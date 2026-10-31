@@ -1079,6 +1079,13 @@ function convertTool() {
         <div class="f"><label for="cv-s">Size (sq ft)</label><input id="cv-s" type="number" inputmode="numeric" value="1000"></div>
         <div class="f"><label for="cv-r">Annual rent (AED)</label><input id="cv-r" type="number" inputmode="numeric" value="140000"></div>
         <div class="f"><label>Result</label><div id="cv-pr" style="padding:12px 0;font-weight:700"></div></div></div></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Service charge</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-int">Internal area (sq ft)</label><input id="cv-int" type="number" inputmode="numeric" value="900"></div>
+        <div class="f"><label for="cv-ext">Balcony / terrace (sq ft)</label><input id="cv-ext" type="number" inputmode="numeric" value="120"></div>
+        <div class="f"><label for="cv-bal">Balcony counted at (%)</label><input id="cv-bal" type="number" inputmode="numeric" value="25"></div>
+        <div class="f"><label for="cv-scr">Rate (AED per sq ft a year)</label><input id="cv-scr" type="number" inputmode="decimal" value="18"></div>
+        <div class="f full"><label>Result</label><div id="cv-sc" style="padding:12px 0;font-weight:700"></div></div></div>
+        <p class="note">Dubai charges the internal area plus 25% of a balcony or terrace. In Abu Dhabi it follows the unit's registered share of the building, so use 100% unless the statement says otherwise.</p></div>
       <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Currency · rates of ${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short" }))}</p><div class="form" style="margin-top:10px">
         <div class="f full"><label for="cv-aed">AED</label><input id="cv-aed" type="number" inputmode="numeric" value="1000000"></div>
         <div class="f"><label for="cv-usd">USD</label><input id="cv-usd" type="number" inputmode="numeric"></div>
@@ -1088,8 +1095,11 @@ function convertTool() {
       const q = s => nb.querySelector(s), K = 10.7639;
       q("#cv-ft").addEventListener("input", () => q("#cv-m").value = (num(q("#cv-ft").value) / K).toFixed(1));
       q("#cv-m").addEventListener("input", () => q("#cv-ft").value = Math.round(num(q("#cv-m").value) * K));
-      const pr = () => { const p = num(q("#cv-p").value), s = num(q("#cv-s").value), r = num(q("#cv-r").value); q("#cv-pr").innerHTML = `${s ? "AED " + Math.round(p / s).toLocaleString("en-US") + "/sq ft" : "—"}<br><span class="muted" style="font-weight:500">${p && r ? (r / p * 100).toFixed(2) + "% gross yield" : ""}</span>`; };
+      const pr = () => { const p = num(q("#cv-p").value), s = num(q("#cv-s").value), r = num(q("#cv-r").value); q("#cv-pr").innerHTML = `${s ? "AED " + Math.round(p / s).toLocaleString("en-US") + "/sq ft · AED " + Math.round(p / (s / K)).toLocaleString("en-US") + "/sq m" : "—"}<br><span class="muted" style="font-weight:500">${p && r ? (r / p * 100).toFixed(2) + "% gross yield" : ""}</span>`; };
       ["#cv-p", "#cv-s", "#cv-r"].forEach(s => q(s).addEventListener("input", pr));
+      const sc = () => { const i = num(q("#cv-int").value), x = num(q("#cv-ext").value), b = Math.min(100, num(q("#cv-bal").value)), r = num(q("#cv-scr").value), a = i + x * b / 100;
+        q("#cv-sc").innerHTML = `AED ${Math.round(a * r).toLocaleString("en-US")} a year<br><span class="muted" style="font-weight:500">Charged on ${Math.round(a).toLocaleString("en-US")} sq ft (${(a / K).toFixed(1)} sq m) · AED ${Math.round(a * r / 4).toLocaleString("en-US")} a quarter</span>`; };
+      ["#cv-int", "#cv-ext", "#cv-bal", "#cv-scr"].forEach(s => q(s).addEventListener("input", sc)); sc();
       const cs = { usd: "USD", gbp: "GBP", inr: "INR" };
       const fromAed = () => { const a = num(q("#cv-aed").value); for (const [k, c] of Object.entries(cs)) q("#cv-" + k).value = Math.round(a * FX[c]); };
       q("#cv-aed").addEventListener("input", fromAed);
@@ -1167,7 +1177,7 @@ const BT = {
   commission: Object.assign(commissionTool(), { i: "money", d: "Your cut after splits and VAT" }),
   brief: Object.assign(briefTool(), { i: "brief", d: "This week's numbers for your community" }),
   checklists: Object.assign(checklistTool(), { i: "check", t: "Checklists", d: "Off-plan, resale, lease, Abu Dhabi" }),
-  convert: Object.assign(convertTool(), { i: "conv", d: "Sq ft, price per foot, currencies" }),
+  convert: Object.assign(convertTool(), { i: "conv", d: "Sq ft/sq m, price per area, service charges, currencies" }),
   card: Object.assign(cardTool(), { i: "card", d: "" }),
   settings: Object.assign(settingsTool(), { i: "gear", d: "" })
 };

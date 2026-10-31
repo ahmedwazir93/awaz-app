@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <meta name="robots" content="noindex">
 <style id="awaz-app-mode">
 html.app body::before, html.app .nav, html.app footer, html.app .back { display: none !important; }
@@ -1081,6 +1080,16 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
 .gv-facts b span[data-rule] { font: inherit; color: inherit; }
 .cty-c span span { font: inherit; color: inherit; }
 .cty-c.cty-other { border-top-color: var(--bone); background: var(--ink); }
+
+.unit-seg { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.unit-seg button { font-size: 14px; }
+.unit-seg button[aria-checked="true"] { background: var(--red); color: #fff; }
+.unit-inline { display: inline-flex; align-items: center; gap: 8px; margin-left: auto; }
+.unit-inline .unit-k { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.unit-inline .unit-seg { width: 140px; }
+.unit-inline .unit-seg button { padding: 8px 0; font-size: 13px; }
+@media (max-width: 620px) { .unit-inline { margin-left: 0; width: 100%; } }
+.area-note { margin: -4px 0 0; font-size: 12.5px !important; color: var(--mute); grid-column: 1 / -1; }
 </style>
 
 <header class="nav">
@@ -1342,6 +1351,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
         <button class="chip chip-t" type="button" aria-pressed="true" data-t="all">All types</button>
         <button class="chip chip-t" type="button" aria-pressed="false" data-t="Residential">Residential</button>
         <button class="chip chip-t" type="button" aria-pressed="false" data-t="Commercial">Commercial</button>
+        <span class="unit-inline"><span class="unit-k" id="l-unit-l">Sizes in</span><span class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="l-unit-l"></span></span>
       </div>
       <div class="radar" id="projGrid">
         <div class="lane" id="laneRes"><div class="lane-head"><h3>Residential</h3><span class="lane-n" id="nRes"></span></div><div class="lane-list" id="listRes"></div></div>
@@ -1612,14 +1622,15 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
             <div class="field"><label for="t-state">Buying</label><select id="t-state"><option value="op">Off-plan from the developer</option><option value="ready">Ready or resale</option></select></div>
             <div class="field full"><label for="t-fee">Land department transfer fee</label><select id="t-fee"></select></div>
             <div class="field full fee-pct"><label for="t-feep">Fee % (change it if your deal differs)</label><input id="t-feep" type="number" min="0" max="10" step="0.25" value="4"></div>
+            <div class="field full"><label id="t-unit-l">Size in</label><div class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="t-unit-l"></div></div>
             <div class="field"><label for="t-loan">Mortgage loan (AED, 0 if cash)</label><input id="t-loan" type="number" min="0" step="50000" value="0"></div>
-            <div class="field"><label for="t-size">Size (sq ft) for service charges</label><input id="t-size" type="number" min="0" step="50" value="1000"></div>
+            <div class="field"><label for="t-size">Internal area (<span data-ulab>sq ft</span>)</label><input id="t-size" data-area="size" type="number" min="0" step="50" value="1000"></div><div class="field"><label for="t-ext">Balcony / terrace (<span data-ulab>sq ft</span>)</label><input id="t-ext" type="number" min="0" value="100" data-area="size" inputmode="numeric"></div><div class="field"><label for="t-bal">Balcony counted at (%)</label><input id="t-bal" type="number" min="0" max="100" step="5" value="25"></div><p class="area-note full" id="t-area"></p>
           </div>
           <div class="tk-out">
             <div class="tk-total"><span>Total cash to complete</span><b id="t-total">—</b><small id="t-sub"></small></div>
             <p class="tm-k" style="margin:0">Where the fees go</p><div class="tk-stack" id="t-stack" aria-hidden="true"></div>
             <div class="tbl"><table><tbody id="t-rows"></tbody></table></div>
-            <p class="fine">Estimates. Service charges assume AED 15 per sq ft a year, which varies widely by building.</p>
+            <p class="fine" id="t-note">Estimates. Service charges assume AED 15 per sq ft a year, which varies widely by building.</p>
           </div>
         </div>
       </div>
@@ -1656,7 +1667,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
           <div><dt>RERA</dt><dd>Dubai's real estate regulator. Licenses brokers and supervises developers and escrow.</dd></div>
           <div><dt>BRN</dt><dd>Broker registration number. Every licensed Dubai broker has one. Mine is 85446.</dd></div>
           <div><dt>Ejari</dt><dd>Dubai's lease register. A tenancy isn't valid until it's on Ejari.</dd></div>
-          <div><dt>Service charge</dt><dd>Yearly fee for maintaining a building's shared areas, charged per sq ft.</dd></div>
+          <div><dt>Service charge</dt><dd>Yearly fee for maintaining a building's shared areas, charged per sq ft (or sq m). In Dubai, balconies and terraces count at 25%.</dd></div>
           <div><dt>Freehold</dt><dd>Full ownership of the property and land, open to foreign buyers in designated areas.</dd></div>
           <div><dt>Musataha</dt><dd>A long-term right to build on and use someone else's land, common in Abu Dhabi.</dd></div>
           <div><dt>LTV</dt><dd>Loan to value: how much of the price a bank will lend, e.g. 80% on a first ready home.</dd></div>
@@ -1698,9 +1709,12 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
         <div class="field full"><label id="y-cur-l">Show amounts in</label><div class="cur-seg gcur" role="radiogroup" aria-labelledby="y-cur-l"></div></div>
         <div class="field full"><label for="y-price">Purchase price (AED)</label><input id="y-price" type="number" min="0" step="1000" value="1500000" inputmode="numeric"></div>
         <div class="field full"><label for="y-fee">Land department transfer fee</label><select id="y-fee"></select></div><div class="field full fee-pct"><label for="y-feep">Fee % (change it if your deal differs)</label><input id="y-feep" type="number" min="0" max="10" step="0.25" value="4"></div>
+        
+        
         <div class="field full"><label for="y-rent">Annual rent (AED)</label><input id="y-rent" type="number" min="0" step="1000" value="110000" inputmode="numeric"></div>
-        <div class="field"><label for="y-size">Size (sq ft)</label><input id="y-size" type="number" min="0" value="900" inputmode="numeric"></div>
-        <div class="field"><label for="y-sc">Service charge (AED/sq ft/yr)</label><input id="y-sc" type="number" min="0" step="0.5" value="18"></div>
+        <div class="field full"><label id="y-unit-l">Size in</label><div class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="y-unit-l"></div></div>
+        <div class="field"><label for="y-size">Internal area (<span data-ulab>sq ft</span>)</label><input id="y-size" data-area="size" type="number" min="0" value="900" inputmode="numeric"></div>
+        <div class="field"><label for="y-ext">Balcony / terrace (<span data-ulab>sq ft</span>)</label><input id="y-ext" type="number" min="0" value="120" data-area="size" inputmode="numeric"></div><div class="field"><label for="y-bal">Balcony counted at (%)</label><input id="y-bal" type="number" min="0" max="100" step="5" value="25"></div><p class="area-note full" id="y-area"></p><div class="field"><label for="y-sc">Service charge (AED/<span data-ulab>sq ft</span>/yr)</label><input id="y-sc" data-area="rate" type="number" min="0" step="0.5" value="18"></div>
         <div class="field"><label for="y-mgmt">Management fee (% of rent)</label><input id="y-mgmt" type="number" min="0" step="0.5" value="5"></div>
         <div class="field"><label for="y-maint">Maintenance (% of rent)</label><input id="y-maint" type="number" min="0" step="0.5" value="5"></div>
         <div class="field"><label for="y-vac">Empty weeks a year</label><input id="y-vac" type="number" min="0" max="52" value="2"></div>
@@ -1710,7 +1724,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
         <div class="c-sum" id="y-sum"></div>
         <div class="c-years-wrap"><h3>Against the Dubai average</h3><div class="bench" id="y-bench"></div><p class="mi-note">Dubai averages for 2026: about 7% gross for apartments and about 5% for villas, from Property Finder and Engel &amp; Völkers data compiled by Real Estate Club Dubai.</p></div>
         <div class="row" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-red" id="y-wa" href="https://wa.me/971586032580" target="_blank" rel="noopener">Ask Ahmed about this deal</a><a class="btn btn-ghost" href="#roe">Return on equity</a><a class="btn btn-ghost" href="#mortgage">Mortgage calculator</a></div>
-        <p class="fine">Estimates only. Service charges, rents and costs vary by building. Ask me for the actual service charge and recent rents for any unit.</p>
+        <p class="fine">Estimates only. In Dubai, service charges are worked out on the internal area plus 25% of any balcony or terrace. In Abu Dhabi and elsewhere, the share follows each unit's registered share of the building, so check the service charge statement. Service charges, rents and costs vary by building. Ask me for the actual service charge and recent rents for any unit.</p>
       </div>
     </div>
   </div>
@@ -1734,10 +1748,12 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
         <div class="field"><label for="q-rate">Interest rate (%)</label><input id="q-rate" type="number" min="0" step="0.05" value="4.25"></div>
         <div class="field"><label for="q-term">Mortgage term (years)</label><input id="q-term" type="number" min="1" max="25" value="25"></div>
         <div class="field full"><label for="q-agency">Agency fee</label><select id="q-agency"><option value="1">2% + VAT (resale)</option><option value="0">None (from developer)</option></select></div>
+        
         <div class="field"><label for="q-rent">Annual rent (AED)</label><input id="q-rent" type="number" min="0" step="1000" value="110000" inputmode="numeric"></div>
         <div class="field"><label for="q-rg">Rent growth a year (%)</label><input id="q-rg" type="number" step="0.5" value="3"></div>
-        <div class="field"><label for="q-size">Size (sq ft)</label><input id="q-size" type="number" min="0" value="900" inputmode="numeric"></div>
-        <div class="field"><label for="q-sc">Service charge (AED/sq ft)</label><input id="q-sc" type="number" min="0" step="0.5" value="18"></div>
+        <div class="field full"><label id="q-unit-l">Size in</label><div class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="q-unit-l"></div></div>
+        <div class="field"><label for="q-size">Internal area (<span data-ulab>sq ft</span>)</label><input id="q-size" data-area="size" type="number" min="0" value="900" inputmode="numeric"></div>
+        <div class="field"><label for="q-ext">Balcony / terrace (<span data-ulab>sq ft</span>)</label><input id="q-ext" type="number" min="0" value="120" data-area="size" inputmode="numeric"></div><div class="field"><label for="q-bal">Balcony counted at (%)</label><input id="q-bal" type="number" min="0" max="100" step="5" value="25"></div><p class="area-note full" id="q-area"></p><div class="field"><label for="q-sc">Service charge (AED/<span data-ulab>sq ft</span>)</label><input id="q-sc" data-area="rate" type="number" min="0" step="0.5" value="18"></div>
         <div class="field"><label for="q-mm">Management + maintenance (% of rent)</label><input id="q-mm" type="number" min="0" step="0.5" value="10"></div>
         <div class="field"><label for="q-vac">Empty weeks a year</label><input id="q-vac" type="number" min="0" max="52" value="2"></div>
         <div class="field"><label for="q-app">Price growth a year (%)</label><input id="q-app" type="number" step="0.5" value="4"></div>
@@ -2103,7 +2119,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
       <h3 id="l-more">Other must-knows</h3>
       <div class="lw-grid">
         <div class="lw-card"><b>Mortgages</b><span>Only from Central Bank-licensed lenders. Not valid until registered at DLD. The fee is 0.25% of the loan, usually paid by the buyer.</span></div>
-        <div class="lw-card"><b>Service charges</b><span>RERA approves management companies and forms an owners' committee of up to 9. Unpaid charges after 30 days' notice can lead to enforcement, and even auction.</span></div>
+        <div class="lw-card"><b>Service charges</b><span>Charged on the internal area plus 25% of any balcony or terrace. RERA approves management companies and forms an owners' committee of up to 9. Unpaid charges after 30 days' notice can lead to enforcement, and even auction.</span></div>
         <div class="lw-card"><b>Power of attorney</b><span>For a specific property only, in Arabic or with a certified translation, notarised (or attested if signed abroad). Valid up to 2 years. You can check it online with Dubai Courts.</span></div>
         <div class="lw-card"><b>VAT</b><span>Residential sales and rents: no VAT (first sale within 3 years zero-rated, after that exempt). Commercial property: 5%.</span></div>
         <div class="lw-card"><b>Anti-money laundering</b><span>ID checks on every client. Cash over AED 55,000 or any crypto in a purchase means a report to the UAE Financial Intelligence Unit, with records kept 5 years.</span></div>
@@ -2665,7 +2681,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
         <div class="field full"><label for="s-where">Community and building</label><input id="s-where" placeholder="e.g. Business Bay, Bay Square 3"></div>
         <div class="field"><label for="s-type">Property type</label><select id="s-type"><option>Apartment</option><option>Townhouse</option><option>Villa</option><option>Penthouse</option><option>Office</option><option>Retail</option><option>Plot</option></select></div>
         <div class="field"><label for="s-beds">Bedrooms</label><select id="s-beds"><option>Studio</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option><option>Not applicable</option></select></div>
-        <div class="field"><label for="s-size">Size (sq ft)</label><input id="s-size" type="number" min="0" inputmode="numeric"></div>
+        <div class="field"><label for="s-size">Size (<span data-ulab>sq ft</span>)</label><input id="s-size" data-area="size" type="number" min="0" inputmode="numeric"></div>
         <div class="field"><label for="s-status">Current status</label><select id="s-status"><option>Vacant</option><option>Tenanted</option><option>Owner-occupied</option><option>Off-plan, not handed over</option></select></div>
         <div class="field"><label for="s-price">Price or rent in mind (AED)</label><input id="s-price" type="number" min="0" step="1000" inputmode="numeric"></div>
         <div class="field"><label for="s-when">Timeline</label><select id="s-when"><option>As soon as possible</option><option>Within 3 months</option><option>3–6 months</option><option>Just exploring</option></select></div>
@@ -3013,6 +3029,54 @@ const CUR = (() => {
     set(v) { c = v; try { localStorage.setItem("awaz-cur", v); } catch (e) {} document.querySelectorAll("[data-gcur]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.gcur === v))); fns.forEach(f => { try { f(); } catch (e) {} }); }
   };
 })();
+// Size unit (sq ft or sq m), remembered in this browser only
+const UNIT = (() => {
+  const F = 10.7639; let u = "sqft"; try { u = localStorage.getItem("awaz-unit") === "sqm" ? "sqm" : "sqft"; } catch (e) {}
+  const fns = [];
+  const lab = () => u === "sqm" ? "sq m" : "sq ft";
+  const parse = (n, m) => parseFloat(n.replace(/,/g, "")) * (m === "k" ? 1e3 : m ? 1e6 : 1);
+  const fmt = (v, k) => v >= 1e4 ? (Math.round(v / 100) * 100).toLocaleString("en-US") : k && v >= 1e3 ? +(v / 1e3).toFixed(1) + "k" : Math.round(v).toLocaleString("en-US");
+  return {
+    get: () => u, lab, F,
+    toSqft: v => u === "sqm" ? v * F : v,
+    conv: (x, kind, toM) => { const v = kind === "size" ? (toM ? x / F : x * F) : (toM ? x * F : x / F); return String(+v.toFixed(kind === "size" ? (toM ? 1 : 0) : 2)); },
+    text(str) {
+      if (u !== "sqm" || !str) return str;
+      return String(str).replace(/(\d[\d,.]*)(k| million)?(?:(\s*(?:–|-|to)\s*)(\d[\d,.]*)(k| million)?)?\s*sq ft/g, (all, a, am, sep, b, bm) =>
+        fmt(parse(a, am && am.trim()) / F, am === "k") + (b ? sep + fmt(parse(b, bm && bm.trim()) / F, bm === "k") : "") + " sq m");
+    },
+    on: f => fns.push(f),
+    set(v) {
+      if (v === u) return;
+      const toM = v === "sqm"; u = v; try { localStorage.setItem("awaz-unit", v); } catch (e) {}
+      document.querySelectorAll('input[data-area]').forEach(el => {
+        if (el.value === "") return;
+        // Remember the exact original so switching back and forth never drifts
+        if (!toM && el.dataset.shown === el.value && el.dataset.base) el.value = el.dataset.base;
+        else { const x = +el.value; el.dataset.base = el.value; el.value = UNIT.conv(x, el.dataset.area, toM); el.dataset.shown = el.value; }
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+      });
+      document.querySelectorAll("[data-ulab]").forEach(e => e.textContent = lab());
+      document.querySelectorAll("[data-gunit]").forEach(b => b.setAttribute("aria-checked", String(b.dataset.gunit === u)));
+      fns.forEach(f => { try { f(); } catch (e) {} });
+    }
+  };
+})();
+// Service charge area: internal area plus a share of balcony/terrace (Dubai: 25%)
+const AREA = {
+  charged(p) {
+    const int = M.num(p + "-size"), ext = M.num(p + "-ext"), pct = Math.min(100, M.num(p + "-bal"));
+    const tot = int + ext * pct / 100, el = document.getElementById(p + "-area");
+    if (el) el.textContent = ext ? `Service charge area: ${Math.round(tot).toLocaleString("en-US")} ${UNIT.lab()} (internal + ${pct}% of balcony). Total built-up: ${Math.round(int + ext).toLocaleString("en-US")} ${UNIT.lab()}.` : `Service charge area: ${Math.round(int).toLocaleString("en-US")} ${UNIT.lab()}.`;
+    return tot;
+  },
+  // Dubai counts 25% of outdoor area (RERA); elsewhere it depends on the building's registered share, so default to 100%
+  bind(p) {
+    const f = document.getElementById(p + "-fee"), b = document.getElementById(p + "-bal");
+    if (!f || !b) return; const upd = () => { b.value = f.value === "dxb" ? 25 : 100; b.dispatchEvent(new Event("input", { bubbles: true })); };
+    f.addEventListener("change", upd);
+  }
+};
 function price(v) {
   const a = v.aed, r = FX.per_aed, pre = v.pre ? `<span class="pre">${esc(v.pre)}</span>` : "";
   return `${pre}${DH}${compact(a)}<span class="fx"><span>$${compact(a * r.USD)}</span><span>£${compact(a * r.GBP)}</span><span>${inr(a * r.INR)}</span></span>`;
@@ -3025,9 +3089,9 @@ function card(p) {
     <article class="proj${p.pick ? " pick" : ""}">
       ${p.pick ? `<div class="pick-bar"><span class="pick-badge">Ahmed's pick · Hot</span></div>` : ""}
       <div class="proj-top"><span class="em">${esc(p.em)} · ${esc(p.type)}</span><span class="st">${esc(p.status)}</span></div>
-      <div class="proj-body"><h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span>${p.pick ? `<p class="pick-why">${esc(p.pick)}</p>` : ""}<p>${withDh(p.blurb)}</p></div>
+      <div class="proj-body"><h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span>${p.pick ? `<p class="pick-why">${esc(p.pick)}</p>` : ""}<p>${withDh(UNIT.text(p.blurb))}</p></div>
       <div>
-        <dl class="specs">${p.specs.map(([k,v]) => `<div><dt>${esc(k)}</dt><dd>${typeof v === "object" ? price(v) : esc(v)}</dd></div>`).join("")}</dl>
+        <dl class="specs">${p.specs.map(([k,v]) => `<div><dt>${esc(k)}</dt><dd>${typeof v === "object" ? price(v) : esc(UNIT.text(v))}</dd></div>`).join("")}</dl>
         ${p.note ? `<p class="spec-note">${esc(p.note)}</p>` : ""}
         <button class="reg" type="button" data-p="${esc(p.name)}" data-e="${esc(p.em)}">Register interest <span aria-hidden="true">→</span></button>
       </div>
@@ -3280,7 +3344,7 @@ const MAP = (() => {
     el.innerHTML = `${p.pick ? `<span class="pick-badge">Ahmed's pick · Hot</span>` : ""}
       <span class="em">${esc(p.em)} · ${esc(p.type)} · ${esc(p.status)}</span>
       <h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span>
-      <p>${withDh(p.blurb)}</p>
+      <p>${withDh(UNIT.text(p.blurb))}</p>
       ${pr ? `<div class="mi-price"><span>${esc(pr[0])}</span><b>${price(pr[1])}</b></div>` : ""}
       <div class="row"><button class="btn btn-red btn-sm" type="button" id="miReg">Register interest</button><button class="btn btn-ghost btn-sm" type="button" id="miClose">Close</button></div>
       <p class="mi-note">Pin shows the approximate area, not the exact plot.</p>`;
@@ -3594,7 +3658,7 @@ const M = {
 const YIELD = (() => {
   let ready = false;
   function calc() {
-    const price = M.num("y-price"), rent = M.num("y-rent"), size = M.num("y-size"), sc = M.num("y-sc");
+    const price = M.num("y-price"), rent = M.num("y-rent"), size = AREA.charged("y"), sc = M.num("y-sc");
     const mgmt = M.num("y-mgmt"), maint = M.num("y-maint"), vac = Math.min(52, M.num("y-vac"));
     const tf = FEE.get("y"), buyCosts = document.getElementById("y-costs").value === "1" ? price * tf.rate + price * 0.021 + (tf.dubai ? (price >= 500000 ? 4200 : 2100) + 580 : 0) : 0;
     const effRent = rent * (1 - vac / 52);
@@ -3614,7 +3678,7 @@ const YIELD = (() => {
     document.getElementById("y-bench").innerHTML = bars.map(([l, v, c]) => `<div class="bn"><span class="bn-l">${l}</span><span class="bn-t"><i style="width:${Math.max(1, v / mx * 100)}%;background:${c}"></i></span><b>${M.pct(v, 1)}</b></div>`).join("");
     document.getElementById("y-wa").href = M.waText([`Hi Ahmed, I ran the rental yield calculator on your website.`, ``, `Price: AED ${Math.round(price).toLocaleString("en-US")}`, `Annual rent: AED ${Math.round(rent).toLocaleString("en-US")}`, `Gross yield: ${M.pct(gross)} · Net yield: ${M.pct(netY)}`, ``, `Can you find me something like this?`]);
   }
-  return { init() { if (!ready) { ready = true; FEE.mount("y", calc); document.querySelectorAll("#yield input:not(#y-feep), #yield select:not(#y-fee)").forEach(el => el.addEventListener("input", calc)); CUR.on(calc); } calc(); } };
+  return { init() { if (!ready) { ready = true; FEE.mount("y", calc); AREA.bind("y"); document.querySelectorAll("#yield input:not(#y-feep), #yield select:not(#y-fee)").forEach(el => el.addEventListener("input", calc)); CUR.on(calc); } calc(); } };
 })();
 
 // ---------- Return on equity ----------
@@ -3658,7 +3722,7 @@ const ROE = (() => {
     if (!cash) down = Math.min(100, Math.max(down, minDown));
     ["q-down", "q-rate", "q-term"].forEach(id => $(id).closest(".field").hidden = cash);
     const o = { price, tf: FEE.get("q"), down, rate: M.num("q-rate"), term: Math.min(25, Math.max(1, M.num("q-term") || 25)), agency: $("q-agency").value === "1",
-      rent: M.num("q-rent"), rg: +$("q-rg").value || 0, sc: M.num("q-size") * M.num("q-sc"), mm: M.num("q-mm"), vac: Math.min(52, M.num("q-vac")),
+      rent: M.num("q-rent"), rg: +$("q-rg").value || 0, sc: AREA.charged("q") * M.num("q-sc"), mm: M.num("q-mm"), vac: Math.min(52, M.num("q-vac")),
       app: +$("q-app").value || 0, years: Math.min(25, Math.max(1, Math.round(M.num("q-years")) || 5)), sell: M.num("q-sell") };
     const L = model(o, !cash && down < 100), C = model(o, false), r = L;
     const pc = v => isFinite(v) ? (v * 100).toFixed(1) + "%" : "—";
@@ -3683,7 +3747,7 @@ const ROE = (() => {
     $("q-lev-note").textContent = cash ? "Pick a mortgage option above to see how borrowing changes your return." : L.irr > C.irr ? `Borrowing lifts your annualised return by ${((L.irr - C.irr) * 100).toFixed(1)} points, because the property grows faster than the loan costs. It also adds risk: if prices fall, losses are magnified the same way.` : `Here the loan costs more than the property earns and grows, so paying cash returns more.`;
     $("q-wa").href = M.waText([`Hi Ahmed, I used the return on equity calculator on your website.`, ``, `Price: AED ${Math.round(price).toLocaleString("en-US")} · ${cash ? "cash" : down + "% down"}`, `Rent: AED ${Math.round(o.rent).toLocaleString("en-US")} a year`, `Year 1 ROE: ${pc(r.roe1)} · Annualised over ${o.years} yrs: ${pc(r.irr)}`, ``, `Can you find me a deal like this?`]);
   }
-  return { init() { if (!ready) { ready = true; FEE.mount("q", calc); document.querySelectorAll("#roe input:not(#q-feep), #roe select:not(#q-fee)").forEach(el => el.addEventListener("input", calc)); CUR.on(calc); } calc(); } };
+  return { init() { if (!ready) { ready = true; FEE.mount("q", calc); AREA.bind("q"); document.querySelectorAll("#roe input:not(#q-feep), #roe select:not(#q-fee)").forEach(el => el.addEventListener("input", calc)); CUR.on(calc); } calc(); } };
 })();
 
 // ---------- Mortgage ----------
@@ -3820,7 +3884,7 @@ const AREAS = (() => {
     e.preventDefault();
     if (!v("s-name") || !v("s-contact")) { document.getElementById("s-err").textContent = "Add your name and an email or WhatsApp number so I can reply."; return; }
     document.getElementById("s-err").textContent = "";
-    const t = [`Owner request via AWaz Realty website`, ``, `Name: ${v("s-name")}`, `Contact: ${v("s-contact")}`, `Wants to: ${v("s-goal")}`, `Emirate: ${v("s-em")}`, v("s-where") && `Community / building: ${v("s-where")}`, `Type: ${v("s-type")} · Bedrooms: ${v("s-beds")}`, v("s-size") && `Size: ${v("s-size")} sq ft`, `Status: ${v("s-status")}`, v("s-price") && `Price or rent in mind: AED ${(+v("s-price")).toLocaleString("en-US")}`, `Timeline: ${v("s-when")}`, v("s-notes") && `\nNotes:\n${v("s-notes")}`].filter(Boolean).join("\n");
+    const t = [`Owner request via AWaz Realty website`, ``, `Name: ${v("s-name")}`, `Contact: ${v("s-contact")}`, `Wants to: ${v("s-goal")}`, `Emirate: ${v("s-em")}`, v("s-where") && `Community / building: ${v("s-where")}`, `Type: ${v("s-type")} · Bedrooms: ${v("s-beds")}`, v("s-size") && `Size: ${v("s-size")} ${UNIT.lab()}`, `Status: ${v("s-status")}`, v("s-price") && `Price or rent in mind: AED ${(+v("s-price")).toLocaleString("en-US")}`, `Timeline: ${v("s-when")}`, v("s-notes") && `\nNotes:\n${v("s-notes")}`].filter(Boolean).join("\n");
     document.getElementById("s-summary").textContent = t;
     document.getElementById("s-wa").href = `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
     document.getElementById("s-mail").href = `mailto:${EMAIL}?subject=${encodeURIComponent("Owner request: " + v("s-goal"))}&body=${encodeURIComponent(t)}`;
@@ -3839,6 +3903,16 @@ const AREAS = (() => {
   document.getElementById("copyContact")?.addEventListener("click", e => copy("Ahmed Wazir · AWaz Realty (Springfield Properties)\nWhatsApp: +971 58 603 2580\nEmail: ahusain@springfield-re.com\nRERA BRN 85446", e.currentTarget));
 }
 
+// ---------- Size unit switch ----------
+{
+  document.querySelectorAll(".gunit").forEach(el => { el.innerHTML = ["sqft", "sqm"].map(k => `<button type="button" role="radio" data-gunit="${k}" aria-checked="${UNIT.get() === k}">${k === "sqft" ? "sq ft" : "sq m"}</button>`).join(""); });
+  if (UNIT.get() === "sqm") {
+    document.querySelectorAll('input[data-area]').forEach(el => { if (el.value !== "") { el.dataset.base = el.value; el.value = UNIT.conv(+el.value, el.dataset.area, true); el.dataset.shown = el.value; } });
+    document.querySelectorAll("[data-ulab]").forEach(e => e.textContent = "sq m");
+  }
+  document.addEventListener("click", e => { const b = e.target.closest("[data-gunit]"); if (b) UNIT.set(b.dataset.gunit); });
+  UNIT.on(renderProjects);
+}
 // ---------- Site-wide currency switch ----------
 {
   const html = `${["AED", "USD", "GBP", "INR"].map(c => `<button type="button" role="radio" data-gcur="${c}" aria-checked="${CUR.get() === c}" aria-label="${{ AED: "UAE dirham", USD: "US dollar", GBP: "British pound", INR: "Indian rupee" }[c]}">${c === "AED" ? DH : { USD: "$", GBP: "£", INR: "₹" }[c]}</button>`).join("")}`;
@@ -3909,7 +3983,8 @@ const TK = (() => {
       ...(ready ? [["Agency fee (2% + VAT)", price * 0.021, "c"]] : []),
       ...(loan > 0 ? [[`Mortgage registration${tf.abu ? " (0.1%)" : " (0.25% + AED 290)"}`, mreg, "d"], ["Bank valuation (approx.)", 3150, "d"], ["Bank arrangement fee (up to 1% + VAT)", loan * 0.0105, "d"]] : [])
     ];
-    const fees = rows.reduce((a, r) => a + r[1], 0), cash = price - loan + fees, sc = M.num("t-size") * 15;
+    const fees = rows.reduce((a, r) => a + r[1], 0), cash = price - loan + fees, sc = UNIT.toSqft(AREA.charged("t")) * 15;
+    $("t-note").textContent = `Estimates. Service charges assume AED ${UNIT.get() === "sqm" ? "161 per sq m" : "15 per sq ft"} a year, which varies widely by building.`;
     $("t-total").innerHTML = M.full(cash);
     $("t-sub").innerHTML = `${M.short(price - loan)} ${loan ? "down payment" : "price"} + ${M.short(fees)} in fees (${(fees / Math.max(1, price) * 100).toFixed(1)}% of the price)`;
     const seg = rows.map(r => [r[0], r[1], r[2]]);
@@ -3930,7 +4005,7 @@ const TK = (() => {
   }
   return { init() {
     if (!$("t-price")) return; tabs();
-    FEE.mount("t", total); FEE.mount("r", resale);
+    FEE.mount("t", total); AREA.bind("t"); FEE.mount("r", resale);
     document.querySelectorAll("#tk-p1 input:not(#t-feep), #tk-p1 select:not(#t-fee)").forEach(el => el.addEventListener("input", total));
     document.querySelectorAll("#tk-p2 input:not(#r-feep), #tk-p2 select:not(#r-fee)").forEach(el => el.addEventListener("input", resale));
     total(); resale(); CUR.on(total); CUR.on(resale);
@@ -4024,5 +4099,3 @@ window.addEventListener("hashchange", route); route();
 
 document.getElementById("copySum").addEventListener("click", e => copy(lastText, e.currentTarget));
 </script>
-
-</body></html>
