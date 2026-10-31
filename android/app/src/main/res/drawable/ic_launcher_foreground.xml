@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- The red "A" from the AWaz wordmark, kept inside the 66dp safe zone -->
+    <group android:translateX="39.5" android:translateY="30" android:scaleX="0.52" android:scaleY="0.48">
+        <path android:fillColor="#D7192A" android:fillType="evenOdd"
+            android:pathData="M0,100 L18,0 L38,0 L56,100 L38,100 L34.5,80 L21.5,80 L18,100 Z M24.2,63 L28,36 L31.8,63 Z" />
+    </group>
+    <path android:fillColor="#F4F1EE" android:pathData="M39.5,82 h29 v2.2 h-29 z" />
+</vector>

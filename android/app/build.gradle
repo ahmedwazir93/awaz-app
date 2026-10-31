@@ -1,0 +1,46 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The live app lives on GitHub Pages; the workflow passes the exact URL.
+def appUrl = project.findProperty('appUrl') ?: 'https://ahmedwazir93.github.io/awaz-app/'
+def buildNo = (project.findProperty('versionCode') ?: '1') as Integer
+
+android {
+    namespace 'realty.awaz.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'realty.awaz.app'
+        minSdk 26
+        targetSdk 35
+        versionCode buildNo
+        versionName "1.0.${buildNo}"
+        buildConfigField 'String', 'APP_URL', "\"${appUrl}\""
+    }
+
+    buildFeatures { buildConfig true }
+
+    signingConfigs {
+        release {
+            // A private key from the KEYSTORE_B64 secret wins; otherwise the test key in this repo.
+            def privateKs = file('release.jks')
+            storeFile privateKs.exists() ? privateKs : file('awaz-test.jks')
+            storePassword System.getenv('KS_PASS') ?: 'awaztest'
+            keyAlias System.getenv('KS_ALIAS') ?: 'awaz'
+            keyPassword System.getenv('KS_PASS') ?: 'awaztest'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

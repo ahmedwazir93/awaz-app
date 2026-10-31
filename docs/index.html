@@ -1,0 +1,1186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AWaz Realty</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B0B0C">
+<meta name="description" content="AWaz Realty: Ahmed Wazir's UAE property toolkit. Calculators, buyer guides, launches and market data.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* One black canvas, one red accent. Cards are flat panels separated by hairlines; the red is kept for actions and live numbers. */
+:root {
+  --ink: #0B0B0C; --ink-2: #131315; --ink-3: #1B1B1E; --line: #2B2A2E;
+  --bone: #F4F1EE; --mute: #A6A2A8; --red: #D7192A; --red-text: #FF4252; --ok: #3FBF7F; --warn: #E8B44A;
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --nav-h: 64px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; }
+body { background: var(--ink); color: var(--bone); font: 15px/1.5 var(--body); -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--red-text); outline-offset: 2px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; margin: 0; line-height: .95; letter-spacing: .005em; }
+p { margin: 0; }
+.dh { width: .78em; height: .72em; vertical-align: -.02em; margin-right: .06em; }
+
+/* App frame */
+.topbar { position: fixed; inset: 0 0 auto; z-index: 20; height: calc(56px + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: color-mix(in srgb, var(--ink) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo svg { width: 70px; height: 27px; display: block; }
+.logo span { font: 600 10px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--mute); padding-left: 10px; border-left: 1px solid var(--line); }
+.top-r { display: flex; align-items: center; gap: 8px; }
+.cur { appearance: none; background: var(--ink-3); border: 1px solid var(--line); padding: 7px 10px; font: 600 12px var(--mono); letter-spacing: .06em; border-radius: 0; }
+.mode-chip { font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 8px 10px; border: 1px solid var(--line); background: transparent; display: inline-flex; gap: 7px; align-items: center; }
+.mode-chip i { width: 7px; height: 7px; background: var(--mute); display: inline-block; }
+.mode-chip.on { border-color: var(--red); }
+.mode-chip.on i { background: var(--red); }
+
+main { padding: calc(56px + env(safe-area-inset-top, 0px)) 0 calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 24px); min-height: 100%; }
+.screen { padding: 0 16px; max-width: 720px; margin: 0 auto; }
+.screen-head { padding: 22px 0 16px; display: grid; gap: 10px; }
+.eyebrow { font: 600 11px/1.2 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--mute); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.eyebrow i { width: 7px; height: 7px; background: var(--red); display: inline-block; }
+.screen-head h1 { font-size: 46px; font-weight: 900; }
+.screen-head h1 em { font-style: normal; color: var(--red-text); }
+.sub { color: var(--mute); font-size: 14px; }
+.sec { margin-top: 26px; }
+.sec-t { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 10px; }
+.sec-t h2 { font-size: 24px; font-weight: 800; }
+.sec-t a, .sec-t button { font: 600 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--red-text); text-decoration: none; background: none; border: 0; padding: 0; }
+
+.tabs { position: fixed; inset: auto 0 0; z-index: 20; height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); display: grid; grid-template-columns: repeat(5, 1fr); background: var(--ink-2); border-top: 1px solid var(--line); }
+.tabs button { background: none; border: 0; display: grid; justify-items: center; align-content: center; gap: 4px; color: var(--mute); font: 600 11px var(--body); position: relative; }
+.tabs svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: square; }
+.tabs button[aria-current="page"] { color: var(--bone); }
+.tabs button[aria-current="page"]::before { content: ""; position: absolute; top: 0; left: 30%; right: 30%; height: 2px; background: var(--red); }
+.badge { position: absolute; top: 8px; left: calc(50% + 6px); min-width: 16px; height: 16px; padding: 0 4px; background: var(--red); color: #fff; font: 700 10px/16px var(--mono); text-align: center; }
+
+/* Building blocks */
+.panel { background: var(--ink-2); border: 1px solid var(--line); padding: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tile { background: var(--ink-2); border: 1px solid var(--line); padding: 14px; text-align: left; display: grid; gap: 6px; align-content: start; min-height: 104px; text-decoration: none; position: relative; }
+.tile:active { background: var(--ink-3); }
+.tile svg { width: 24px; height: 24px; stroke: var(--red-text); fill: none; stroke-width: 1.8; }
+.tile b { font: 800 19px/1 var(--display); text-transform: uppercase; }
+.tile small { color: var(--mute); font-size: 12.5px; line-height: 1.35; }
+.tile.wide { grid-column: 1 / -1; min-height: 0; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; }
+.tile .go { color: var(--mute); font-size: 18px; }
+.tile .tag { position: absolute; top: 12px; right: 12px; font: 600 9.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--red-text); }
+.row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); text-decoration: none; background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%; text-align: left; }
+.row:last-child { border-bottom: 0; }
+.row .t { flex: 1; min-width: 0; }
+.row .t b { display: block; font-weight: 600; font-size: 15px; }
+.row .t small { color: var(--mute); font-size: 12.5px; }
+.row .go { color: var(--mute); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 700 14px/1 var(--body); padding: 14px 16px; border: 1px solid transparent; text-decoration: none; background: var(--ink-3); border-color: var(--line); }
+.btn-red { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-ghost { background: transparent; }
+.btn-sm { padding: 10px 12px; font-size: 13px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row .btn { flex: 1 1 auto; }
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; padding: 8px 12px; background: transparent; border: 1px solid var(--line); font: 600 12.5px var(--body); color: var(--mute); }
+.chip[aria-pressed="true"] { border-color: var(--bone); color: var(--bone); background: var(--ink-3); }
+.mono { font-family: var(--mono); }
+.muted { color: var(--mute); }
+.note { color: var(--mute); font-size: 12px; margin-top: 10px; }
+
+/* Market */
+.mk { display: grid; gap: 10px; }
+.mk-card { background: var(--ink-2); border: 1px solid var(--line); padding: 16px; }
+.mk-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.mk-head h3 { font-size: 22px; font-weight: 800; }
+.mk-per { font: 11px var(--mono); color: var(--mute); letter-spacing: .04em; }
+.mk-total { font: 900 40px/1 var(--display); margin-top: 10px; }
+.mk-total small { display: block; font: 12px var(--body); color: var(--mute); margin-top: 6px; }
+.mk-bar { display: flex; height: 6px; margin: 14px 0 10px; gap: 2px; }
+.mk-bar span { display: block; }
+.mk-mix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mk-mix div { font-size: 12px; color: var(--mute); }
+.mk-mix b { display: block; color: var(--bone); font: 700 15px var(--body); }
+.mk-mix i { display: inline-block; width: 7px; height: 7px; margin-right: 5px; }
+.mk-src { font-size: 11px; color: var(--mute); margin-top: 10px; }
+.mk-src a { color: var(--mute); }
+.tick { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
+.tick::-webkit-scrollbar { display: none; }
+.tick .mk-card { flex: 0 0 78%; }
+.tick-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; margin-top: 12px; }
+.tick-stats b { display: block; font: 700 17px var(--body); }
+.tick-stats small { color: var(--mute); font-size: 11.5px; }
+.up { color: var(--ok); } .down { color: var(--red-text); }
+.fx { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); }
+.fx div { padding: 12px; border-right: 1px solid var(--line); }
+.fx div:last-child { border-right: 0; }
+.fx span { font: 11px var(--mono); color: var(--mute); }
+.fx b { display: block; font: 700 16px var(--body); }
+
+/* Hero + launches */
+.hero-cta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.lc { background: var(--ink-2); border: 1px solid var(--line); padding: 16px; display: grid; gap: 8px; text-align: left; width: 100%; }
+.lc.pick { border-color: var(--red); }
+.lc-top { display: flex; justify-content: space-between; gap: 8px; font: 600 10.5px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.lc-top .st { color: var(--red-text); text-align: right; }
+.lc h3 { font-size: 26px; font-weight: 800; }
+.lc .dev { color: var(--mute); font-size: 13px; }
+.lc .pickbar { font: 700 10.5px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: var(--red); color: #fff; padding: 6px 8px; justify-self: start; }
+.specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--line); }
+.specs dt { font: 10.5px var(--mono); color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
+.specs dd { margin: 2px 0 0; font-weight: 700; font-size: 14px; }
+.lc-list { display: grid; gap: 10px; }
+
+/* Overlay sheet */
+.sheet { position: fixed; inset: 0; z-index: 40; background: var(--ink); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1); visibility: hidden; }
+.sheet.open { transform: none; visibility: visible; }
+.sheet-bar { flex: none; height: calc(52px + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 8px 0; display: flex; align-items: center; gap: 6px; border-bottom: 1px solid var(--line); background: var(--ink); }
+.sheet-bar button { background: none; border: 0; width: 44px; height: 44px; display: grid; place-items: center; }
+.sheet-bar svg { width: 22px; height: 22px; stroke: var(--bone); fill: none; stroke-width: 2; }
+.sheet-bar h2 { font: 800 20px/1 var(--display); text-transform: uppercase; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet-body { flex: 1; overflow: auto; position: relative; -webkit-overflow-scrolling: touch; }
+.sheet-body iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--ink); }
+.native { padding: 18px 16px calc(32px + env(safe-area-inset-bottom, 0px)); max-width: 720px; margin: 0 auto; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; background: var(--ink); }
+.bars { display: flex; gap: 4px; align-items: flex-end; height: 28px; }
+.bars i { width: 5px; background: var(--red); animation: eq 0.9s ease-in-out infinite; }
+.bars i:nth-child(2) { animation-delay: .15s } .bars i:nth-child(3) { animation-delay: .3s } .bars i:nth-child(4) { animation-delay: .45s }
+@keyframes eq { 0%,100% { height: 25% } 50% { height: 100% } }
+@media (prefers-reduced-motion: reduce) { .sheet { transition: none } .bars i { animation: none; height: 60% } }
+
+/* Forms */
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.f { display: grid; gap: 6px; }
+.f.full { grid-column: 1 / -1; }
+.f label { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.f input, .f select, .f textarea { width: 100%; background: var(--ink-3); border: 1px solid var(--line); padding: 12px; border-radius: 0; font-size: 16px; }
+.f textarea { min-height: 120px; resize: vertical; line-height: 1.45; }
+.f input:focus, .f select:focus, .f textarea:focus { outline: none; border-color: var(--bone); }
+.seg { display: flex; border: 1px solid var(--line); }
+.seg button { flex: 1; background: none; border: 0; padding: 11px 6px; font: 600 13px var(--body); color: var(--mute); border-right: 1px solid var(--line); }
+.seg button:last-child { border-right: 0; }
+.seg button[aria-pressed="true"] { background: var(--bone); color: var(--ink); }
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; background: var(--ink-3); border: 1px solid var(--line); }
+.toggle input { width: 22px; height: 22px; accent-color: var(--red); }
+.result { margin-top: 18px; background: var(--ink-2); border: 1px solid var(--line); }
+.result .big { padding: 18px 16px; border-bottom: 1px solid var(--line); }
+.result .big span { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.result .big b { display: block; font: 900 42px/1.05 var(--display); margin-top: 6px; color: var(--bone); }
+.result .big small { color: var(--mute); font-size: 12.5px; }
+table.t { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.t td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 600; }
+table.t tr.tot td { font-weight: 800; border-bottom: 0; }
+table.t tr.hl td { color: var(--red-text); }
+.actions { padding: 14px 16px; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); }
+.actions .btn { flex: 1 1 140px; }
+
+/* Lock */
+.lock { text-align: center; padding: 40px 16px; display: grid; gap: 18px; justify-items: center; }
+.dots { display: flex; gap: 14px; }
+.dots i { width: 14px; height: 14px; border: 2px solid var(--mute); }
+.dots i.on { background: var(--red); border-color: var(--red); }
+.pad { display: grid; grid-template-columns: repeat(3, 76px); gap: 10px; }
+.pad button { height: 64px; background: var(--ink-2); border: 1px solid var(--line); font: 700 26px var(--display); }
+.pad button:active { background: var(--ink-3); }
+.shake { animation: shake .35s; }
+@keyframes shake { 20%,60% { transform: translateX(-8px) } 40%,80% { transform: translateX(8px) } }
+
+/* Leads */
+.lead { background: var(--ink-2); border: 1px solid var(--line); padding: 14px; display: grid; gap: 8px; }
+.lead.due { border-left: 3px solid var(--red); }
+.lead-h { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.lead-h b { font-size: 16px; }
+.stage { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 4px 7px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+.lead .meta { color: var(--mute); font-size: 13px; }
+.lead .btn-row .btn { padding: 9px 10px; font-size: 12.5px; }
+.empty { text-align: center; color: var(--mute); padding: 36px 16px; border: 1px dashed var(--line); }
+
+/* Checklist */
+.ck { display: grid; gap: 0; }
+.ck label { display: grid; grid-template-columns: 24px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.ck input { width: 20px; height: 20px; accent-color: var(--red); margin: 2px 0 0; }
+.ck b { font-weight: 600; }
+.ck small { display: block; color: var(--mute); font-size: 12.5px; }
+.ck input:checked + span b { color: var(--mute); text-decoration: line-through; }
+.prog { height: 4px; background: var(--ink-3); margin: 8px 0 4px; }
+.prog i { display: block; height: 100%; background: var(--red); }
+
+.toast { position: fixed; left: 50%; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 16px); transform: translateX(-50%); z-index: 60; background: var(--bone); color: var(--ink); padding: 10px 16px; font: 700 13px var(--body); max-width: calc(100% - 32px); }
+.cred { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.cred div { background: var(--ink-2); padding: 12px; }
+.cred span { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.cred b { display: block; font: 700 16px var(--body); margin-top: 3px; word-break: break-word; }
+.qr { background: #fff; padding: 12px; justify-self: center; margin-top: 14px; }
+.soc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.soc a { background: var(--ink-2); border: 1px solid var(--line); padding: 12px 8px; text-align: center; text-decoration: none; font: 600 12.5px var(--body); }
+.soc a small { display: block; color: var(--mute); font-size: 11px; font-weight: 500; }
+.foot { color: var(--mute); font-size: 11.5px; text-align: center; margin: 28px 0 0; line-height: 1.6; }
+@media (min-width: 560px) { .grid2 { grid-template-columns: repeat(3, 1fr); } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="#home" aria-label="AWaz Realty home">
+    <svg viewBox="0 0 264 100" aria-hidden="true"><path fill="var(--red)" fill-rule="evenodd" d="M0,100 L18,0 L38,0 L56,100 L38,100 L34.5,80 L21.5,80 L18,100 Z M24.2,63 L28,36 L31.8,63 Z"/><g fill="currentColor"><path d="M62,0 L78,0 L85,58 L93,0 L111,0 L119,58 L126,0 L142,0 L129,100 L110,100 L102,44 L94,100 L75,100 Z"/><path fill-rule="evenodd" d="M148,100 L166,0 L186,0 L204,100 L186,100 L182.5,80 L169.5,80 L166,100 Z M172.2,63 L176,36 L179.8,63 Z"/><path d="M210,0 H264 V16 L231,84 H264 V100 H210 V84 L243,16 H210 Z"/></g></svg>
+    <span>Realty</span>
+  </a>
+  <div class="top-r">
+    <select class="cur" id="cur" aria-label="Show amounts in"><option>AED</option><option>USD</option><option>GBP</option><option>INR</option></select>
+    <button class="mode-chip" id="modeChip" type="button" aria-label="Switch mode"><i></i><span>Client</span></button>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<nav class="tabs" aria-label="Sections">
+  <button data-tab="home" aria-current="page"><svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5 10v10h5v-6h4v6h5V10"/></svg>Home</button>
+  <button data-tab="tools"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18"/><path d="M8 7h8M8 11h2M12 11h0M14 11h2M8 15h2M12 15h0M14 15h2M8 18h2M14 18h2"/></svg>Tools</button>
+  <button data-tab="guides"><svg viewBox="0 0 24 24"><path d="M4 5h6a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-6a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h6z"/></svg>Guides</button>
+  <button data-tab="launches"><svg viewBox="0 0 24 24"><path d="M4 21V9l5-3v15M9 21V3l6 3v15M15 21v-9l5 2v7M2 21h20"/></svg>Launches</button>
+  <button data-tab="broker"><svg viewBox="0 0 24 24" id="brokerIcon"><rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Broker<span class="badge" id="dueBadge" hidden></span></button>
+</nav>
+
+<section class="sheet" id="sheet" aria-modal="true" role="dialog" aria-labelledby="sheetTitle">
+  <div class="sheet-bar">
+    <button type="button" id="sheetBack" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <h2 id="sheetTitle"></h2>
+    <button type="button" id="sheetShare" aria-label="Share" hidden><svg viewBox="0 0 24 24"><path d="M12 3v12M7 8l5-5 5 5M5 13v8h14v-8"/></svg></button>
+  </div>
+  <div class="sheet-body" id="sheetBody">
+    <iframe id="siteFrame" title="AWaz Realty" hidden></iframe>
+    <div class="native" id="nativeBody" hidden></div>
+    <div class="loading" id="loading" hidden><div class="bars"><i></i><i></i><i></i><i></i></div></div>
+  </div>
+</section>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+/* ============================================================
+   AWaz Realty app. Client mode by default; broker mode behind a PIN.
+   Calculators and guides open the synced website (site.html) in app
+   mode, so they always match the website. Data comes from data.js,
+   regenerated from the website every morning.
+   ============================================================ */
+const D = window.APPDATA || {};
+const WA = "971586032580", PHONE = "+971586032580", EMAIL = "ahusain@springfield-re.com";
+const BOOK = "https://calendar.app.google/T7Str2jVSvmZEARA9";
+const SIGN = "Ahmed Wazir · AWaz Realty\nSpringfield Properties · RERA BRN 85446\nWhatsApp +971 58 603 2580";
+const NB = window.AndroidBridge || null;
+const FX = Object.assign({ USD: 0.27229, GBP: 0.2033, INR: 25.91 }, (D.fx || {}).per_aed || {});
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DH = '<svg class="dh" viewBox="0 0 22 20" role="img" aria-label="AED"><path d="M5 2.5v15M5 2.5h5a7.5 7.5 0 0 1 0 15H5M1 8h19M1 12h19" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>';
+
+/* ---------- storage ---------- */
+const S = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+  sset(k, v) { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (e) {} }
+};
+
+/* ---------- money ---------- */
+function compact(n) {
+  const f = (v, u) => (v >= 100 ? Math.round(v) : +v.toFixed(v >= 10 ? 1 : 2)).toString() + u;
+  const a = Math.abs(n), s = n < 0 ? "-" : "";
+  if (a >= 1e9) return s + f(a / 1e9, "bn"); if (a >= 1e6) return s + f(a / 1e6, "M"); if (a >= 1e3) return s + f(a / 1e3, "K"); return s + Math.round(a);
+}
+function inr(n) { if (n >= 1e7) { const c = n / 1e7; return "₹" + (c >= 100 ? Math.round(c).toLocaleString("en-IN") : c.toFixed(c >= 10 ? 1 : 2)) + " Cr"; } return "₹" + (n / 1e5).toFixed(1) + " L"; }
+let CUR = (() => { try { return localStorage.getItem("awaz-cur") || "AED"; } catch (e) { return "AED"; } })();
+const SYM = { USD: "$", GBP: "£", INR: "₹" };
+const conv = n => CUR === "AED" ? n : n * FX[CUR];
+const short = n => CUR === "INR" ? inr(conv(n)) : (CUR === "AED" ? DH : SYM[CUR]) + compact(conv(n));
+const full = n => (CUR === "AED" ? DH : SYM[CUR]) + Math.round(conv(n)).toLocaleString(CUR === "INR" ? "en-IN" : "en-US");
+const aedTxt = n => "AED " + Math.round(n).toLocaleString("en-US");
+const curTxt = n => CUR === "AED" ? "" : ` (about ${SYM[CUR]}${Math.round(conv(n)).toLocaleString(CUR === "INR" ? "en-IN" : "en-US")})`;
+const num = v => Math.max(0, +String(v).replace(/,/g, "") || 0);
+const fmtD = (d, o = { day: "numeric", month: "short" }) => { if (!d) return ""; const x = new Date(String(d).length <= 10 ? d + "T12:00:00" : d); return isNaN(x) ? String(d) : x.toLocaleDateString("en-GB", o); };
+const today = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+
+/* ---------- phone bridge ---------- */
+function openExt(url) { if (NB && NB.openExternal) NB.openExternal(url); else window.open(url, "_blank", "noopener"); }
+const waLink = (text, to = WA) => `https://wa.me/${to}${text ? "?text=" + encodeURIComponent(text) : ""}`;
+const waPhone = p => { let d = String(p || "").replace(/[^\d+]/g, ""); if (d.startsWith("+")) d = d.slice(1); else if (d.startsWith("00")) d = d.slice(2); else if (d.startsWith("05")) d = "971" + d.slice(1); else if (d.startsWith("5") && d.length === 9) d = "971" + d; return d; };
+function shareText(text, title = "AWaz Realty") {
+  if (NB && NB.share) return NB.share(text, title);
+  if (navigator.share) return navigator.share({ title, text }).catch(() => {});
+  copyText(text);
+}
+function copyText(text) {
+  if (NB && NB.copy) { NB.copy(text); toast("Copied"); return; }
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast("Copied"), () => {
+    const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); toast("Copied"); } catch (e) {} t.remove();
+  });
+}
+let tt; function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2200); }
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-ext]"); if (a) { e.preventDefault(); openExt(a.href); }
+});
+
+/* ---------- icons ---------- */
+const IC = {
+  plan: '<path d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4M8 13h3M8 16h6"/>',
+  cost: '<path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/>',
+  sell: '<path d="M4 17l6-6 4 4 6-7M14 8h6v6"/>',
+  yield: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  roe: '<path d="M3 17c4 0 5-10 9-10s5 6 9 6M3 21h18"/>',
+  mort: '<path d="M3 11 12 4l9 7M6 10v10h12V10M10 15h4"/>',
+  rent: '<path d="M7 7h10l-3-3M17 17H7l3 3"/>',
+  visa: '<path d="M4 4h16v16H4zM8 9h8M8 13h5M15 15l2 2 3-4"/>',
+  india: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  match: '<path d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12zM15 15l5 5"/>',
+  planner: '<path d="M5 4h14v16H5zM9 9l1.5 1.5L14 7M9 15h6"/>',
+  map: '<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2zM9 4v14M15 6v14"/>',
+  glossary: '<path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2zM5 18a2 2 0 0 1 2-2h12"/>',
+  faq: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14M12 17h0"/>',
+  law: '<path d="M12 3v18M5 7h14M7 7l-3 7h6zM17 7l-3 7h6M8 21h8"/>',
+  why: '<path d="M12 3l2.6 5.6L20 9.5l-4 4 1 5.9-5-2.8-5 2.8 1-5.9-4-4 5.4-.9z"/>',
+  globe: '<path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM3 12h18"/>',
+  area: '<path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12zM12 7a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>',
+  dev: '<path d="M4 21V5l8-2v18M12 9l8 2v10M2 21h20M7 8h2M7 12h2M7 16h2"/>',
+  owner: '<path d="M3 11 12 4l9 7M6 10v10h12V10M12 13v4M10 15h4"/>',
+  shield: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/>',
+  money: '<path d="M3 6h18v12H3zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM6 9v0M18 15v0"/>',
+  quote: '<path d="M5 3h10l4 4v14H5zM14 3v5h5M8 12h8M8 16h5"/>',
+  leads: '<path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21c0-4 3-6 7-6s7 2 7 6M17 7h5M19.5 4.5v5"/>',
+  msg: '<path d="M4 4h16v12H8l-4 4z M8 9h8M8 12h5"/>',
+  check: '<path d="M4 4h16v16H4zM8 12l3 3 5-6"/>',
+  brief: '<path d="M4 18V8M9 18V5M14 18v-6M19 18V9M2 21h20"/>',
+  conv: '<path d="M4 8h13l-3-3M20 16H7l3 3"/>',
+  card: '<path d="M3 5h18v14H3zM7 10a2 2 0 1 0 4 0 2 2 0 0 0-4 0M5.5 16c.5-1.5 2-2 3.5-2s3 .5 3.5 2M14 9h5M14 13h4"/>',
+  gear: '<path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>',
+  wa: '<path d="M4 20l1.3-4A8 8 0 1 1 8 19z M9 9c0 3 3 6 6 6l1-1.5-2-1-1 1c-1-.5-2-1.5-2.5-2.5l1-1-1-2z"/>',
+  call: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/>',
+  mail: '<path d="M3 5h18v14H3zM3 6l9 7 9-7"/>',
+  cal: '<path d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4"/>'
+};
+const ico = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k] || ""}</svg>`;
+
+/* ---------- catalog: what opens the website in app mode ---------- */
+const TOOLS = [
+  { id: "calc", t: "Payment plan", d: "Every instalment, dated, from booking to keys", i: "plan", h: "calc" },
+  { id: "total", t: "Total cost", d: "Fees and cash needed to buy", i: "cost", h: "toolkit", only: "toolkit", tab: 1 },
+  { id: "resale", t: "Sell before handover", d: "Profit on an off-plan flip", i: "sell", h: "toolkit", only: "toolkit", tab: 2 },
+  { id: "yield", t: "Rental yield", d: "Gross and net, against the Dubai average", i: "yield", h: "yield" },
+  { id: "roe", t: "Return on equity", d: "What your cash really earns, with a mortgage", i: "roe", h: "roe" },
+  { id: "mortgage", t: "Mortgage", d: "Monthly payment and cash to complete", i: "mort", h: "mortgage" },
+  { id: "buyrent", t: "Buy or rent", d: "Which leaves you richer, year by year", i: "rent", h: "buyrent" },
+  { id: "golden", t: "Golden Visa check", d: "Does this property qualify?", i: "visa", h: "golden" },
+  { id: "lrs", t: "India LRS & TCS", d: "Remittance limits and tax collected", i: "india", h: "abroad" },
+  { id: "match", t: "Find my match", d: "Six questions, a shortlist of launches", i: "match", h: "match" },
+  { id: "planner", t: "Investor planner", d: "Due diligence, compare, handover calendar", i: "planner", h: "planner" },
+  { id: "map", t: "Launch map", d: "Where every project sits", i: "map", h: "map" },
+  { id: "glossary", t: "Glossary", d: "Oqood, NOC, Ejari and the rest", i: "glossary", h: "toolkit", only: "toolkit", tab: 3 },
+  { id: "faq", t: "Buyer FAQ", d: "The ten questions everyone asks", i: "faq", h: "toolkit", only: "toolkit", tab: 4 }
+];
+const GUIDES = [
+  { t: "Why invest in UAE property", d: "Tax, yields, visa, the dollar peg", i: "why", h: "why" },
+  { t: "Golden Visa through property", d: "Dubai vs Abu Dhabi rules, how to apply", i: "visa", h: "golden" },
+  { t: "Dubai real estate law", d: "Off-plan, escrow, handover, renting", i: "law", h: "laws" },
+  { t: "Abu Dhabi real estate law", d: "Ownership, fees, owners' committees", i: "law", h: "adlaw" },
+  { t: "Area guides", d: "Where the launches are, emirate by emirate", i: "area", h: "areas" },
+  { t: "The UAE's main developers", d: "Track records, from Emaar to Aldar", i: "dev", h: "developers" },
+  { t: "Sell or lease with Ahmed", d: "Owners: get your property in front of buyers", i: "owner", h: "sell" }
+];
+const ABROAD = [
+  { t: "From anywhere", d: "What's the same for every buyer", h: "buyabroad", f: "🌍" },
+  { t: "From India", d: "LRS, TCS, NRI accounts", h: "abroad", f: "🇮🇳" },
+  { t: "From Pakistan", d: "SBP rules and paying", h: "from-pakistan", f: "🇵🇰" },
+  { t: "From Saudi Arabia", d: "Paying and reporting", h: "from-saudi", f: "🇸🇦" },
+  { t: "From the UK", d: "CGT, IHT, reporting", h: "from-uk", f: "🇬🇧" },
+  { t: "From the USA", d: "FBAR, FATCA, tax", h: "from-us", f: "🇺🇸" }
+];
+
+/* ---------- mode ---------- */
+const PIN_KEY = "awaz-pin", UNLOCK = "awaz-broker", KEEP = "awaz-keep";
+const hash = s => { let h = 5381; for (const c of "awaz:" + s) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
+const isBroker = () => S.sget(UNLOCK) === "1" || (S.get(KEEP, false) && S.get("awaz-keep-on", false));
+function setBroker(on) {
+  S.sset(UNLOCK, on ? "1" : null); if (!on) S.set("awaz-keep-on", false); else if (S.get(KEEP, false)) S.set("awaz-keep-on", true);
+  paintMode(); render();
+}
+function paintMode() {
+  const on = isBroker(); $("modeChip").classList.toggle("on", on); $("modeChip").querySelector("span").textContent = on ? "Broker" : "Client";
+  $("brokerIcon").innerHTML = on ? IC.money.replace("", "") : '<rect x="5" y="11" width="14" height="10"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>';
+  const due = on ? dueLeads().length : 0; $("dueBadge").hidden = !due; $("dueBadge").textContent = due;
+}
+$("modeChip").addEventListener("click", () => { if (isBroker()) { setBroker(false); toast("Client mode"); } else go("broker"); });
+
+/* ---------- router ---------- */
+let TAB = "home";
+function go(tab) { TAB = tab; if (location.hash !== "#" + tab) history.replaceState(null, "", "#" + tab); render(); window.scrollTo(0, 0); }
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => go(b.dataset.tab)));
+function render() {
+  document.querySelectorAll(".tabs button").forEach(b => b.toggleAttribute("aria-current", b.dataset.tab === TAB) || b.dataset.tab === TAB && b.setAttribute("aria-current", "page"));
+  document.querySelectorAll(".tabs button").forEach(b => b.dataset.tab === TAB ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+  const m = $("main");
+  m.innerHTML = { home: homeView, tools: toolsView, guides: guidesView, launches: launchesView, broker: brokerView }[TAB]();
+  bindScreen(m);
+}
+$("cur").value = CUR;
+$("cur").addEventListener("change", e => { CUR = e.target.value; try { localStorage.setItem("awaz-cur", CUR); } catch (err) {} render(); if (NATIVE) NATIVE.refresh?.(); });
+
+/* ---------- sheet (website views and native tools) ---------- */
+let SHEET = false, NATIVE = null, SITE_V = (D.synced || "").replace(/\D/g, "");
+function openSite(o) {
+  const q = new URLSearchParams({ app: "1", v: SITE_V });
+  if (o.only) q.set("only", o.only); if (o.tab) q.set("tab", o.tab); if (o.proj) q.set("proj", o.proj);
+  openSheet(o.t);
+  $("nativeBody").hidden = true; NATIVE = null;
+  const f = $("siteFrame"); f.hidden = false; $("loading").hidden = false;
+  const url = "site.html?" + q + "#" + (o.h || "top");
+  if (f.dataset.base === q.toString()) { try { f.contentWindow.location.hash = o.h; $("loading").hidden = true; } catch (e) { f.src = url; } }
+  else { f.dataset.base = q.toString(); f.src = url; }
+  clearTimeout(openSite.t); openSite.t = setTimeout(() => $("loading").hidden = true, 6000);
+}
+$("siteFrame").addEventListener("load", () => setTimeout(() => $("loading").hidden = true, 120));
+window.addEventListener("message", e => {
+  const m = e.data; if (!m || !m.awaz) return;
+  if (m.type === "close") closeSheet();
+  else if (m.type === "open") openExt(m.url);
+  else if (m.type === "ready") $("loading").hidden = true;
+});
+function openNative(title, tool) {
+  openSheet(title);
+  $("siteFrame").hidden = true; $("loading").hidden = true;
+  const nb = $("nativeBody"); nb.hidden = false; nb.innerHTML = tool.html(); NATIVE = tool;
+  $("sheetBody").scrollTop = 0;
+  tool.init && tool.init(nb);
+  $("sheetShare").hidden = !tool.share; $("sheetShare").onclick = () => tool.share && tool.share();
+}
+function openSheet(title) {
+  $("sheetTitle").textContent = title || ""; $("sheetShare").hidden = true;
+  const s = $("sheet"); s.classList.add("open"); SHEET = true;
+  if (!history.state || !history.state.sheet) history.pushState({ sheet: 1 }, "", location.hash);
+}
+function closeSheet(fromPop) {
+  if (!SHEET) return; SHEET = false; $("sheet").classList.remove("open"); NATIVE = null;
+  if (!fromPop && history.state && history.state.sheet) history.back();
+  paintMode(); if (TAB === "broker" || TAB === "home") render();
+}
+$("sheetBack").addEventListener("click", () => closeSheet());
+window.addEventListener("popstate", () => { if (SHEET) closeSheet(true); });
+// Android back button asks the page first
+window.appBack = () => { if (SHEET) { closeSheet(); return true; } if (TAB !== "home") { go("home"); return true; } return false; };
+
+function bindScreen(root) {
+  root.querySelectorAll("[data-site]").forEach(b => b.addEventListener("click", () => {
+    const o = [...TOOLS, ...GUIDES, ...ABROAD].find(x => (x.id || x.h) === b.dataset.site) || { h: b.dataset.site, t: b.dataset.title || "" };
+    openSite(Object.assign({}, o, b.dataset.proj ? { proj: b.dataset.proj } : {}));
+  }));
+  root.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => go(b.dataset.go)));
+  root.querySelectorAll("[data-tool]").forEach(b => b.addEventListener("click", () => { const t = BT[b.dataset.tool]; openNative(t.t, t); }));
+  root.querySelectorAll("[data-launch]").forEach(b => b.addEventListener("click", () => openNative(D.projects[+b.dataset.launch].name, launchDetail(+b.dataset.launch))));
+  if (TAB === "launches") bindLaunches(root);
+  if (TAB === "broker") bindBroker(root);
+}
+
+/* ================= CLIENT SCREENS ================= */
+function marketCard(name, d) {
+  if (!d) return "";
+  const key = d.mixBasis === "count" ? "count" : "aed", sum = d.mix.reduce((a, m) => a + (m[key] || 0), 0) || 1;
+  const C = ["var(--red)", "var(--bone)", "var(--mute)"];
+  return `<div class="mk-card"><div class="mk-head"><h3>${esc(name)}</h3><span class="mk-per">${esc(d.period.label)}</span></div>
+    <div class="mk-total">${short(d.total)}<small>${esc(d.totalSub || "Total value")}</small></div>
+    <div class="mk-bar">${d.mix.map((m, i) => `<span style="flex:${m[key] || 0};background:${C[i]}"></span>`).join("")}</div>
+    <div class="mk-mix">${d.mix.map((m, i) => `<div><i style="background:${C[i]}"></i>${esc(m.name)}<b>${m.aed ? short(m.aed) : Number(m.count).toLocaleString("en-US")}</b>${Math.round((m[key] || 0) / sum * 100)}%</div>`).join("")}</div>
+    <p class="mk-src">Source: ${(d.sources || []).map(s => `<a href="${esc(s.url)}" data-ext>${esc(s.name)}</a>`).join(", ")}</p></div>`;
+}
+function statVal(t) { return t.aed != null ? short(t.aed) : t.num != null ? Number(t.num).toLocaleString("en-US") : t.pct != null ? `<span class="${t.pct >= 0 ? "up" : "down"}">${t.pct >= 0 ? "▲" : "▼"} ${Math.abs(t.pct)}%</span>` : esc(t.text || ""); }
+function newsRows(n = 4) {
+  const items = ((D.news || {}).items || []).slice(0, n);
+  return items.length ? `<div class="panel" style="padding:0 16px">${items.map(x => `<a class="row" href="${esc(x.url)}" data-ext><div class="t"><b>${esc(x.title)}</b><small>${esc(x.source)}${x.date ? " · " + fmtD(x.date) : ""}</small></div><span class="go">↗</span></a>`).join("")}</div>` : `<p class="muted">No headlines yet.</p>`;
+}
+function homeView() {
+  const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  const p = D.pulse || {}, picks = (D.projects || []).map((x, i) => [x, i]).filter(([x]) => x.pick);
+  const tick = ((D.ticker || {}).items || []);
+  const quick = ["calc", "total", "golden", "yield"].map(id => TOOLS.find(t => t.id === id));
+  return `<div class="screen">
+    <div class="screen-head">
+      <p class="eyebrow"><i></i>${hi} · RERA BRN 85446</p>
+      <h1>The voice of <em>UAE real estate</em></h1>
+      <p class="sub">Off-plan launches, honest numbers and buyer guides from Ahmed Wazir, Springfield Properties.</p>
+      <div class="hero-cta">
+        <a class="btn btn-red" href="${waLink("Hi Ahmed, I found you through the AWaz Realty app.")}" data-ext>${ico("wa").replace('aria-hidden="true"', 'aria-hidden="true" style="width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8"')}WhatsApp Ahmed</a>
+        <a class="btn" href="${BOOK}" data-ext>Book a call</a>
+      </div>
+    </div>
+
+    <div class="sec"><div class="sec-t"><h2>Quick tools</h2><button data-go="tools">All tools →</button></div>
+      <div class="grid2">${quick.map(t => `<button class="tile" data-site="${t.id}">${ico(t.i)}<b>${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div></div>
+
+    ${picks.length ? `<div class="sec"><div class="sec-t"><h2>Ahmed's pick</h2><button data-go="launches">All launches →</button></div><div class="lc-list">${picks.slice(0, 2).map(([x, i]) => launchCard(x, i)).join("")}</div></div>` : ""}
+
+    <div class="sec"><div class="sec-t"><h2>Market this week</h2><span class="mk-per">Updated ${esc(fmtD((D.synced || "").slice(0, 10), { day: "numeric", month: "short" }))}</span></div>
+      <div class="mk">${marketCard("Dubai", p.dubai)}${marketCard("Abu Dhabi", p.abudhabi)}</div>
+      ${tick.length ? `<div class="tick" style="margin-top:10px">${tick.map(it => `<div class="mk-card"><div class="mk-head"><h3>${esc(it.em)}</h3><span class="mk-per">${esc(it.period)}</span></div><div class="tick-stats">${it.stats.map(s => `<div><b>${statVal(s)}</b><small>${esc(s.label)}</small></div>`).join("")}</div><p class="mk-src">Source: <a href="${esc(it.source.url)}" data-ext>${esc(it.source.name)}</a></p></div>`).join("")}</div>` : ""}
+    </div>
+
+    <div class="sec"><div class="sec-t"><h2>Dirham today</h2><span class="mk-per">${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short", year: "numeric" }))}</span></div>
+      <div class="fx"><div><span>AED 1M =</span><b>$${compact(1e6 * FX.USD)}</b></div><div><span>AED 1M =</span><b>£${compact(1e6 * FX.GBP)}</b></div><div><span>AED 1M =</span><b>${inr(1e6 * FX.INR)}</b></div></div></div>
+
+    <div class="sec"><div class="sec-t"><h2>Headlines</h2></div>${newsRows(4)}</div>
+
+    <div class="sec"><div class="sec-t"><h2>Talk to Ahmed</h2></div>
+      <div class="panel" style="padding:0 16px">
+        <a class="row" href="${waLink("Hi Ahmed, I found you through the AWaz Realty app.")}" data-ext><div class="t"><b>WhatsApp</b><small>+971 58 603 2580 · English, Arabic, Hindi, Urdu</small></div><span class="go">→</span></a>
+        <a class="row" href="tel:${PHONE}" data-ext><div class="t"><b>Call</b><small>+971 58 603 2580</small></div><span class="go">→</span></a>
+        <a class="row" href="mailto:${EMAIL}" data-ext><div class="t"><b>Email</b><small>${EMAIL}</small></div><span class="go">→</span></a>
+        <a class="row" href="${waLink("Hi Ahmed, please add me to Ahmed's UAE Real Estate Private Collection on WhatsApp.")}" data-ext><div class="t"><b>Join the Private Collection</b><small>Launch alerts on WhatsApp. One-way, messages vanish after 7 days.</small></div><span class="go">→</span></a>
+        <button class="row" id="saveContact"><div class="t"><b>Save Ahmed's contact</b><small>Add to your phone's contacts</small></div><span class="go">+</span></button>
+      </div></div>
+
+    <div class="sec"><div class="sec-t"><h2>Follow @awaz.realty</h2></div>
+      <div class="soc">
+        <a href="https://www.instagram.com/awaz.realty" data-ext>Instagram<small>Reels & launches</small></a>
+        <a href="https://www.tiktok.com/@awaz.realty" data-ext>TikTok<small>Quick takes</small></a>
+        <a href="https://www.youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA?sub_confirmation=1" data-ext>YouTube<small>Subscribe</small></a>
+        <a href="https://www.youtube.com/channel/UC29rND5JpEEFSATZUVwWGIw?sub_confirmation=1" data-ext>Shorts<small>Subscribe</small></a>
+        <a href="https://www.linkedin.com/in/ahmed-wazir/" data-ext>LinkedIn<small>Market takes</small></a>
+        <a href="https://linktr.ee/ahmedwazir" data-ext>Linktree<small>Everything</small></a>
+      </div></div>
+
+    <p class="foot">Ahmed Wazir · AWaz Realty · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · NMA advertiser permit 8476056<br>Figures are estimates for guidance, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="background:none;border:0;color:var(--mute);text-decoration:underline;font-size:11.5px;padding:6px">Privacy policy</button></p>
+  </div>`;
+}
+document.addEventListener("click", e => {
+  if (!e.target.closest("#saveContact")) return;
+  if (NB && NB.addContact) NB.addContact("Ahmed Wazir", PHONE, EMAIL, "AWaz Realty · Springfield Properties", "Real Estate Agent · RERA BRN 85446");
+  else shareText(VCARD, "Ahmed Wazir");
+});
+const VCARD = ["BEGIN:VCARD", "VERSION:3.0", "N:Wazir;Ahmed;;;", "FN:Ahmed Wazir", "ORG:AWaz Realty · Springfield Properties", "TITLE:Real Estate Agent · RERA BRN 85446", "TEL;TYPE=CELL:" + PHONE, "EMAIL;TYPE=WORK:" + EMAIL, "URL:https://linktr.ee/ahmedwazir", "END:VCARD"].join("\n");
+
+function toolsView() {
+  return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>Investor toolkit</p><h1>Know the numbers</h1><p class="sub">The same calculators as the website. Amounts follow the currency at the top.</p></div>
+    <div class="grid2">${TOOLS.map(t => `<button class="tile" data-site="${t.id}">${ico(t.i)}<b>${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div>
+    ${isBroker() ? `<div class="sec"><div class="sec-t"><h2>Broker tools</h2><button data-go="broker">Open →</button></div></div>` : ""}</div>`;
+}
+function guidesView() {
+  return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>Buyer guides</p><h1>Buy with your eyes open</h1><p class="sub">Plain-English guides, checked against official sources.</p></div>
+    <div class="panel" style="padding:0 16px">${GUIDES.map(g => `<button class="row" data-site="${g.h}"><div class="t"><b>${esc(g.t)}</b><small>${esc(g.d)}</small></div><span class="go">→</span></button>`).join("")}</div>
+    <div class="sec"><div class="sec-t"><h2>Buying from abroad</h2></div>
+      <div class="grid2">${ABROAD.map(g => `<button class="tile" data-site="${g.h}"><span style="font-size:24px;line-height:1">${g.f}</span><b>${esc(g.t)}</b><small>${esc(g.d)}</small></button>`).join("")}</div></div></div>`;
+}
+
+/* ---------- launches ---------- */
+let LF = { em: "all", type: "all" };
+function priceSpec(p) { const v = (p.specs || []).find(([, x]) => x && typeof x === "object"); return v ? v[1] : null; }
+function specHtml(v) { return v && typeof v === "object" ? `${v.pre ? esc(v.pre) : ""}${short(v.aed)}` : esc(v); }
+function launchCard(p, i) {
+  return `<button class="lc${p.pick ? " pick" : ""}" data-launch="${i}">
+    ${p.pick ? `<span class="pickbar">Ahmed's pick · Hot</span>` : ""}
+    <div class="lc-top"><span>${esc(p.em)} · ${esc(p.type)}</span><span class="st">${esc(p.status)}</span></div>
+    <h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span>
+    <dl class="specs">${(p.specs || []).slice(0, 3).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${specHtml(v)}</dd></div>`).join("")}</dl></button>`;
+}
+function launchesView() {
+  const P = D.projects || [], ems = ["all", ...new Set(P.map(p => p.em))];
+  const list = P.map((p, i) => [p, i]).filter(([p]) => (LF.em === "all" || p.em === LF.em) && (LF.type === "all" || p.type === LF.type)).sort((a, b) => (b[0].pick ? 1 : 0) - (a[0].pick ? 1 : 0));
+  return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>On my radar</p><h1>Launches</h1><p class="sub">Off-plan and commercial projects I'm tracking. Register early: launches go to whoever's first in line.</p></div>
+    <div class="chips" id="emF">${ems.map(e => `<button class="chip" data-em="${esc(e)}" aria-pressed="${LF.em === e}">${e === "all" ? "All emirates" : esc(e)}</button>`).join("")}</div>
+    <div class="chips" id="tyF" style="margin-top:6px">${["all", "Residential", "Commercial"].map(t => `<button class="chip" data-ty="${t}" aria-pressed="${LF.type === t}">${t === "all" ? "All types" : t}</button>`).join("")}</div>
+    <div class="lc-list" style="margin-top:14px">${list.length ? list.map(([p, i]) => launchCard(p, i)).join("") : `<p class="empty">Nothing here yet. Message me and I'll tell you what's coming.</p>`}</div>
+    <div class="sec grid2">
+      <button class="tile" data-site="map">${ico("map")}<b>Launch map</b><small>Every project on one map</small></button>
+      <button class="tile" data-site="match">${ico("match")}<b>Find my match</b><small>Six questions, your shortlist</small></button>
+      <button class="tile" data-site="planner">${ico("planner")}<b>Compare</b><small>Side by side, plus handover calendar</small></button>
+      <button class="tile" data-site="developers">${ico("dev")}<b>Developers</b><small>Who's building what</small></button>
+    </div></div>`;
+}
+function bindLaunches(root) {
+  root.querySelectorAll("[data-em]").forEach(b => b.addEventListener("click", () => { LF.em = b.dataset.em; render(); }));
+  root.querySelectorAll("[data-ty]").forEach(b => b.addEventListener("click", () => { LF.type = b.dataset.ty; render(); }));
+}
+function launchText(p, forClient) {
+  const pr = priceSpec(p);
+  const lines = [`${p.name}${p.dev ? " by " + p.dev : ""}`, `${p.loc}, ${p.em} · ${p.type}`, `Status: ${p.status}`, "", p.blurb || ""];
+  const specs = (p.specs || []).map(([k, v]) => `${k}: ${v && typeof v === "object" ? (v.pre || "") + aedTxt(v.aed) : v}`);
+  if (specs.length) lines.push("", ...specs);
+  if (p.note) lines.push(p.note);
+  return forClient ? [`Hi, thought this one might suit you:`, "", ...lines, "", "Want me to hold a spot or send the full brochure and payment plan?", "", SIGN].join("\n") : lines.join("\n");
+}
+function launchDetail(i) {
+  const p = D.projects[i];
+  return {
+    t: p.name,
+    html: () => `<p class="eyebrow"><i></i>${esc(p.em)} · ${esc(p.type)} · ${esc(p.status)}</p>
+      <h2 style="font-size:40px;font-weight:900;margin-top:10px">${esc(p.name)}</h2>
+      <p class="muted" style="margin-top:6px">${esc(p.dev)} · ${esc(p.loc)}</p>
+      ${p.pick ? `<p style="margin-top:14px;padding:12px;border-left:3px solid var(--red);background:var(--ink-2)">${esc(p.pick)}</p>` : ""}
+      <p style="margin-top:14px">${esc(p.blurb)}</p>
+      <dl class="specs" style="margin-top:16px">${(p.specs || []).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${specHtml(v)}</dd></div>`).join("")}</dl>
+      ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}
+      <div class="btn-row" style="margin-top:20px">
+        <a class="btn btn-red" href="${waLink(`Hi Ahmed, I'd like to register interest in ${p.name} (${p.em}).`)}" data-ext>Register interest</a>
+        ${p.plan || priceSpec(p) ? `<button class="btn" data-site="calc" data-proj="${esc(p.name)}">Payment plan</button>` : ""}
+      </div>
+      ${isBroker() ? `<div class="btn-row" style="margin-top:8px"><button class="btn btn-ghost" id="ldShare">Send to a client</button><button class="btn btn-ghost" id="ldCopy">Copy details</button></div>` : ""}`,
+    init(nb) {
+      bindScreen(nb);
+      nb.querySelector("#ldShare")?.addEventListener("click", () => shareText(launchText(p, true), p.name));
+      nb.querySelector("#ldCopy")?.addEventListener("click", () => copyText(launchText(p, false)));
+    },
+    share: () => shareText(isBroker() ? launchText(p, true) : `${p.name}: ${p.em} launch I'm watching on the AWaz Realty app.\n\n${launchText(p, false)}\n\nAsk Ahmed: ${waLink("")}`, p.name)
+  };
+}
+
+/* ================= BROKER MODE ================= */
+let pinBuf = "", pinStage = "";
+function brokerView() {
+  if (!isBroker()) {
+    const has = !!S.get(PIN_KEY, null); pinStage = pinStage || (has ? "enter" : "new");
+    const label = { enter: "Enter your PIN", new: "Set a 4-digit PIN", confirm: "Enter it again" }[pinStage];
+    return `<div class="screen"><div class="lock">
+      <p class="eyebrow"><i></i>Broker mode</p>
+      <h1 style="font-size:36px;font-weight:900">${label}</h1>
+      <p class="sub" style="max-width:32ch">${has ? "Your deal tools, leads and templates." : "Keeps clients out of your broker tools when they use your phone. It's a lock for convenience, so keep anything sensitive out of the notes."}</p>
+      <div class="dots" id="dots">${[0, 1, 2, 3].map(i => `<i class="${i < pinBuf.length ? "on" : ""}"></i>`).join("")}</div>
+      <div class="pad" id="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-k="${k}" aria-label="${k === "⌫" ? "Delete" : k}">${k}</button>`).join("")}</div>
+    </div></div>`;
+  }
+  const due = dueLeads(), L = S.get("awaz-leads", []);
+  const T = (k, extra = "") => { const t = BT[k]; return `<button class="tile" data-tool="${k}">${ico(t.i)}<b>${esc(t.t)}</b><small>${esc(t.d)}</small>${extra}</button>`; };
+  return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>Broker mode · BRN 85446</p><h1>Your <em>toolkit</em></h1>
+      <p class="sub">${due.length ? `<b style="color:var(--red-text)">${due.length} follow-up${due.length > 1 ? "s" : ""} due today.</b> ` : ""}${L.length} lead${L.length === 1 ? "" : "s"} on this phone.</p></div>
+    <div class="grid2">
+      ${T("leads", due.length ? `<span class="tag">${due.length} due</span>` : "")}${T("templates")}${T("quote")}${T("plan")}${T("commission")}${T("brief")}${T("checklists")}${T("convert")}
+    </div>
+    <div class="sec"><div class="sec-t"><h2>Client tools</h2><button data-go="tools">All →</button></div>
+      <div class="grid2">${["golden", "roe", "match"].map(id => { const t = TOOLS.find(x => x.id === id); return `<button class="tile" data-site="${id}">${ico(t.i)}<b>${esc(t.t)}</b><small>${esc(t.d)}</small></button>`; }).join("")}</div></div>
+    <div class="sec"><div class="panel" style="padding:0 16px">
+      <button class="row" data-tool="card"><div class="t"><b>My credentials & contact card</b><small>BRN, ORN, permit, QR to share</small></div><span class="go">→</span></button>
+      <button class="row" data-tool="settings"><div class="t"><b>Settings & backup</b><small>PIN, stay unlocked, back up leads</small></div><span class="go">→</span></button>
+      <button class="row" id="lockNow"><div class="t"><b>Lock and switch to client mode</b><small>Hand the phone to a client</small></div><span class="go">🔒</span></button>
+    </div></div>
+    <p class="foot">Data synced ${esc(D.synced || "—")} (Dubai time)</p></div>`;
+}
+function bindBroker(root) {
+  root.querySelector("#lockNow")?.addEventListener("click", () => { setBroker(false); go("home"); toast("Locked. Client mode on."); });
+  const pad = root.querySelector("#pad"); if (!pad) return;
+  pad.addEventListener("click", e => {
+    const b = e.target.closest("[data-k]"); if (!b) return;
+    const k = b.dataset.k;
+    if (k === "⌫") pinBuf = pinBuf.slice(0, -1); else if (pinBuf.length < 4) pinBuf += k;
+    if (pinBuf.length === 4) {
+      if (pinStage === "enter") {
+        if (hash(pinBuf) === S.get(PIN_KEY)) { pinBuf = ""; pinStage = ""; setBroker(true); toast("Broker mode on"); return; }
+        return fail();
+      }
+      if (pinStage === "new") { pinStage = "confirm"; pinStage_new = pinBuf; pinBuf = ""; return render(); }
+      if (pinStage === "confirm") {
+        if (pinBuf === pinStage_new) { S.set(PIN_KEY, hash(pinBuf)); pinBuf = ""; pinStage = ""; setBroker(true); toast("PIN set. Broker mode on."); return; }
+        pinStage = "new"; return fail("Didn't match. Try again.");
+      }
+    }
+    render();
+  });
+  function fail(msg) { pinBuf = ""; render(); const d = $("dots"); d.classList.add("shake"); toast(msg || "Wrong PIN"); }
+}
+let pinStage_new = "";
+
+/* ---------- leads ---------- */
+const STAGES = ["New", "Contacted", "Viewing", "Negotiating", "EOI / booked", "Closed", "Lost"];
+const dueLeads = () => S.get("awaz-leads", []).filter(l => l.next && l.next <= today() && !["Closed", "Lost"].includes(l.stage));
+const saveLeads = L => S.set("awaz-leads", L);
+let LEADF = "Active";
+function leadsTool() {
+  return {
+    t: "Leads",
+    html() {
+      const L = S.get("awaz-leads", []);
+      const f = LEADF, shown = L.filter(l => f === "All" ? true : f === "Due" ? dueLeads().some(d => d.id === l.id) : f === "Active" ? !["Closed", "Lost"].includes(l.stage) : l.stage === f)
+        .sort((a, b) => (a.next || "9") < (b.next || "9") ? -1 : 1);
+      return `<div class="btn-row"><button class="btn btn-red" id="ldAdd">+ Add lead</button></div>
+        <div class="chips" style="margin-top:12px">${["Due", "Active", ...STAGES, "All"].map(s => `<button class="chip" data-lf="${s}" aria-pressed="${f === s}">${s}${s === "Due" ? ` (${dueLeads().length})` : ""}</button>`).join("")}</div>
+        <div style="display:grid;gap:10px;margin-top:12px">${shown.length ? shown.map(leadCard).join("") : `<p class="empty">${L.length ? "No leads in this view." : "No leads yet. Add your first one, it stays on this phone only."}</p>`}</div>
+        <p class="note">Leads are stored on this phone only, not on any server. Back them up from Settings.</p>`;
+    },
+    init(nb) {
+      nb.querySelector("#ldAdd").addEventListener("click", () => openNative("New lead", leadForm()));
+      nb.querySelectorAll("[data-lf]").forEach(b => b.addEventListener("click", () => { LEADF = b.dataset.lf; reopen(); }));
+      nb.querySelectorAll("[data-le]").forEach(b => b.addEventListener("click", () => openNative("Edit lead", leadForm(b.dataset.le))));
+      nb.querySelectorAll("[data-lwa]").forEach(b => b.addEventListener("click", () => { const l = S.get("awaz-leads", []).find(x => x.id === b.dataset.lwa); openExt(waLink(`Hi ${l.name.split(" ")[0]}, Ahmed here from AWaz Realty.`, waPhone(l.phone))); }));
+      nb.querySelectorAll("[data-ltp]").forEach(b => b.addEventListener("click", () => { TPL_LEAD = b.dataset.ltp; openNative("Templates", BT.templates); }));
+      nb.querySelectorAll("[data-ldone]").forEach(b => b.addEventListener("click", () => {
+        const L = S.get("awaz-leads", []), l = L.find(x => x.id === b.dataset.ldone);
+        const d = new Date(); d.setDate(d.getDate() + 3); l.next = d.toISOString().slice(0, 10);
+        if (l.stage === "New") l.stage = "Contacted"; l.log = (l.log || []).concat(today() + " followed up"); saveLeads(L); toast("Next follow-up in 3 days"); reopen();
+      }));
+      function reopen() { nb.innerHTML = leadsTool().html(); leadsTool().init(nb); paintMode(); }
+    }
+  };
+}
+function leadCard(l) {
+  const due = l.next && l.next <= today() && !["Closed", "Lost"].includes(l.stage);
+  return `<div class="lead${due ? " due" : ""}"><div class="lead-h"><b>${esc(l.name)}</b><span class="stage">${esc(l.stage)}</span></div>
+    <div class="meta">${[l.interest, l.budget ? "Budget " + l.budget : "", l.source].filter(Boolean).map(esc).join(" · ")}</div>
+    ${l.next ? `<div class="meta" style="color:${due ? "var(--red-text)" : "var(--mute)"}">Follow up ${l.next === today() ? "today" : fmtD(l.next, { weekday: "short", day: "numeric", month: "short" })}</div>` : ""}
+    ${l.notes ? `<div class="meta">${esc(l.notes).slice(0, 160)}</div>` : ""}
+    <div class="btn-row">${l.phone ? `<button class="btn" data-lwa="${l.id}">WhatsApp</button><a class="btn" href="tel:${esc(l.phone)}" data-ext>Call</a>` : ""}<button class="btn" data-ltp="${l.id}">Template</button>${due ? `<button class="btn" data-ldone="${l.id}">Done</button>` : ""}<button class="btn btn-ghost" data-le="${l.id}">Edit</button></div></div>`;
+}
+function leadForm(id) {
+  const L = S.get("awaz-leads", []), l = L.find(x => x.id === id) || { stage: "New", next: today() };
+  const projOpts = (D.projects || []).map(p => p.name);
+  return {
+    t: id ? "Edit lead" : "New lead",
+    html: () => `<form class="form" id="lf" onsubmit="return false">
+      <div class="f full"><label for="l-name">Name</label><input id="l-name" required value="${esc(l.name || "")}" autocomplete="off"></div>
+      <div class="f full"><label for="l-phone">Phone / WhatsApp</label><input id="l-phone" type="tel" value="${esc(l.phone || "")}" placeholder="+971 5x xxx xxxx"></div>
+      <div class="f"><label for="l-stage">Stage</label><select id="l-stage">${STAGES.map(s => `<option${s === l.stage ? " selected" : ""}>${s}</option>`).join("")}</select></div>
+      <div class="f"><label for="l-next">Next follow-up</label><input id="l-next" type="date" value="${esc(l.next || "")}"></div>
+      <div class="f full"><label for="l-int">Looking for</label><input id="l-int" list="l-projs" value="${esc(l.interest || "")}" placeholder="e.g. 2BR off-plan, Palm Springs"><datalist id="l-projs">${projOpts.map(p => `<option value="${esc(p)}">`).join("")}</datalist></div>
+      <div class="f"><label for="l-bud">Budget</label><input id="l-bud" value="${esc(l.budget || "")}" placeholder="AED 2M"></div>
+      <div class="f"><label for="l-src">Source</label><input id="l-src" list="l-srcs" value="${esc(l.source || "")}"><datalist id="l-srcs">${["Instagram", "TikTok", "YouTube", "Website", "WhatsApp community", "Referral", "Portal", "Walk-in", "Event"].map(s => `<option value="${s}">`).join("")}</datalist></div>
+      <div class="f full"><label for="l-notes">Notes</label><textarea id="l-notes">${esc(l.notes || "")}</textarea></div>
+      ${l.log && l.log.length ? `<p class="note full" style="grid-column:1/-1">History: ${l.log.slice(-5).map(esc).join(" · ")}</p>` : ""}
+      <div class="btn-row full" style="grid-column:1/-1"><button class="btn btn-red" id="l-save">Save</button>${id ? `<button class="btn btn-ghost" id="l-del">Delete</button>` : ""}</div></form>`,
+    init(nb) {
+      nb.querySelector("#l-save").addEventListener("click", () => {
+        const v = k => nb.querySelector("#l-" + k).value.trim();
+        if (!v("name")) { toast("Add a name"); return; }
+        const rec = Object.assign(l, { id: l.id || Date.now().toString(36), name: v("name"), phone: v("phone"), stage: v("stage"), next: v("next"), interest: v("int"), budget: v("bud"), source: v("src"), notes: v("notes"), updated: today() });
+        if (!id) { rec.created = today(); rec.log = [today() + " added"]; L.push(rec); }
+        saveLeads(L); toast("Saved"); openNative("Leads", leadsTool()); paintMode();
+      });
+      nb.querySelector("#l-del")?.addEventListener("click", () => { if (!confirm("Delete this lead?")) return; saveLeads(L.filter(x => x.id !== id)); openNative("Leads", leadsTool()); paintMode(); });
+    }
+  };
+}
+
+/* ---------- message templates ---------- */
+let TPL_LEAD = null;
+const TPLS = [
+  { t: "First reply to an enquiry", b: "Hi {name}, Ahmed here from AWaz Realty (Springfield Properties). Thanks for reaching out about {project}.\n\nTo point you to the right options, what's your budget, and is this for living in or investing?\n\nHappy to jump on a quick call whenever suits you." },
+  { t: "New launch alert", b: "Hi {name}, a new launch you'll want to see before it goes public: {project}.\n\nUnits go to whoever registers first. Shall I hold a spot and send the brochure and payment plan?" },
+  { t: "EOI reminder", b: "Hi {name}, quick reminder: the EOI window for {project} closes on {date}. The EOI is refundable and puts you in the queue for unit selection.\n\nWant me to send the details so you can lock it in?" },
+  { t: "Viewing confirmation", b: "Hi {name}, confirming our viewing at {project} on {date} at {time}.\n\nLocation: {location}\n\nPlease bring your Emirates ID or passport. See you there!" },
+  { t: "After a viewing", b: "Hi {name}, thanks for your time today at {project}. What did you think?\n\nI can put together a side-by-side with the other options and the full cost breakdown, if useful." },
+  { t: "Payment reminder", b: "Hi {name}, a friendly heads-up: your next instalment for {project} is due on {date}.\n\nLet me know if you need the developer's payment details or a statement." },
+  { t: "Check-in on a cold lead", b: "Hi {name}, Ahmed from AWaz Realty. It's been a while, so a quick update: prices in the areas you liked have moved, and there are a couple of new launches worth a look.\n\nStill thinking about buying this year?" },
+  { t: "Owner: listing request", b: "Hi {name}, I'm Ahmed Wazir, a RERA-registered agent (BRN 85446) with Springfield Properties. I have buyers asking for homes like yours at {project}.\n\nWould you be open to a no-obligation valuation based on recent transactions?" },
+  { t: "Thank you after a deal", b: "Hi {name}, congratulations again on {project}! Thank you for trusting me with it.\n\nIf you have a minute, a short recommendation would mean a lot. And I'm always here for anything you need after handover." },
+  { t: "Follow me on social", b: "Hi {name}, I share new launches and honest market takes first on my channels:\n\nInstagram & TikTok: @awaz.realty\nYouTube: youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA\n\nWould love to have you there." }
+];
+const TPL_SAVED = () => S.get("awaz-tpl-edits", {});
+function templatesTool() {
+  let cur = 0;
+  return {
+    t: "Message templates",
+    html() {
+      const L = S.get("awaz-leads", []), lead = L.find(l => l.id === TPL_LEAD);
+      return `<div class="form">
+        <div class="f full"><label for="tp-pick">Template</label><select id="tp-pick">${TPLS.map((x, i) => `<option value="${i}">${esc(x.t)}</option>`).join("")}</select></div>
+        <div class="f full"><label for="tp-lead">Send to</label><select id="tp-lead"><option value="">Choose from my leads (optional)</option>${L.map(l => `<option value="${l.id}"${lead && lead.id === l.id ? " selected" : ""}>${esc(l.name)}</option>`).join("")}</select></div>
+        <div class="f"><label for="tp-name">Name</label><input id="tp-name" value="${esc(lead ? lead.name.split(" ")[0] : "")}"></div>
+        <div class="f"><label for="tp-project">Project</label><input id="tp-project" list="tp-projs" value="${esc(lead ? lead.interest || "" : "")}"><datalist id="tp-projs">${(D.projects || []).map(p => `<option value="${esc(p.name)}">`).join("")}</datalist></div>
+        <div class="f"><label for="tp-date">Date</label><input id="tp-date" placeholder="Sat 8 Nov"></div>
+        <div class="f"><label for="tp-time">Time</label><input id="tp-time" placeholder="4:30pm"></div>
+        <div class="f full"><label for="tp-location">Location</label><input id="tp-location" placeholder="Sales centre or map link"></div>
+        <div class="f full"><label for="tp-out">Message (edit freely)</label><textarea id="tp-out" style="min-height:200px"></textarea></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-red" id="tp-wa">WhatsApp</button><button class="btn" id="tp-share">Share</button><button class="btn" id="tp-copy">Copy</button></div>
+      <div class="toggle" style="margin-top:12px"><label for="tp-sign">Add my signature</label><input type="checkbox" id="tp-sign"></div>
+      <button class="btn btn-ghost btn-sm" id="tp-save" style="margin-top:12px">Save my wording for this template</button>`;
+    },
+    init(nb) {
+      const q = s => nb.querySelector(s), body = () => (TPL_SAVED()[cur] || TPLS[cur].b);
+      const fill = () => {
+        let t = body(); for (const k of ["name", "project", "date", "time", "location"]) { const v = q("#tp-" + k).value.trim(); t = t.split("{" + k + "}").join(v || (k === "name" ? "there" : "[" + k + "]")); }
+        if (q("#tp-sign").checked) t += "\n\n" + SIGN; q("#tp-out").value = t;
+      };
+      q("#tp-pick").addEventListener("change", e => { cur = +e.target.value; fill(); });
+      q("#tp-lead").addEventListener("change", e => { const l = S.get("awaz-leads", []).find(x => x.id === e.target.value); TPL_LEAD = e.target.value || null; if (l) { q("#tp-name").value = l.name.split(" ")[0]; q("#tp-project").value = l.interest || ""; } fill(); });
+      nb.querySelectorAll("input").forEach(i => i.id !== "tp-out" && i.addEventListener("input", fill));
+      q("#tp-sign").addEventListener("change", fill);
+      q("#tp-wa").addEventListener("click", () => { const l = S.get("awaz-leads", []).find(x => x.id === q("#tp-lead").value); openExt(l && l.phone ? waLink(q("#tp-out").value, waPhone(l.phone)) : "https://wa.me/?text=" + encodeURIComponent(q("#tp-out").value)); });
+      q("#tp-share").addEventListener("click", () => shareText(q("#tp-out").value));
+      q("#tp-copy").addEventListener("click", () => copyText(q("#tp-out").value));
+      q("#tp-save").addEventListener("click", () => {
+        let t = q("#tp-out").value;
+        for (const k of ["name", "project", "date", "time", "location"]) { const v = q("#tp-" + k).value.trim(); if (v) t = t.split(v).join("{" + k + "}"); }
+        t = t.replace("\n\n" + SIGN, ""); const s = TPL_SAVED(); s[cur] = t; S.set("awaz-tpl-edits", s); toast("Saved your wording");
+      });
+      fill();
+    }
+  };
+}
+
+/* ---------- client cost quote ---------- */
+const FEES = [
+  { id: "dxb", label: "Dubai · DLD 4%", auth: "DLD", pct: 4, dubai: 1 },
+  { id: "adm", label: "Abu Dhabi · ADM 2%", auth: "ADM", pct: 2, abu: 1 },
+  { id: "adgm", label: "Abu Dhabi · ADGM (Reem, Maryah) 2%", auth: "ADGM", pct: 2, abu: 1 },
+  { id: "shj", label: "Sharjah 4%", auth: "Sharjah", pct: 4 },
+  { id: "ajm", label: "Ajman 4%", auth: "Ajman", pct: 4 },
+  { id: "rak", label: "Ras Al Khaimah 4%", auth: "RAK", pct: 4 },
+  { id: "none", label: "Transfer fee waived", auth: "Transfer", pct: 0 }
+];
+function quoteRows(o) {
+  const f = FEES.find(x => x.id === o.fee) || FEES[0], price = o.price, loan = Math.min(price, o.loan), ready = o.state === "ready";
+  const mreg = f.dubai ? loan * 0.0025 + 290 : f.abu ? Math.min(loan * 0.001, 1e6) : loan * 0.0025;
+  const rows = [[`${f.auth} transfer fee (${f.pct}%)`, price * f.pct / 100]];
+  if (f.dubai) rows.push(["DLD admin and title deed", 580]);
+  if (f.dubai && ready) rows.push(["Registration trustee", price >= 500000 ? 4200 : 2100]);
+  if (ready && o.agency) rows.push(["Agency fee (2% + VAT)", price * 0.021]);
+  if (loan > 0) rows.push([`Mortgage registration${f.abu ? " (0.1%)" : " (0.25% + AED 290)"}`, mreg], ["Bank valuation (approx.)", 3150], ["Bank arrangement fee (up to 1% + VAT)", loan * 0.0105]);
+  return { rows, fees: rows.reduce((a, r) => a + r[1], 0), loan, f };
+}
+function quoteTool() {
+  const st = S.get("awaz-q", { price: 2000000, fee: "dxb", state: "ready", loan: 0, agency: true, client: "", project: "" });
+  let lastText = "";
+  return {
+    t: "Client cost sheet",
+    html: () => `<p class="sub">Builds the cash-to-complete for a client and sends it as a clean message. Same fee rules as the website.</p>
+      <div class="form" style="margin-top:14px">
+        <div class="f"><label for="q-client">Client name</label><input id="q-client" value="${esc(st.client)}"></div>
+        <div class="f"><label for="q-project">Property</label><input id="q-project" list="q-projs" value="${esc(st.project)}"><datalist id="q-projs">${(D.projects || []).map(p => `<option value="${esc(p.name)}">`).join("")}</datalist></div>
+        <div class="f full"><label for="q-price">Price (AED)</label><input id="q-price" type="number" inputmode="numeric" value="${st.price}"></div>
+        <div class="f full"><label for="q-fee">Emirate</label><select id="q-fee">${FEES.map(f => `<option value="${f.id}"${f.id === st.fee ? " selected" : ""}>${f.label}</option>`).join("")}</select></div>
+        <div class="f full"><label>Buying</label><div class="seg" id="q-state"><button type="button" data-v="offplan" aria-pressed="${st.state === "offplan"}">Off-plan</button><button type="button" data-v="ready" aria-pressed="${st.state === "ready"}">Ready / resale</button></div></div>
+        <div class="f full"><label for="q-loan">Mortgage loan (AED, 0 if cash)</label><input id="q-loan" type="number" inputmode="numeric" value="${st.loan}"></div>
+        <div class="toggle f full"><label for="q-agency">Agency fee 2% + VAT (resale)</label><input type="checkbox" id="q-agency"${st.agency ? " checked" : ""}></div>
+      </div><div id="q-out"></div>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      const run = () => {
+        Object.assign(st, { client: q("#q-client").value, project: q("#q-project").value, price: num(q("#q-price").value), fee: q("#q-fee").value, loan: num(q("#q-loan").value), agency: q("#q-agency").checked });
+        S.set("awaz-q", st);
+        const r = quoteRows(st), down = st.price - r.loan, cash = down + r.fees;
+        q("#q-out").innerHTML = `<div class="result"><div class="big"><span>Total cash to complete</span><b>${full(cash)}</b><small>${short(down)} ${r.loan ? "down payment" : "price"} + ${short(r.fees)} fees (${(r.fees / Math.max(1, st.price) * 100).toFixed(1)}%)</small></div>
+          <table class="t">${r.rows.map(([l, v]) => `<tr><td>${esc(l)}</td><td class="n">${full(v)}</td></tr>`).join("")}<tr class="tot"><td>Fees total</td><td class="n">${full(r.fees)}</td></tr></table>
+          <div class="actions"><button class="btn btn-red" id="q-wa">Send on WhatsApp</button><button class="btn" id="q-copy">Copy</button></div></div>
+          <p class="note">Estimates. Bank fees vary by lender; off-plan buyers also pay any developer admin/Oqood charges.</p>`;
+        lastText = [`Hi${st.client ? " " + st.client.split(" ")[0] : ""}, here's the cost breakdown${st.project ? " for " + st.project : ""}:`, "",
+          `Price: ${aedTxt(st.price)}`, r.loan ? `Mortgage: ${aedTxt(r.loan)} (down payment ${aedTxt(down)})` : "Cash purchase", "",
+          ...r.rows.map(([l, v]) => `• ${l}: ${aedTxt(v)}`), "", `Fees total: ${aedTxt(r.fees)}`, `Total cash to complete: ${aedTxt(cash)}${curTxt(cash)}`, "", "Estimates; final figures confirmed at transfer.", "", SIGN].join("\n");
+        q("#q-wa").addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(lastText)));
+        q("#q-copy").addEventListener("click", () => copyText(lastText));
+      };
+      nb.querySelectorAll("input,select").forEach(i => i.addEventListener("input", run));
+      nb.querySelectorAll("#q-state button").forEach(b => b.addEventListener("click", () => { st.state = b.dataset.v; nb.querySelectorAll("#q-state button").forEach(x => x.setAttribute("aria-pressed", x === b)); run(); }));
+      run(); this.refresh = run;
+    },
+    share: () => shareText(lastText)
+  };
+}
+
+/* ---------- payment plan quote ---------- */
+function planTool() {
+  const P = (D.projects || []).filter(p => p.plan || priceSpec(p));
+  let lastText = "";
+  return {
+    t: "Payment plan quote",
+    html: () => `<p class="sub">Pick a launch or enter your own numbers, then send the schedule to a client.</p>
+      <div class="form" style="margin-top:14px">
+        <div class="f full"><label for="pp-proj">Project</label><select id="pp-proj"><option value="">Your own numbers</option>${P.map(p => `<option>${esc(p.name)}</option>`).join("")}</select></div>
+        <div class="f full"><label for="pp-price">Unit price (AED)</label><input id="pp-price" type="number" inputmode="numeric" value="2000000"></div>
+        <div class="f"><label for="pp-b">Booking %</label><input id="pp-b" type="number" value="20"></div>
+        <div class="f"><label for="pp-c">Construction %</label><input id="pp-c" type="number" value="50"></div>
+        <div class="f"><label for="pp-h">On handover %</label><input id="pp-h" type="number" value="30"></div>
+        <div class="f"><label for="pp-post">Post-handover months</label><input id="pp-post" type="number" value="24"></div>
+        <div class="f"><label for="pp-ho">Handover</label><input id="pp-ho" type="month" value="2029-12"></div>
+        <div class="f"><label for="pp-fq">Construction payments</label><select id="pp-fq"><option value="1">Monthly</option><option value="3" selected>Quarterly</option><option value="6">Every 6 months</option></select></div>
+        <div class="f full"><label for="pp-fee">Transfer fee</label><select id="pp-fee">${FEES.map(f => `<option value="${f.id}">${f.label}</option>`).join("")}</select></div>
+      </div><div id="pp-out"></div>
+      <button class="btn btn-ghost btn-sm" data-site="calc" style="margin-top:12px">Open the full calculator with every date →</button>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      bindScreen(nb);
+      q("#pp-proj").addEventListener("change", () => {
+        const p = P.find(x => x.name === q("#pp-proj").value); if (!p) return;
+        const pr = priceSpec(p); if (pr) q("#pp-price").value = pr.aed;
+        if (p.plan) { q("#pp-b").value = p.plan.b; q("#pp-c").value = p.plan.c; q("#pp-h").value = p.plan.h; }
+        if (p.handover) q("#pp-ho").value = p.handover;
+        const fid = p.em === "Abu Dhabi" ? (/Reem|Maryah/i.test(p.loc) ? "adgm" : "adm") : ({ Dubai: "dxb", Sharjah: "shj", "Ras Al Khaimah": "rak", Ajman: "ajm" }[p.em] || "dxb");
+        q("#pp-fee").value = fid; q("[data-site=calc]").dataset.proj = p.name; run();
+      });
+      const run = () => {
+        const price = num(q("#pp-price").value), b = num(q("#pp-b").value), c = num(q("#pp-c").value), h = num(q("#pp-h").value), p = Math.max(0, 100 - b - c - h);
+        const post = Math.max(1, num(q("#pp-post").value) || 1), fq = +q("#pp-fq").value, f = FEES.find(x => x.id === q("#pp-fee").value);
+        const [hy, hm] = (q("#pp-ho").value || "2029-12").split("-").map(Number), now = new Date(), start = new Date(now.getFullYear(), now.getMonth(), 1), ho = new Date(hy, hm - 1, 1);
+        const span = Math.max(0, (ho.getFullYear() - start.getFullYear()) * 12 + ho.getMonth() - start.getMonth()), nC = Math.max(1, Math.floor(span / fq));
+        const fee = price * f.pct / 100, up = price * b / 100 + fee, perC = c ? price * c / 100 / nC : 0, perP = p ? price * p / 100 / post : 0;
+        const ym = d => d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+        const over = b + c + h > 100, freq = fq === 1 ? "monthly" : fq === 3 ? "quarterly" : "every 6 months";
+        if (over) { q("#pp-out").innerHTML = `<p class="note" style="color:var(--red-text)">Booking, construction and handover add up to more than 100%.</p>`; return; }
+        q("#pp-out").innerHTML = `<div class="result"><div class="big"><span>Due at booking</span><b>${full(up)}</b><small>${b}% down${fee ? ` + ${f.pct}% ${f.auth} fee` : ""}</small></div>
+          <table class="t"><tr><td>During construction<br><small class="muted">${c ? `${nC} × ${freq}` : "None"}</small></td><td class="n">${c ? full(perC) : "—"}</td></tr>
+          <tr><td>On handover · ${ym(ho)}<br><small class="muted">${h}% of price</small></td><td class="n">${h ? full(price * h / 100) : "—"}</td></tr>
+          <tr><td>After handover<br><small class="muted">${p ? `${post} monthly · ${p}%` : "None"}</small></td><td class="n">${p ? full(perP) : "—"}</td></tr>
+          <tr class="tot"><td>Total incl. ${f.auth} fee</td><td class="n">${full(price + fee)}</td></tr></table>
+          <div class="actions"><button class="btn btn-red" id="pp-wa">Send on WhatsApp</button><button class="btn" id="pp-copy">Copy</button></div></div>`;
+        const proj = q("#pp-proj").value;
+        lastText = [`Payment plan${proj ? " · " + proj : ""}`, "", `Price: ${aedTxt(price)}`, `Plan: ${b}/${c}/${h}${p ? "/" + p + " post-handover" : ""}`, "",
+          `• At booking: ${aedTxt(up)} (${b}%${fee ? ` + ${f.pct}% ${f.auth} fee` : ""})`, c ? `• Construction: ${nC} × ${aedTxt(perC)} ${freq}` : "", h ? `• On handover (${ym(ho)}): ${aedTxt(price * h / 100)}` : "", p ? `• After handover: ${post} × ${aedTxt(perP)} monthly` : "",
+          "", `Total incl. fee: ${aedTxt(price + fee)}${curTxt(price + fee)}`, "", "Subject to the developer's final SPA.", "", SIGN].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n");
+        q("#pp-wa").addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(lastText)));
+        q("#pp-copy").addEventListener("click", () => copyText(lastText));
+      };
+      nb.querySelectorAll("input,select").forEach(i => i.id !== "pp-proj" && i.addEventListener("input", run));
+      run(); this.refresh = run;
+    },
+    share: () => shareText(lastText)
+  };
+}
+
+/* ---------- commission ---------- */
+function commissionTool() {
+  const st = S.get("awaz-comm", { type: "sale", value: 2000000, pct: 2, vat: true, co: 0, mine: 50 });
+  const PRE = { sale: 2, lease: 5, offplan: 4 };
+  return {
+    t: "Commission",
+    html: () => `<div class="form">
+      <div class="f full"><label>Deal</label><div class="seg" id="cm-type">${[["sale", "Resale"], ["offplan", "Off-plan"], ["lease", "Lease"]].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${st.type === v}">${l}</button>`).join("")}</div></div>
+      <div class="f full"><label for="cm-val" id="cm-vl">${st.type === "lease" ? "Annual rent (AED)" : "Sale price (AED)"}</label><input id="cm-val" type="number" inputmode="numeric" value="${st.value}"></div>
+      <div class="f"><label for="cm-pct">Commission %</label><input id="cm-pct" type="number" step="0.25" value="${st.pct}"></div>
+      <div class="f"><label for="cm-co">Co-broker gets %</label><input id="cm-co" type="number" step="5" value="${st.co}"></div>
+      <div class="f full"><label for="cm-mine">My share of our side (%)</label><input id="cm-mine" type="number" step="5" value="${st.mine}"></div>
+      <div class="toggle f full"><label for="cm-vat">Add 5% VAT on top</label><input type="checkbox" id="cm-vat"${st.vat ? " checked" : ""}></div></div>
+      <div id="cm-out"></div>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      const run = () => {
+        Object.assign(st, { value: num(q("#cm-val").value), pct: num(q("#cm-pct").value), co: Math.min(100, num(q("#cm-co").value)), mine: Math.min(100, num(q("#cm-mine").value)), vat: q("#cm-vat").checked });
+        S.set("awaz-comm", st);
+        const gross = st.value * st.pct / 100, vat = st.vat ? gross * 0.05 : 0, co = gross * st.co / 100, ours = gross - co, me = ours * st.mine / 100, firm = ours - me;
+        q("#cm-out").innerHTML = `<div class="result"><div class="big"><span>Your earnings</span><b>${full(me)}</b><small>${st.mine}% of our side${st.co ? `, after ${st.co}% to the co-broker` : ""}</small></div>
+          <table class="t"><tr><td>Commission (${st.pct}%)</td><td class="n">${full(gross)}</td></tr>${vat ? `<tr><td>VAT 5% (collected, paid to FTA)</td><td class="n">${full(vat)}</td></tr><tr><td>${st.type === "offplan" ? "Developer pays" : "Client pays"} incl. VAT</td><td class="n">${full(gross + vat)}</td></tr>` : ""}
+          ${st.co ? `<tr><td>Co-broker (${st.co}%)</td><td class="n">−${full(co)}</td></tr>` : ""}<tr><td>Brokerage keeps</td><td class="n">${full(firm)}</td></tr><tr class="tot hl"><td>You</td><td class="n">${full(me)}</td></tr></table></div>
+          <p class="note">Your split is saved on this phone. Check your agreement for how VAT and deductions are handled.</p>`;
+      };
+      nb.querySelectorAll("#cm-type button").forEach(b => b.addEventListener("click", () => {
+        st.type = b.dataset.v; st.pct = PRE[st.type]; q("#cm-pct").value = st.pct; q("#cm-vl").textContent = st.type === "lease" ? "Annual rent (AED)" : "Sale price (AED)";
+        nb.querySelectorAll("#cm-type button").forEach(x => x.setAttribute("aria-pressed", x === b)); run();
+      }));
+      nb.querySelectorAll("input").forEach(i => i.addEventListener("input", run));
+      run(); this.refresh = run;
+    }
+  };
+}
+
+/* ---------- market brief for the WhatsApp community ---------- */
+function briefTool() {
+  const build = () => {
+    const p = D.pulse || {}, L = [];
+    L.push(`📊 UAE property this week · ${fmtD(today(), { day: "numeric", month: "short" })}`, "");
+    const mk = (n, d) => { if (!d) return; L.push(`*${n}* (${d.period.label})`, `${d.totalSub ? d.totalSub + ": " : "Total: "}AED ${compact(d.total)}`);
+      d.mix.forEach(m => L.push(`• ${m.name}: ${m.aed ? "AED " + compact(m.aed) : Number(m.count).toLocaleString("en-US")}${m.aed && m.count ? ` (${m.count.toLocaleString("en-US")} deals)` : ""}`)); L.push(""); };
+    mk("Dubai", p.dubai); mk("Abu Dhabi", p.abudhabi);
+    const picks = (D.projects || []).filter(x => x.pick);
+    if (picks.length) { L.push("*On my radar*"); picks.forEach(x => { const pr = priceSpec(x); L.push(`• ${x.name} by ${x.dev}, ${x.loc}${pr ? ` · from ${pr.pre || ""}AED ${compact(pr.aed)}` : ""} · ${x.status}`); }); L.push(""); }
+    const n = ((D.news || {}).items || []).slice(0, 3);
+    if (n.length) { L.push("*Worth reading*"); n.forEach(x => L.push(`• ${x.title} (${x.source})`, `  ${x.url}`)); L.push(""); }
+    L.push("Questions or want a unit held? Message me.", "", SIGN, "Follow @awaz.realty for launches first.");
+    return L.join("\n");
+  };
+  return {
+    t: "Market brief",
+    html: () => `<p class="sub">Built from this morning's data. Edit, then post to your Private Collection or status.</p>
+      <div class="f full" style="margin-top:14px"><label for="br-out">Message</label><textarea id="br-out" style="min-height:380px;font-size:14px">${esc(build())}</textarea></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-red" id="br-wa">WhatsApp</button><button class="btn" id="br-share">Share</button><button class="btn" id="br-copy">Copy</button></div>
+      <p class="note">Figures: ${esc((D.pulse?.dubai?.sources || []).map(s => s.name).join(", ") || "website data")}. Check before posting if anything looks off.</p>`,
+    init(nb) {
+      const t = () => nb.querySelector("#br-out").value;
+      nb.querySelector("#br-wa").addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(t())));
+      nb.querySelector("#br-share").addEventListener("click", () => shareText(t(), "Market brief"));
+      nb.querySelector("#br-copy").addEventListener("click", () => copyText(t()));
+    },
+    share: () => shareText(document.querySelector("#br-out").value, "Market brief")
+  };
+}
+
+/* ---------- deal checklists ---------- */
+const CHECKS = {
+  offplan: { t: "Off-plan sale (Dubai)", items: [
+    ["Confirm the project is RERA-registered", "Check the project and escrow account in the Dubai REST app"],
+    ["Client KYC", "Passport, visa page or Emirates ID if resident, proof of address"],
+    ["EOI or booking form signed", "With the deposit to the developer's escrow, not to you"],
+    ["Unit, price and plan confirmed in writing", "Check the plan % adds to 100 and the handover date"],
+    ["SPA issued and signed", "Read the late-payment and cancellation clauses with the client"],
+    ["Oqood registration done", "4% DLD fee plus admin; client gets the Oqood certificate"],
+    ["Commission invoice to the developer", "With your BRN and the agency registration details"],
+    ["Payment schedule shared with the client", "Use Payment plan quote, set follow-up dates in Leads"] ] },
+  resale: { t: "Resale / ready (Dubai)", items: [
+    ["Form A signed with the seller", "Listing agreement (seller and agency)"],
+    ["Trakheesi ad permit before advertising", "Show the permit number or QR on every ad"],
+    ["Form B signed with the buyer", "Buyer and agency agreement"],
+    ["Form I if there's a co-broker", "Agency-to-agency agreement, split agreed in writing"],
+    ["Form F (MOU) signed", "Price, terms, 10% security cheque usually held by the agency"],
+    ["Mortgage pre-approval / valuation", "If financed; bank valuation must support the price"],
+    ["Seller's liability letter & clearance", "If the property is mortgaged"],
+    ["Developer NOC", "Service charges cleared; book the NOC"],
+    ["Transfer at the trustee office", "Manager's cheques ready: price, 4% DLD, trustee and admin fees"],
+    ["Keys, access cards, DEWA moved over", "And collect the commission"] ] },
+  lease: { t: "Lease (Dubai)", items: [
+    ["Form A with the landlord", "Plus title deed and landlord ID"],
+    ["Trakheesi ad permit", "Before the listing goes live"],
+    ["Tenant documents", "Passport, visa, Emirates ID"],
+    ["Rent checked against the RERA index", "Use the rental calculator for renewals"],
+    ["Tenancy contract signed", "Cheques agreed; security deposit (usually 5% unfurnished)"],
+    ["Ejari registered", "Needed for DEWA and residence"],
+    ["DEWA connection", "Tenant opens the account"],
+    ["Commission collected", "Usually 5% of annual rent + VAT"] ] },
+  abudhabi: { t: "Abu Dhabi sale", items: [
+    ["Check the property on DARI", "Ownership, any mortgage or block"],
+    ["Client KYC", "Passport or Emirates ID"],
+    ["Sale agreement / MOU", "Through DARI where required"],
+    ["Off-plan: confirm escrow and registration", "Interim register before handover"],
+    ["Transfer fee 2%", "Paid at registration"],
+    ["Mortgage registration 0.1%", "If financed (capped)"],
+    ["Commission invoice", "With licence details"] ] }
+};
+function checklistTool() {
+  let cur = S.get("awaz-ck-cur", "offplan");
+  return {
+    t: "Deal checklists",
+    html() {
+      const C = CHECKS[cur], done = S.get("awaz-ck-" + cur, {}), n = C.items.filter((_, i) => done[i]).length;
+      return `<div class="chips">${Object.entries(CHECKS).map(([k, v]) => `<button class="chip" data-ck="${k}" aria-pressed="${k === cur}">${esc(v.t)}</button>`).join("")}</div>
+        <div class="prog" style="margin-top:14px"><i style="width:${n / C.items.length * 100}%"></i></div><p class="note" style="margin:0">${n} of ${C.items.length} done</p>
+        <div class="ck">${C.items.map(([b, s], i) => `<label><input type="checkbox" data-i="${i}"${done[i] ? " checked" : ""}><span><b>${esc(b)}</b><small>${esc(s)}</small></span></label>`).join("")}</div>
+        <button class="btn btn-ghost btn-sm" id="ck-reset" style="margin-top:14px">Start a new deal (clear ticks)</button>
+        <p class="note">A working aid, not legal advice. Forms and fees change; check the latest RERA, DLD and ADREC rules.</p>`;
+    },
+    init(nb) {
+      const re = () => { nb.innerHTML = this.html(); this.init(nb); };
+      nb.querySelectorAll("[data-ck]").forEach(b => b.addEventListener("click", () => { cur = b.dataset.ck; S.set("awaz-ck-cur", cur); re(); }));
+      nb.querySelectorAll("input[data-i]").forEach(i => i.addEventListener("change", () => { const d = S.get("awaz-ck-" + cur, {}); d[i.dataset.i] = i.checked; S.set("awaz-ck-" + cur, d); re(); }));
+      nb.querySelector("#ck-reset").addEventListener("click", () => { S.set("awaz-ck-" + cur, {}); re(); });
+    }
+  };
+}
+
+/* ---------- converter ---------- */
+function convertTool() {
+  return {
+    t: "Converter",
+    html: () => `<div class="panel"><p class="eyebrow"><i></i>Size</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-ft">Sq ft</label><input id="cv-ft" type="number" inputmode="decimal" value="1000"></div>
+        <div class="f"><label for="cv-m">Sq m</label><input id="cv-m" type="number" inputmode="decimal"></div></div></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Price per foot</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-p">Price (AED)</label><input id="cv-p" type="number" inputmode="numeric" value="2000000"></div>
+        <div class="f"><label for="cv-s">Size (sq ft)</label><input id="cv-s" type="number" inputmode="numeric" value="1000"></div>
+        <div class="f"><label for="cv-r">Annual rent (AED)</label><input id="cv-r" type="number" inputmode="numeric" value="140000"></div>
+        <div class="f"><label>Result</label><div id="cv-pr" style="padding:12px 0;font-weight:700"></div></div></div></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Currency · rates of ${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short" }))}</p><div class="form" style="margin-top:10px">
+        <div class="f full"><label for="cv-aed">AED</label><input id="cv-aed" type="number" inputmode="numeric" value="1000000"></div>
+        <div class="f"><label for="cv-usd">USD</label><input id="cv-usd" type="number" inputmode="numeric"></div>
+        <div class="f"><label for="cv-gbp">GBP</label><input id="cv-gbp" type="number" inputmode="numeric"></div>
+        <div class="f full"><label for="cv-inr">INR</label><input id="cv-inr" type="number" inputmode="numeric"></div></div></div>`,
+    init(nb) {
+      const q = s => nb.querySelector(s), K = 10.7639;
+      q("#cv-ft").addEventListener("input", () => q("#cv-m").value = (num(q("#cv-ft").value) / K).toFixed(1));
+      q("#cv-m").addEventListener("input", () => q("#cv-ft").value = Math.round(num(q("#cv-m").value) * K));
+      const pr = () => { const p = num(q("#cv-p").value), s = num(q("#cv-s").value), r = num(q("#cv-r").value); q("#cv-pr").innerHTML = `${s ? "AED " + Math.round(p / s).toLocaleString("en-US") + "/sq ft" : "—"}<br><span class="muted" style="font-weight:500">${p && r ? (r / p * 100).toFixed(2) + "% gross yield" : ""}</span>`; };
+      ["#cv-p", "#cv-s", "#cv-r"].forEach(s => q(s).addEventListener("input", pr));
+      const cs = { usd: "USD", gbp: "GBP", inr: "INR" };
+      const fromAed = () => { const a = num(q("#cv-aed").value); for (const [k, c] of Object.entries(cs)) q("#cv-" + k).value = Math.round(a * FX[c]); };
+      q("#cv-aed").addEventListener("input", fromAed);
+      for (const [k, c] of Object.entries(cs)) q("#cv-" + k).addEventListener("input", () => { const a = num(q("#cv-" + k).value) / FX[c]; q("#cv-aed").value = Math.round(a); for (const [k2, c2] of Object.entries(cs)) if (k2 !== k) q("#cv-" + k2).value = Math.round(a * FX[c2]); });
+      q("#cv-ft").dispatchEvent(new Event("input")); pr(); fromAed();
+    }
+  };
+}
+
+/* ---------- my card ---------- */
+function cardTool() {
+  const line = "Ahmed Wazir · AWaz Realty (Springfield Properties)\nRERA BRN 85446 · Agency ORN 11929\nWhatsApp +971 58 603 2580 · " + EMAIL + "\nhttps://linktr.ee/ahmedwazir";
+  return {
+    t: "My card",
+    html: () => `<div class="cred">
+        <div><span>Name</span><b>Ahmed Wazir</b></div><div><span>Brand</span><b>AWaz Realty</b></div>
+        <div><span>RERA BRN</span><b>85446</b></div><div><span>Agency ORN</span><b>11929</b></div>
+        <div><span>NMA permit</span><b>8476056</b></div><div><span>Agency</span><b>Springfield Properties</b></div>
+        <div style="grid-column:1/-1"><span>WhatsApp</span><b>+971 58 603 2580</b></div>
+        <div style="grid-column:1/-1"><span>Email</span><b>${EMAIL}</b></div></div>
+      <div style="display:grid"><div class="qr" id="qrBox" hidden></div></div>
+      <p class="note" style="text-align:center" id="qrNote">Clients scan to save your contact.</p>
+      <div class="btn-row" style="margin-top:14px"><button class="btn btn-red" id="mc-share">Share my contact</button><button class="btn" id="mc-copy">Copy details</button></div>
+      <div class="btn-row" style="margin-top:8px"><a class="btn btn-ghost" href="https://linktr.ee/ahmedwazir" data-ext>Linktree</a><a class="btn btn-ghost" href="${BOOK}" data-ext>My booking link</a></div>`,
+    init(nb) {
+      nb.querySelector("#mc-share").addEventListener("click", () => shareText(line, "Ahmed Wazir"));
+      nb.querySelector("#mc-copy").addEventListener("click", () => copyText(line));
+      const draw = () => { const b = nb.querySelector("#qrBox"); try { new QRCode(b, { text: VCARD, width: 200, height: 200, colorDark: "#0B0B0C", colorLight: "#FFFFFF", correctLevel: QRCode.CorrectLevel.M }); b.hidden = false; } catch (e) { nb.querySelector("#qrNote").textContent = "QR needs a connection the first time."; } };
+      if (window.QRCode) draw(); else { const s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload = draw; s.onerror = () => nb.querySelector("#qrNote").textContent = "QR needs a connection the first time."; document.head.appendChild(s); }
+    }
+  };
+}
+
+/* ---------- settings ---------- */
+function settingsTool() {
+  return {
+    t: "Settings",
+    html: () => `<div class="toggle"><label for="st-keep">Stay unlocked on this phone<br><small class="muted">Skip the PIN until you lock it yourself</small></label><input type="checkbox" id="st-keep"${S.get(KEEP, false) ? " checked" : ""}></div>
+      <div class="panel" style="margin-top:12px;padding:0 16px">
+        <button class="row" id="st-pin"><div class="t"><b>Change PIN</b><small>Set a new 4-digit PIN</small></div><span class="go">→</span></button>
+        <button class="row" id="st-csv"><div class="t"><b>Export leads (CSV)</b><small>Share to email or Drive, opens in Excel/Sheets</small></div><span class="go">↗</span></button>
+        <button class="row" id="st-bak"><div class="t"><b>Back up everything</b><small>Leads, templates, checklists as one text block</small></div><span class="go">↗</span></button>
+        <button class="row" id="st-res"><div class="t"><b>Restore from backup</b><small>Paste a backup to bring your data to a new phone</small></div><span class="go">→</span></button>
+      </div>
+      <div class="f full" id="st-resbox" hidden style="margin-top:12px"><label for="st-paste">Paste backup</label><textarea id="st-paste"></textarea><button class="btn btn-red" id="st-do" style="margin-top:8px">Restore</button></div>
+      <p class="foot">App data synced ${esc(D.synced || "—")} · website version ${esc(SITE_V || "—")}</p>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      q("#st-keep").addEventListener("change", e => { S.set(KEEP, e.target.checked); S.set("awaz-keep-on", e.target.checked); toast(e.target.checked ? "Stays unlocked" : "PIN each time"); });
+      q("#st-pin").addEventListener("click", () => { S.set(PIN_KEY, null); try { localStorage.removeItem(PIN_KEY); } catch (e) {} S.sset(UNLOCK, null); S.set("awaz-keep-on", false); pinStage = "new"; closeSheet(); go("broker"); });
+      q("#st-csv").addEventListener("click", () => {
+        const L = S.get("awaz-leads", []), cols = ["name", "phone", "stage", "next", "interest", "budget", "source", "notes", "created", "updated"];
+        const csv = [cols.join(",")].concat(L.map(l => cols.map(c => `"${String(l[c] || "").replace(/"/g, '""')}"`).join(","))).join("\n");
+        if (NB && NB.saveFile) NB.saveFile("awaz-leads-" + today() + ".csv", csv, "text/csv"); else shareText(csv, "AWaz leads");
+      });
+      q("#st-bak").addEventListener("click", () => {
+        const o = {}; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith("awaz-") && k !== PIN_KEY) o[k] = localStorage.getItem(k); } } catch (e) {}
+        const t = "AWAZ-BACKUP " + btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+        if (NB && NB.saveFile) NB.saveFile("awaz-backup-" + today() + ".txt", t, "text/plain"); else shareText(t, "AWaz backup");
+      });
+      q("#st-res").addEventListener("click", () => q("#st-resbox").hidden = false);
+      q("#st-do").addEventListener("click", () => {
+        try { const o = JSON.parse(decodeURIComponent(escape(atob(q("#st-paste").value.trim().replace(/^AWAZ-BACKUP\s+/, ""))))); for (const [k, v] of Object.entries(o)) if (k.startsWith("awaz-")) localStorage.setItem(k, v); toast("Restored"); paintMode(); }
+        catch (e) { toast("That doesn't look like a backup"); }
+      });
+    }
+  };
+}
+
+const BT = {
+  leads: Object.assign(leadsTool(), { i: "leads", d: "Follow-ups, stages, one-tap WhatsApp" }),
+  templates: Object.assign(templatesTool(), { i: "msg", d: "Ready messages for every stage" }),
+  quote: Object.assign(quoteTool(), { i: "quote", t: "Cost sheet", d: "Cash to complete, sent to a client" }),
+  plan: Object.assign(planTool(), { i: "plan", t: "Plan quote", d: "A launch's schedule in one message" }),
+  commission: Object.assign(commissionTool(), { i: "money", d: "Your cut after splits and VAT" }),
+  brief: Object.assign(briefTool(), { i: "brief", d: "This week's numbers for your community" }),
+  checklists: Object.assign(checklistTool(), { i: "check", t: "Checklists", d: "Off-plan, resale, lease, Abu Dhabi" }),
+  convert: Object.assign(convertTool(), { i: "conv", d: "Sq ft, price per foot, currencies" }),
+  card: Object.assign(cardTool(), { i: "card", d: "" }),
+  settings: Object.assign(settingsTool(), { i: "gear", d: "" })
+};
+// Fresh tool state each time a tool opens
+const FACT = { leads: leadsTool, templates: templatesTool, quote: quoteTool, plan: planTool, commission: commissionTool, brief: briefTool, checklists: checklistTool, convert: convertTool, card: cardTool, settings: settingsTool };
+const _openNative = openNative;
+openNative = function (title, tool) { const k = Object.keys(BT).find(k => BT[k] === tool); return _openNative(title, k ? Object.assign(FACT[k](), { t: tool.t }) : tool); };
+
+/* ---------- start ---------- */
+const start = (location.hash || "#home").slice(1);
+TAB = ["home", "tools", "guides", "launches", "broker"].includes(start) ? start : "home";
+paintMode(); render();
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
+</body>
+</html>
