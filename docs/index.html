@@ -141,6 +141,26 @@ main { padding: calc(56px + env(safe-area-inset-top, 0px)) 0 calc(var(--nav-h) +
 .specs dt { font: 10.5px var(--mono); color: var(--mute); text-transform: uppercase; letter-spacing: .06em; }
 .specs dd { margin: 2px 0 0; font-weight: 700; font-size: 14px; }
 .lc-list { display: grid; gap: 10px; }
+.lc .lc-top { align-items: center; }
+.lc-logo { display: inline-flex; align-items: center; justify-content: flex-end; height: 22px; max-width: 80px; color: var(--bone); opacity: .9; flex: none; }
+.lc-logo > * { flex: none; }
+.lc .st { font: 600 10.5px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--red-text); }
+.lg { display: block; background-size: contain; background-repeat: no-repeat; background-position: center; color: #F2F2F2; flex: none; }
+.lf-sel { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+.lf-sel span { font: 600 10.5px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.lf-sel select { flex: 1; min-width: 0; background: var(--ink-2); color: var(--bone); border: 1px solid var(--line); padding: 9px 10px; font: 600 13px var(--body); }
+.lf-sel option { background: var(--ink-2); color: var(--bone); }
+/* Today + UAE public holidays */
+.hd { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
+.hd::-webkit-scrollbar { display: none; }
+.hd-c { flex: none; background: var(--ink-2); border: 1px solid var(--line); padding: 10px 12px; display: grid; gap: 2px; min-width: 150px; }
+.hd-c b { font: 700 14px var(--body); }
+.hd-c span { font: 11px var(--mono); color: var(--mute); }
+.hd-c em { font: 700 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; font-style: normal; color: var(--ok); }
+.hd-c.today { border-color: var(--red); }
+.hd-c.today em { color: var(--red-text); }
+.hd-c.past { opacity: .5; }
+.hd-c.past em { color: var(--mute); }
 
 /* Overlay sheet */
 .sheet { position: fixed; inset: 0; z-index: 40; background: var(--ink); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1); visibility: hidden; }
@@ -268,6 +288,7 @@ table.t tr.hl td { color: var(--red-text); }
 
 <div class="toast" id="toast" hidden role="status"></div>
 
+<script src="logos.js"></script>
 <script src="data.js"></script>
 <script>
 "use strict";
@@ -278,6 +299,15 @@ table.t tr.hl td { color: var(--red-text); }
    regenerated from the website every morning.
    ============================================================ */
 const D = window.APPDATA || {};
+const LG = window.APPLOGOS || { keys: [], html: [], css: "" };
+if (LG.css) document.head.insertAdjacentHTML("beforeend", `<style id="lg-css">${LG.css}</style>`);
+const devName = d => String(d || "").replace(/\s*[×(].*$/, "").replace(/ (Properties|Developments|Developers|Development)$/, "").trim();
+function devLogo(dev) {
+  const d = String(dev || "").toLowerCase(), k = LG.keys.findIndex(x => d.includes(x)), html = LG.html[k];
+  if (k < 0 || !html) return "";
+  // Fit the logo into an 80×22 box, keeping its proportions
+  return `<span class="lc-logo" aria-hidden="true">` + html.replace(/style="width:(\d+)px;height:(\d+)px"/, (m, w, h) => { const r = Math.min(80 / w, 22 / h); return `style="width:${Math.round(w * r)}px;height:${Math.round(h * r)}px"`; }) + `</span>`;
+}
 const WA = "971586032580", PHONE = "+971586032580", EMAIL = "ahusain@springfield-re.com";
 const BOOK = "https://calendar.app.google/T7Str2jVSvmZEARA9";
 const SIGN = "Ahmed Wazir · AWaz Realty\nSpringfield Properties · RERA BRN 85446\nWhatsApp +971 58 603 2580";
@@ -507,6 +537,25 @@ function newsRows(n = 4) {
   const items = ((D.news || {}).items || []).slice(0, n);
   return items.length ? `<div class="panel" style="padding:0 16px">${items.map(x => `<a class="row" href="${esc(x.url)}" data-ext><div class="t"><b>${esc(x.title)}</b><small>${esc(x.source)}${x.date ? " · " + fmtD(x.date) : ""}</small></div><span class="go">↗</span></a>`).join("")}</div>` : `<p class="muted">No headlines yet.</p>`;
 }
+function holidayStrip() {
+  const H = D.holidays || {}, tz = "Asia/Dubai", now = new Date();
+  const ymd = d => new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const today = ymd(now), day = s => new Date(s + "T12:00:00+04:00");
+  const greg = new Intl.DateTimeFormat("en-GB", { timeZone: tz, weekday: "short", day: "numeric", month: "short", year: "numeric" }).format(now);
+  const HM = ["Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Ula", "Jumada al-Akhirah", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah"];
+  let hij = ""; try { const pt = Object.fromEntries(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { timeZone: tz, day: "numeric", month: "numeric", year: "numeric" }).formatToParts(now).map(x => [x.type, x.value])); hij = `${+pt.day} ${HM[+pt.month - 1]} ${parseInt(pt.year)} AH`; } catch (e) {}
+  const fmt = (a, b) => { const o = { day: "numeric", month: "short" }, A = day(a).toLocaleDateString("en-GB", o), B = day(b).toLocaleDateString("en-GB", o), Y = day(b).getFullYear();
+    if (a === b) return `${day(a).toLocaleDateString("en-GB", { weekday: "short" })} ${A} ${Y}`;
+    return day(a).getMonth() === day(b).getMonth() ? `${day(a).getDate()}–${B} ${Y}` : `${A} – ${B} ${Y}`; };
+  const items = (H.items || []).map(h => {
+    const until = Math.round((day(h.start) - day(today)) / 864e5), on = h.start <= today && today <= h.end, past = h.end < today;
+    return { past, html: `<div class="hd-c${past ? " past" : ""}"><b>${esc(h.name)}</b><span>${esc(fmt(h.start, h.end))}</span><em>${on ? "Today" : past ? "Passed" : until === 1 ? "Tomorrow" : "In " + until + " days"}</em></div>` };
+  });
+  const cards = items.filter(i => !i.past).concat(items.filter(i => i.past)).map(i => i.html).join("");
+  return `<div class="sec"><div class="sec-t"><h2>UAE holidays</h2></div>
+    <div class="hd"><div class="hd-c today"><em>Today</em><b>${esc(greg)}</b>${hij ? `<span>${esc(hij)}</span>` : ""}</div>${cards}</div>
+    ${H.note ? `<p class="mk-src">${esc(H.note)}</p>` : ""}</div>`;
+}
 function homeView() {
   const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
   const p = D.pulse || {}, picks = (D.projects || []).map((x, i) => [x, i]).filter(([x]) => x.pick);
@@ -532,6 +581,8 @@ function homeView() {
       <div class="mk">${marketCard("Dubai", p.dubai)}${marketCard("Abu Dhabi", p.abudhabi)}</div>
       ${tick.length ? `<div class="tick" style="margin-top:10px">${tick.map(it => `<div class="mk-card"><div class="mk-head"><h3>${esc(it.em)}</h3><span class="mk-per">${esc(it.period)}</span></div><div class="tick-stats">${it.stats.map(s => `<div><b>${statVal(s)}</b><small>${esc(s.label)}</small></div>`).join("")}</div><p class="mk-src">Source: <a href="${esc(it.source.url)}" data-ext>${esc(it.source.name)}</a></p></div>`).join("")}</div>` : ""}
     </div>
+
+    ${holidayStrip()}
 
     <div class="sec"><div class="sec-t"><h2>Dirham today</h2><span class="mk-per">${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short", year: "numeric" }))}</span></div>
       <div class="fx"><div><span>AED 1M =</span><b>$${compact(1e6 * FX.USD)}</b></div><div><span>AED 1M =</span><b>£${compact(1e6 * FX.GBP)}</b></div><div><span>AED 1M =</span><b>${inr(1e6 * FX.INR)}</b></div></div></div>
@@ -580,23 +631,27 @@ function guidesView() {
 }
 
 /* ---------- launches ---------- */
-let LF = { em: "all", type: "all" };
+let LF = { em: "all", type: "all", dev: "all" };
 function priceSpec(p) { const v = (p.specs || []).find(([, x]) => x && typeof x === "object"); return v ? v[1] : null; }
 function specHtml(v) { return v && typeof v === "object" ? `${v.pre ? esc(v.pre) : ""}${short(v.aed)}` : esc(v); }
 function launchCard(p, i) {
   return `<button class="lc${p.pick ? " pick" : ""}" data-launch="${i}">
     ${p.pick ? `<span class="pickbar">Ahmed's pick · Hot</span>` : ""}
-    <div class="lc-top"><span>${esc(p.em)} · ${esc(p.type)}</span><span class="st">${esc(p.status)}</span></div>
-    <h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span>
+    <div class="lc-top"><span>${esc(p.em)} · ${esc(p.type)}</span>${devLogo(p.dev)}</div>
+    <h3>${esc(p.name)}</h3><span class="dev">${esc(p.dev)} · ${esc(p.loc)}</span><span class="st">${esc(p.status)}</span>
     <dl class="specs">${(p.specs || []).slice(0, 3).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${specHtml(v)}</dd></div>`).join("")}</dl></button>`;
 }
 function launchesView() {
-  const P = D.projects || [], ems = ["all", ...new Set(P.map(p => p.em))];
-  const list = P.map((p, i) => [p, i]).filter(([p]) => (LF.em === "all" || p.em === LF.em) && (LF.type === "all" || p.type === LF.type)).sort((a, b) => (b[0].pick ? 1 : 0) - (a[0].pick ? 1 : 0));
+  const P = D.projects || [], ems = ["all", ...new Set(P.map(p => p.em))], dc = {};
+  P.forEach(p => { const d = devName(p.dev); dc[d] = (dc[d] || 0) + 1; });
+  const devs = Object.keys(dc).sort((a, b) => dc[b] - dc[a] || a.localeCompare(b));
+  const list = P.map((p, i) => [p, i]).filter(([p]) => (LF.em === "all" || p.em === LF.em) && (LF.type === "all" || p.type === LF.type) && (LF.dev === "all" || devName(p.dev) === LF.dev)).sort((a, b) => (b[0].pick ? 1 : 0) - (a[0].pick ? 1 : 0));
   return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>On my radar</p><h1>Launches</h1><p class="sub">Off-plan and commercial projects I'm tracking. Register early: launches go to whoever's first in line.</p></div>
     <div class="chips" id="emF">${ems.map(e => `<button class="chip" data-em="${esc(e)}" aria-pressed="${LF.em === e}">${e === "all" ? "All emirates" : esc(e)}</button>`).join("")}</div>
     <div class="chips" id="tyF" style="margin-top:6px">${["all", "Residential", "Commercial"].map(t => `<button class="chip" data-ty="${t}" aria-pressed="${LF.type === t}">${t === "all" ? "All types" : t}</button>`).join("")}</div>
-    <div class="lc-list" style="margin-top:14px">${list.length ? list.map(([p, i]) => launchCard(p, i)).join("") : `<p class="empty">Nothing here yet. Message me and I'll tell you what's coming.</p>`}</div>
+    <label class="lf-sel"><span>Developer</span><select id="devF" aria-label="Filter by developer"><option value="all">All developers (${P.length})</option>${devs.map(d => `<option value="${esc(d)}"${LF.dev === d ? " selected" : ""}>${esc(d)} (${dc[d]})</option>`).join("")}</select></label>
+    <p class="mk-per" style="margin-top:10px">${list.length} project${list.length === 1 ? "" : "s"}</p>
+    <div class="lc-list" style="margin-top:8px">${list.length ? list.map(([p, i]) => launchCard(p, i)).join("") : `<p class="empty">Nothing here yet. Message me and I'll tell you what's coming.</p>`}</div>
     <div class="sec grid2">
       <button class="tile" data-site="map">${ico("map")}<b>Launch map</b><small>Every project on one map</small></button>
       <button class="tile" data-site="match">${ico("match")}<b>Find my match</b><small>Six questions, your shortlist</small></button>
@@ -607,6 +662,7 @@ function launchesView() {
 function bindLaunches(root) {
   root.querySelectorAll("[data-em]").forEach(b => b.addEventListener("click", () => { LF.em = b.dataset.em; render(); }));
   root.querySelectorAll("[data-ty]").forEach(b => b.addEventListener("click", () => { LF.type = b.dataset.ty; render(); }));
+  root.querySelector("#devF")?.addEventListener("change", e => { LF.dev = e.target.value; render(); });
 }
 function launchText(p, forClient) {
   const pr = priceSpec(p);

@@ -7,14 +7,15 @@ Reads the published website HTML (the claude.ai artifact) and writes:
   docs/site.html  the website itself, in "app mode" (no site header/footer,
                   views open on their own, links routed to the phone)
   docs/data.js    window.APPDATA: launches, FX, market pulse, ticker, news,
-                  videos and buyer rules, taken from the site's data blocks
+                  videos, buyer rules and UAE holidays, taken from the site's data blocks
+  docs/logos.js  developer logos for the launch cards
   docs/sw.js      offline cache, with a fresh version stamp so phones update
 
 Nothing else in the repo is touched. Needs Node.js (to read the PROJECTS list).
 """
 import datetime, hashlib, json, os, re, subprocess, sys, tempfile
 
-BLOCKS = ["rules-data", "fx-data", "pulse-data", "video-data", "ticker-data", "news-data"]
+BLOCKS = ["holidays-data", "rules-data", "fx-data", "pulse-data", "video-data", "ticker-data", "news-data"]
 
 APP_HEAD = r"""<meta name="robots" content="noindex">
 <style id="awaz-app-mode">
@@ -69,6 +70,20 @@ def extract_projects(html):
     return json.loads(out)
 
 
+def extract_logos(html):
+    """Developer logos in the website's DEV_KEYS order, plus their CSS."""
+    km = re.search(r"const DEV_KEYS = (\[[^\]]*\]);", html)
+    keys = json.loads(km.group(1)) if km else []
+    i = html.find('<ul class="ds-run"')
+    run = html[i:html.find("</ul>", i)] if i >= 0 else ""
+    j = html.find('<ul id="extraLogos"')
+    extra = html[j:html.find("</ul>", j)] if j >= 0 else ""
+    items = lambda block: [x.split("</li>")[0] for x in block.split("<li>")[1:]]
+    logos = items(run)[:17] + items(extra)
+    css = "".join(re.findall(r"\.lg-\d+\{background-image:url\(data:image/png;base64,[A-Za-z0-9+/=]+\)\}", html))
+    return {"keys": keys, "html": logos, "css": css}
+
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
@@ -94,6 +109,10 @@ def main():
     site = site[:i] + APP_HEAD + site[i:]
     open(os.path.join(docs, "site.html"), "w", encoding="utf-8").write(site)
 
+    logos = extract_logos(html)
+    open(os.path.join(docs, "logos.js"), "w", encoding="utf-8").write(
+        "window.APPLOGOS = " + json.dumps(logos, ensure_ascii=False, separators=(",", ":")) + ";\n")
+
     js = "window.APPDATA = " + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + ";\n"
     open(os.path.join(docs, "data.js"), "w", encoding="utf-8").write(js)
 
@@ -108,7 +127,7 @@ def main():
     sw = open(tpl, encoding="utf-8").read().replace("__VERSION__", ver)
     open(os.path.join(docs, "sw.js"), "w", encoding="utf-8").write(sw)
 
-    print(f"Synced {len(data['projects'])} launches, {len(data['news'].get('items', []))} headlines, FX {data['fx'].get('date')}, version {ver}")
+    print(f"Synced {len(data['projects'])} launches, {len(logos['html'])} logos, {len(data['news'].get('items', []))} headlines, FX {data['fx'].get('date')}, version {ver}")
 
 
 if __name__ == "__main__":
