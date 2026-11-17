@@ -32,9 +32,10 @@ SLUG = {
     "sell": "sell-off-plan-property",
     "prices": "dubai-property-prices-by-area", "charges": "dubai-service-charges-by-area", "rents": "dubai-rent-by-area",
     "stress": "off-plan-stress-test", "afford": "dubai-property-budget-from-abroad", "verify": "verify-off-plan-project-dubai",
+    "compare": "dubai-vs-global-property-markets",
 }
 # Guides get Article schema, calculators get WebApplication schema
-GUIDES = {"why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify"}
+GUIDES = {"why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify", "compare"}
 TOOLS = {"calc", "yield", "roe", "mortgage", "buyrent", "planner", "stress", "afford"}
 # Kept on the site but out of Google: not part of the off-plan focus
 NOINDEX = {"sell"}
