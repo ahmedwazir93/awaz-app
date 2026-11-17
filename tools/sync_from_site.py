@@ -20,7 +20,7 @@ BLOCKS = ["holidays-data", "rules-data", "fx-data", "pulse-data", "video-data", 
 
 APP_HEAD = r"""<meta name="robots" content="noindex">
 <style id="awaz-app-mode">
-html.app body::before, html.app .nav, html.app footer, html.app .back { display: none !important; }
+html.app body::before, html.app .nav, html.app footer, html.app .back, html.app .awb-btn, html.app .awb { display: none !important; }
 html.app .tool-view > .wrap, html.app .dev-view > .wrap, html.app .map-view > .wrap { padding-top: 12px !important; }
 html.app-only main#top > section:not(.app-keep) { display: none !important; }
 html.app-only main#top > section.app-keep { border-top: 0; padding-top: 16px; }

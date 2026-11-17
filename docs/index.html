@@ -437,6 +437,8 @@ table.t small { color: var(--mute); }
 <script src="data.js"></script>
 <script src="reelly.js"></script>
 <script src="logos.js"></script>
+<style>.awb-btn{bottom:calc(var(--nav-h) + var(--sb) + 12px)!important}.awb{bottom:calc(var(--nav-h) + var(--sb) + 70px)!important;height:min(520px,calc(100vh - var(--nav-h) - 170px))!important}</style>
+<script src="widget.js" data-endpoint="" defer></script>
 <script>
 "use strict";
 /* ============================================================
@@ -1206,7 +1208,7 @@ function homeView() {
 
 <div class="sec"><div class="sec-t"><h2>New launches in Dubai</h2></div>
       <div class="card" style="padding:16px"><p style="margin:0 0 10px">Under Dubai Land Department rules, specific projects, prices and availability can only be advertised with a DLD permit, so they aren't listed in this app. Tell me your budget and goal and I'll walk you through the launches that fit, one to one.</p>
-      <a class="act pri" style="display:inline-flex" href="${waLink("Hi Ahmed, I'd like to hear about new off-plan launches in Dubai. My budget and goal are: ")}" data-ext><span class="c">${ico("wa")}</span>Ask on WhatsApp</a></div></div>
+      <a href="${waLink("Hi Ahmed, I'd like to hear about new off-plan launches in Dubai. My budget and goal are: ")}" data-ext style="display:inline-block;background:#C8102E;color:#fff;border-radius:10px;padding:10px 16px;font-weight:600;text-decoration:none">Ask on WhatsApp</a></div></div>
 
     <div class="sec"><div class="sec-t"><h2>Market this week</h2><button class="more" data-tool="market">More ${ico("chev")}</button></div><div class="rail">${marketStats()}</div></div>
 
