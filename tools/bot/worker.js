@@ -51,14 +51,26 @@ async function getProject(env, a = {}) {
   return { ...compact(p), overview: p.ov || "", ...(isAD(p) ? {} : { total_units: p.tu }) };
 }
 
+const MOBILE_RE = /^\+?[0-9][0-9 ()-]{6,18}[0-9]$/, EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+// Contact gate: no project details or brochures until name, mobile and email are recorded and valid.
+function contactGate(lead) {
+  const miss = [];
+  if (!lead.name || String(lead.name).trim().length < 2) miss.push("full name");
+  if (!lead.mobile || !MOBILE_RE.test(String(lead.mobile).trim())) miss.push("mobile number with country code");
+  if (!lead.email || !EMAIL_RE.test(String(lead.email).trim())) miss.push("email address");
+  return miss.length ? { error: "contact_required", missing: miss, instruction: "Do not share any project details yet. Politely ask the visitor for: " + miss.join(", ") + ". Record them with update_lead, then try again." } : null;
+}
+
 const TOOLS = [
   { name: "search_projects", description: "Search Ahmed's partner developers' off-plan projects. Use only when the visitor asks about projects or asks for options matching their brief. Returns up to 8 matches.",
     input_schema: { type: "object", properties: { query: { type: "string" }, emirate: { type: "string", enum: ["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Umm Al Quwain"] }, developer: { type: "string" }, type: { type: "string" }, max_price_aed: { type: "number" }, min_beds: { type: "number" }, handover_by: { type: "string" } } } },
   { name: "get_project", description: "Full details of one project by id or exact name.", input_schema: { type: "object", properties: { id: { type: "number" }, name: { type: "string" } } } },
   { name: "update_lead", description: "Record what you learned about the visitor (only new fields).",
-    input_schema: { type: "object", properties: { name: { type: "string" }, contact: { type: "string" }, goal: { type: "string" }, budget_aed: { type: "string" }, area: { type: "string" }, unit_type: { type: "string" }, timeline: { type: "string" }, finance: { type: "string" }, buying_from: { type: "string" }, summary: { type: "string" } } } },
-  { name: "book_meeting", description: "Call when the visitor wants to talk to Ahmed, book a call, get floor plans or a brochure, or go ahead. Needs name and contact.",
-    input_schema: { type: "object", properties: { name: { type: "string" }, contact: { type: "string" }, preferred_time: { type: "string" }, route: { type: "string", enum: ["dubai", "abu-dhabi", "other-emirate"] }, notes: { type: "string" } }, required: ["name", "contact"] } }
+    input_schema: { type: "object", properties: { name: { type: "string", description: "Full name" }, mobile: { type: "string", description: "Mobile number with country code" }, email: { type: "string" }, goal: { type: "string" }, budget_aed: { type: "string" }, area: { type: "string" }, unit_type: { type: "string" }, timeline: { type: "string" }, finance: { type: "string" }, buying_from: { type: "string" }, summary: { type: "string" } } } },
+  { name: "request_brochure", description: "Call when the visitor asks for a brochure, floor plans or price list for a project. Needs name, mobile and email already recorded.",
+    input_schema: { type: "object", properties: { project: { type: "string" }, documents: { type: "string" } }, required: ["project"] } },
+  { name: "book_meeting", description: "Call when the visitor wants to talk to Ahmed, book a call or go ahead. Needs name, mobile and email already recorded.",
+    input_schema: { type: "object", properties: { preferred_time: { type: "string" }, route: { type: "string", enum: ["dubai", "abu-dhabi", "other-emirate"] }, notes: { type: "string" } }, required: ["preferred_time"] } }
 ];
 
 async function alert(env, subject, body) {
@@ -78,13 +90,14 @@ async function chat(req, env) {
   if (!msgs.length || msgs.at(-1).role !== "user") return json({ error: "bad_request" }, 400);
 
   const row = await env.DB.prepare("SELECT * FROM chats WHERE id = ?").bind(id).first();
-  const st = { stage: row?.stage || "new", route: row?.route || "dubai", lead: JSON.parse(row?.lead || "{}"), meeting: JSON.parse(row?.meeting || "null") };
-  let justBooked = false;
+  const st = { stage: row?.stage || "new", route: row?.route || "dubai", lead: JSON.parse(row?.lead || "{}"), meeting: JSON.parse(row?.meeting || "null"), brochure: JSON.parse(row?.brochure || "null") };
+  let justBooked = false, justBrochure = false;
   const run = async (name, input) => {
-    if (name === "search_projects") return searchProjects(env, input);
-    if (name === "get_project") return getProject(env, input);
-    if (name === "update_lead") { for (const [k, v] of Object.entries(input || {})) if (v) st.lead[k] = String(v).slice(0, 300); if (st.stage === "new") st.stage = "qualifying"; return { ok: true }; }
-    if (name === "book_meeting") { st.lead.name = input.name || st.lead.name; st.lead.contact = input.contact || st.lead.contact; st.stage = "meeting"; st.route = input.route || "dubai"; st.meeting = { preferred_time: input.preferred_time || "", notes: input.notes || "", at: Date.now() }; justBooked = true;
+    if (name === "search_projects") return contactGate(st.lead) || searchProjects(env, input);
+    if (name === "get_project") return contactGate(st.lead) || getProject(env, input);
+    if (name === "update_lead") { const bad = []; for (let [k, v] of Object.entries(input || {})) { if (!v) continue; v = String(v).trim().slice(0, 300); if (k === "mobile" && !MOBILE_RE.test(v)) { bad.push("mobile"); continue; } if (k === "email" && !EMAIL_RE.test(v)) { bad.push("email"); continue; } st.lead[k] = v; } if (st.stage === "new") st.stage = "qualifying"; return bad.length ? { ok: false, invalid: bad } : { ok: true, contact_complete: !contactGate(st.lead) }; }
+    if (name === "request_brochure") { const g = contactGate(st.lead); if (g) return g; if (st.stage !== "meeting") st.stage = "brochure"; st.brochure = { project: String(input.project || "").slice(0, 120), documents: String(input.documents || "brochure").slice(0, 120), at: Date.now() }; justBrochure = true; return { ok: true, note: "Ahmed will send the official documents personally to the visitor's WhatsApp or email." }; }
+    if (name === "book_meeting") { const g = contactGate(st.lead); if (g) return g; st.stage = "meeting"; st.route = input.route || "dubai"; st.meeting = { preferred_time: input.preferred_time || "", notes: input.notes || "", at: Date.now() }; justBooked = true;
       return { ok: true, booking_link: BOOKING, handled_by: st.route === "dubai" ? "Ahmed Wazir" : "a licensed agent at Springfield Properties for that emirate" }; }
     return { error: "unknown tool" };
   };
@@ -107,11 +120,13 @@ async function chat(req, env) {
   }
   const transcript = [...msgs, { role: "assistant", content: reply }].slice(-60);
   const lang = /[؀-ۿ]/.test(JSON.stringify(msgs)) ? "Arabic/Urdu" : /[ऀ-ॿ]/.test(JSON.stringify(msgs)) ? "Hindi" : "Latin script";
-  await env.DB.prepare(`INSERT INTO chats (id, created, updated, stage, route, lead, meeting, lang, messages, handled) VALUES (?1, ?2, ?2, ?3, ?4, ?5, ?6, ?7, ?8, 0)
-    ON CONFLICT(id) DO UPDATE SET updated = ?2, stage = ?3, route = ?4, lead = ?5, meeting = ?6, lang = ?7, messages = ?8`)
-    .bind(id, Date.now(), st.stage, st.route, JSON.stringify(st.lead), JSON.stringify(st.meeting), lang, JSON.stringify(transcript)).run();
+  await env.DB.prepare(`INSERT INTO chats (id, created, updated, stage, route, lead, meeting, brochure, lang, messages, handled) VALUES (?1, ?2, ?2, ?3, ?4, ?5, ?6, ?9, ?7, ?8, 0)
+    ON CONFLICT(id) DO UPDATE SET updated = ?2, stage = ?3, route = ?4, lead = ?5, meeting = ?6, brochure = ?9, lang = ?7, messages = ?8`)
+    .bind(id, Date.now(), st.stage, st.route, JSON.stringify(st.lead), JSON.stringify(st.meeting), lang, JSON.stringify(transcript), JSON.stringify(st.brochure)).run();
+  if (justBrochure) await alert(env, `Brochure requested: ${st.brochure.project} (${st.lead.name || "visitor"})`,
+    `${st.lead.name || ""}\nMobile: ${st.lead.mobile || "-"}\nEmail: ${st.lead.email || "-"}\nRoute: ${st.route}\n\nWants: ${st.brochure.documents} for ${st.brochure.project}\n\nSend the official documents personally, then mark it contacted in your desk.`);
   if (justBooked) await alert(env, `Meeting requested: ${st.lead.name || "visitor"} (${st.route})`,
-    `${st.lead.name || ""} · ${st.lead.contact || ""}\nRoute: ${st.route}\nPreferred time: ${st.meeting?.preferred_time || "-"}\nNotes: ${st.meeting?.notes || "-"}\n\nWhat they want: ${st.lead.summary || st.lead.goal || "-"}\nBudget: ${st.lead.budget_aed || "-"} · Area: ${st.lead.area || "-"} · From: ${st.lead.buying_from || "-"}\n\nOpen your desk to read the conversation.`);
+    `${st.lead.name || ""}\nMobile: ${st.lead.mobile || "-"}\nEmail: ${st.lead.email || "-"}\nRoute: ${st.route}\nPreferred time: ${st.meeting?.preferred_time || "-"}\nNotes: ${st.meeting?.notes || "-"}\n\nWhat they want: ${st.lead.summary || st.lead.goal || "-"}\nBudget: ${st.lead.budget_aed || "-"} · Area: ${st.lead.area || "-"} · From: ${st.lead.buying_from || "-"}\n\nOpen your desk to read the conversation.`);
   return json({ session_id: id, reply }, 200, cors(req, env));
 }
 

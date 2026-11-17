@@ -1,7 +1,7 @@
 -- Ahmed Wazir assistant · Cloudflare D1 schema
 CREATE TABLE IF NOT EXISTS chats (
   id TEXT PRIMARY KEY, created INTEGER, updated INTEGER,
-  stage TEXT, route TEXT, lead TEXT, meeting TEXT, lang TEXT, messages TEXT, handled INTEGER DEFAULT 0
+  stage TEXT, route TEXT, lead TEXT, meeting TEXT, brochure TEXT, lang TEXT, messages TEXT, handled INTEGER DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS forms (
   id TEXT PRIMARY KEY, created INTEGER, name TEXT, contact TEXT, interest TEXT, budget TEXT,
