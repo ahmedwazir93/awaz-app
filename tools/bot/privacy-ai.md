@@ -2,9 +2,9 @@
 
 The website and app offer an AI assistant that answers questions about buying property in Dubai. It is an automated system powered by Anthropic's Claude, not a person. Ahmed Wazir reviews conversations and follows up personally.
 
-**What we collect.** The messages you type or speak in the chat, and any details you choose to share (such as your name, WhatsApp number or email, budget and preferences). Voice input is converted to text by your browser; we do not store recordings.
+**What we collect.** The messages you type or speak in the chat, whether you share your details or continue as a guest, and the details you give in the chat's contact form (name, mobile number and email). Brochures, floor plans and other files are sent only after the form is filled in. Voice input is converted to text by your browser; we do not store recordings.
 
-**Why.** To answer your questions and, if you ask, to arrange a call with Ahmed. The legal basis is your consent, which you give before the chat starts and can withdraw at any time.
+**Why.** To answer your questions, send the files you request, arrange a call if you ask, and understand which areas, projects and topics buyers ask about most so we can improve the assistant. Insights are used in aggregate. The legal basis is your consent, which you give before the chat starts and can withdraw at any time.
 
 **Who sees it.** Ahmed Wazir and, where you ask about property in another emirate, a licensed agent at Springfield Properties for that emirate. Messages are processed by Anthropic (the AI provider) and Cloudflare (hosting) on our behalf. We do not sell your data.
 
