@@ -19,6 +19,8 @@ URL = (sys.argv[sys.argv.index("--url") + 1] if "--url" in sys.argv else "https:
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.dirname(os.path.abspath(SRC))
 TODAY = datetime.date.today().isoformat()
+sys.path.insert(0, HERE)
+import geo  # search + AI-engine extras (prerendered data, Dataset/FAQ schema, robots, llms.txt)
 
 SLUG = {
     "developers": "uae-property-developers",
@@ -148,6 +150,9 @@ seo = {}
 for m in re.finditer(r'^\s*"?([a-z_-]+)"?: \["([^"]+)", (null|"([^"]*)")\]', js_readable, re.M):
     seo[m.group(1)] = (m.group(2), m.group(4))
 home_desc = re.search(r'<meta name="description" content="([^"]+)"', s).group(1)
+_SRC_TXT = open(SRC, encoding="utf-8").read()
+_blk = lambda bid: json.loads((re.search(r'<script type="application/json" id="%s">(.*?)</script>' % bid, _SRC_TXT, re.S) or [None, '{}'])[1])
+AREA, PULSE, NEWS = _blk("area-data"), _blk("pulse-data"), _blk("news-data")
 
 # 5. Sections
 sec_re = re.compile(r'<section class="(tool-view|dev-view|map-view)[^"]*" id="([^"]+)"[^>]*>.*?</section>\s*(?=<section class="(?:tool-view|dev-view|map-view)|<footer|<ul id="extraLogos"|<script|<dialog|<div class="sticky|$)', re.S)
@@ -195,7 +200,7 @@ def body_for(view):
             return f'href="/#{v}"'
         return m.group(0)
     b = re.sub(r'href="#([a-z-]*)"', link, b)
-    return b
+    return geo.prerender(b, view, AREA, PULSE, NEWS)
 
 def page(view):
     title, desc = seo.get(view or "_", (None, None))
@@ -220,6 +225,7 @@ def page(view):
             for k in ("headline", "author", "dateModified"): pg.pop(k, None)
         ld += [f'<script type="application/ld+json">{json.dumps(crumbs, ensure_ascii=False)}</script>\n',
                f'<script type="application/ld+json">{json.dumps(pg, ensure_ascii=False)}</script>\n']
+        ld += [f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>\n' for x in geo.extra_ld(view, AREA, URL, canon, TODAY, {"@type": "Person", "name": "Ahmed Wazir", "url": URL + "/", "jobTitle": "Off-plan property consultant, RERA BRN 85446"})]
     head = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -262,7 +268,9 @@ nf = nf.replace("<title>", "<title>Page not found · ", 1)
 open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(nf)
 
 # 6. Crawl files
-open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {URL}/sitemap.xml\n")
+open(os.path.join(OUT, "robots.txt"), "w").write(geo.robots(URL))
+open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA))
+open(os.path.join(OUT, "llms-full.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA, full=True))
 prio = lambda v: "1.0" if not v else ("0.9" if v in ("golden", "laws", "adlaw", "calc") else "0.7")
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for v, path in pages.items():
