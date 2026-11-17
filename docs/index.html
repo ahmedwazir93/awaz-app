@@ -1104,13 +1104,20 @@ const openSite = o => pushView({ t: o.t, site: o });
 const TOOLS = [
   { id: "plan", g: "Buying" }, { id: "cost", g: "Buying" }, { id: "mortgage", g: "Buying" }, { id: "golden", g: "Buying" },
   { id: "yield", g: "Investing" }, { id: "roe", g: "Investing" }, { id: "resale", g: "Investing" }, { id: "buyrent", g: "Investing" },
+  { id: "verify", g: "Before you buy", t: "Verify a project", d: "8 official DLD checks", i: "verified", site: { h: "verify", t: "Verify a project" } },
   { id: "planner", g: "Before you buy", t: "Due diligence", d: "Checklist and developer track records", i: "planner", site: { h: "planner", t: "Due diligence" } },
+  { id: "stress", g: "Before you buy", t: "Stress test", d: "Rates up, currency down, empty months", i: "chart", site: { h: "stress", t: "Off-plan stress test" } },
+  { id: "afford", g: "Before you buy", t: "Afford from abroad", d: "Your realistic Dubai budget", i: "globe", site: { h: "afford", t: "Afford from abroad" } },
   { id: "lrs", g: "More", t: "India LRS & TCS", d: "Remittance limits and tax", i: "india", site: { h: "abroad", t: "Buying from India" } },
   { id: "convert", g: "More" },
   { id: "glossary", g: "More", t: "Glossary", d: "Oqood, NOC, Ejari…", i: "glossary", site: { h: "toolkit", only: "toolkit", tab: 3, t: "Glossary" } },
   { id: "faq", g: "More", t: "Buyer FAQ", d: "The questions everyone asks", i: "faq", site: { h: "toolkit", only: "toolkit", tab: 4, t: "Buyer FAQ" } }
 ].map(t => Object.assign({}, CALCS[t.id] ? { t: CALCS[t.id].t, d: CALCS[t.id].d, i: CALCS[t.id].i } : {}, t));
 const GUIDES = [
+  { t: "Dubai vs the world", d: "How the UAE beats London, New York, Singapore", i: "pulse", h: "compare" },
+  { t: "Dubai prices by area", d: "Price per sq ft and where Dubai is buying", i: "chart", h: "prices" },
+  { t: "Dubai rents by area", d: "Studio to 4 bed, straight into the yield calculator", i: "rent", h: "rents" },
+  { t: "Service charges by area", d: "The running cost buyers forget", i: "cost", h: "charges" },
   { t: "Why invest in UAE property", d: "Tax, yields, visa, the dollar peg", i: "star", h: "why" },
   { t: "Golden Visa through property", d: "Dubai vs Abu Dhabi rules", i: "visa", h: "golden" },
   { t: "Dubai real estate law", d: "Off-plan, escrow, handover, renting", i: "law", h: "laws" },
@@ -1195,6 +1202,8 @@ function homeView() {
     <div class="sec"><div class="sec-t"><h2>Explore</h2></div>
       <div class="grid4">
         <button class="app" data-tool="news"><span class="ib">${ico("news")}</span>News</button>
+        <button class="app" data-site="compare" data-title="Dubai vs the world"><span class="ib">${ico("pulse")}</span>Dubai vs world</button>
+        <button class="app" data-site="prices" data-title="Prices by area"><span class="ib">${ico("chart")}</span>Prices</button>
         <button class="app" data-site="developers"><span class="ib">${ico("dev")}</span>Developers</button>
         <button class="app" data-site="why"><span class="ib">${ico("star")}</span>Why UAE</button>
         <button class="app" data-site="buyabroad"><span class="ib">${ico("globe")}</span>From abroad</button>

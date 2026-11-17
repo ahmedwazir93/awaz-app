@@ -861,7 +861,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
 .lw-core { grid-column: 2 / 4; grid-row: 2; background: var(--red); color: #fff; padding: 18px; display: grid; gap: 4px; align-content: center; text-align: center; }
 .lw-core b { font-family: var(--display); font-weight: 900; font-size: 54px; line-height: .9; }
 .lw-core span { font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-.lw-core em { font-style: normal; font-size: 13.5px; line-height: 1.45; color: rgba(255,255,255,.9); }
+.lw-core em { font-style: normal; font-size: 13.5px; line-height: 1.45; color: #fff; }
 .lw-node { border: 1px solid var(--line); background: var(--ink); padding: 12px; display: grid; gap: 4px; align-content: start; min-width: 0; }
 .lw-node b { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 20px; line-height: 1; color: var(--bone); }
 .lw-node span { font-size: 12.5px; line-height: 1.45; color: var(--mute); }
@@ -1178,7 +1178,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
 /* ---------- Light theme: follows the visitor's device (light by day, dark at night on most phones), with a manual switch in the nav ---------- */
 :root[data-theme="light"] {
     --ink: #F4F1EE; --ink-2: #EAE6E1; --ink-3: #DFDAD4; --line: #CFC8C1;
-    --bone: #121214; --mute: #5C5860; --red: #D7192A; --red-text: #B8101F; --ok: #1B7A4B;
+    --bone: #121214; --mute: #5C5860; --red: #D7192A; --red-text: #B8101F; --ok: #13693D;
     --soft: #2F2C31; --soft-2: #26232A; --gold-text: #8F6200;
     --logo-filter: brightness(0) opacity(.82);
     color-scheme: light;
@@ -1186,7 +1186,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     --ink: #F4F1EE; --ink-2: #EAE6E1; --ink-3: #DFDAD4; --line: #CFC8C1;
-    --bone: #121214; --mute: #5C5860; --red: #D7192A; --red-text: #B8101F; --ok: #1B7A4B;
+    --bone: #121214; --mute: #5C5860; --red: #D7192A; --red-text: #B8101F; --ok: #13693D;
     --soft: #2F2C31; --soft-2: #26232A; --gold-text: #8F6200;
     --logo-filter: brightness(0) opacity(.82);
     color-scheme: light;
@@ -1344,6 +1344,88 @@ body { transition: background-color .25s ease, color .25s ease; }
 .ps-facts { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
 .ps-facts span:last-child { overflow: hidden; text-overflow: ellipsis; }
 .ps-card .opc { margin-top: auto; }
+
+.dx-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.dx-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 4px 14px; padding: 12px 2px 10px; border-bottom: 1px solid var(--line); color: var(--bone); }
+.dx-name { font-size: 15.5px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; display: flex; gap: 10px; align-items: baseline; }
+.dx-rank { font: 900 18px/1 var(--display); color: var(--red-text); }
+.dx-val { text-align: right; white-space: nowrap; }
+.dx-val small { display: block; font: 600 10.5px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.dx-n { font: 900 22px/1.05 var(--display); font-variant-numeric: tabular-nums; color: var(--bone); }
+.dx-chg { grid-column: 1 / -1; font: 600 12.5px/1.2 var(--mono); color: var(--mute); }
+.dx-chg.up { color: var(--ok); } .dx-chg.down { color: var(--red-text); }
+.dx-chg small { font-weight: 400; color: var(--mute); }
+.dx-line { grid-column: 1 / -1; display: block; height: 4px; background: var(--ink-3); margin-top: 2px; }
+.dx-line i { display: block; height: 100%; background: var(--red); animation: dxgrow .7s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes dxgrow { from { width: 0; } }
+@media (prefers-reduced-motion: reduce) { .dx-line i { animation: none; } }
+.dx-row-r { grid-template-columns: minmax(0, 1fr) auto; }
+.dx-chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.dx-chip { display: grid; gap: 2px; min-width: 0; }
+.dx-chip small { font: 600 10.5px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.dx-chip b { font: 700 15px/1.2 var(--body); color: var(--bone); }
+.dx-chip .dx-n { font: 900 20px/1.05 var(--display); }
+.dx-sc .dx-pill { justify-self: end; align-self: center; }
+.dx-pos { color: var(--ok) !important; }
+.dx-hi { background: linear-gradient(90deg, color-mix(in srgb, var(--red) 14%, transparent), transparent 70%); border-left: 3px solid var(--red); padding-left: 10px !important; }
+.dx-hi .dx-name { color: var(--red-text); }
+@media (min-width: 760px) { .dx-row:not(.dx-row-r) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) 170px; } .dx-row:not(.dx-row-r) .dx-line { grid-column: 2; grid-row: 1; align-self: center; margin: 0; } .dx-row:not(.dx-row-r) .dx-val { grid-column: 3; grid-row: 1; } .dx-row:not(.dx-row-r) .dx-chg { grid-column: 3; text-align: right; } }
+/* ---------- Dubai data pages and planners ---------- */
+.dx-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 0 0 8px; }
+.dx-kpi { background: var(--ink-2); border: 1px solid var(--line); padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+.dx-kpi span { font: 600 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.dx-kpi b { font: 900 28px/1 var(--display); color: var(--bone); text-transform: uppercase; }
+.dx-kpi small { color: var(--mute); font-size: 12.5px; }
+.dx-kpi.red { border-left: 3px solid var(--red); }
+.dx-kpi.red b { color: var(--red-text); }
+.dx-h { font: 900 22px/1.1 var(--display); text-transform: uppercase; margin: 32px 0 12px; color: var(--bone); }
+.dx-ctrl { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.dx-ctrl .cur-seg { grid-template-columns: repeat(2, minmax(0, auto)); }
+.dx-ctrl .cur-seg button { font-size: 14px; padding: 10px 14px; }
+.dx-ctrl .cur-seg button[aria-pressed="true"] { background: var(--red); color: var(--on-red); }
+.dx-ctrl input { flex: 1 1 200px; min-width: 0; background: var(--ink-2); color: var(--bone); border: 1px solid var(--line); padding: 10px 12px; font: 15px var(--body); }
+.dx-tbl { overflow-x: auto; border: 1px solid var(--line); }
+.dx-tbl table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 520px; }
+.dx-tbl table.dx-st { font-size: 13.5px; min-width: 600px; }
+.dx-tbl table.dx-st td, .dx-tbl table.dx-st th { padding: 8px 9px; }
+.dx-verdict + .dx-tbl { margin-bottom: 12px; }
+.dx-st .dx-pill { text-transform: none; letter-spacing: 0; font: 600 12px/1 var(--body); padding: 4px 7px; }
+.dx-tbl th { text-align: left; font: 600 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); padding: 10px 12px; border-bottom: 1px solid var(--line); background: var(--ink-2); }
+.dx-tbl td { padding: 9px 12px; border-bottom: 1px solid var(--line); color: var(--bone); vertical-align: middle; }
+.dx-tbl tr:last-child td { border-bottom: 0; }
+.dx-tbl .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dx-barh { width: 34%; }
+.dx-bar { width: 34%; }
+.dx-bar i { display: block; height: 8px; background: var(--red); }
+.dx-up { color: var(--ok); font-weight: 600; }
+.dx-neg { color: var(--red-text); font-weight: 600; }
+.dx-note { margin-top: 18px; padding: 14px 16px; border-left: 3px solid var(--red); background: var(--ink-2); color: var(--bone); font-size: 14.5px; }
+.dx-note a, .dx-rules a { color: var(--red-text); }
+.dx-verdict { margin-bottom: 14px; }
+.dx-verdict p { margin: 0; padding: 14px 16px; border: 1px solid var(--line); color: var(--bone); }
+.dx-good { border-left: 4px solid var(--ok) !important; }
+.dx-mid { border-left: 4px solid var(--gold-text) !important; }
+.dx-bad { border-left: 4px solid var(--red) !important; }
+.dx-verdict .dx-k { padding: 0; border: 0; font: 600 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.dx-verdict .dx-big { padding: 4px 0 6px; border: 0; font: 900 44px/1 var(--display); color: var(--red-text); }
+.dx-verdict .muted { padding: 0; border: 0; color: var(--mute); }
+.dx-pill { display: inline-block; font: 600 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border: 1px solid currentColor; white-space: nowrap; }
+.dx-pill.ok { color: var(--ok); } .dx-pill.mid { color: var(--gold-text); } .dx-pill.bad { color: var(--red-text); }
+.dx-rules { margin: 0 0 12px; padding-left: 18px; color: var(--bone); display: grid; gap: 8px; font-size: 14.5px; }
+.dx-prog { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.dx-prog .dd-bar { flex: 1; }
+.dx-prog b { color: var(--bone); white-space: nowrap; font: 600 13px var(--mono); }
+.dx-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: st; }
+.dx-step { counter-increment: st; border: 1px solid var(--line); background: var(--ink-2); padding: 14px 16px 14px 56px; position: relative; color: var(--bone); }
+.dx-step::before { content: counter(st); position: absolute; left: 16px; top: 14px; width: 28px; height: 28px; display: grid; place-items: center; background: var(--red); color: var(--on-red); font: 900 16px var(--display); }
+.dx-step.done { border-color: var(--ok); }
+.dx-step.done::before { content: "✓"; background: var(--ok); }
+.dx-st-h { display: flex; gap: 10px; align-items: center; cursor: pointer; font-size: 16px; }
+.dx-st-h input { width: 20px; height: 20px; accent-color: var(--ok); flex: none; }
+.dx-step p { margin: 8px 0 0; font-size: 14.5px; }
+.dx-gb { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 16px; margin-top: 4px; }
+.dx-gb p { color: var(--mute); }
+@media (max-width: 720px) { .dx-barh, .dx-bar { display: none; } .dx-tbl table { min-width: 0; } }
 </style>
 
 <header class="nav">
@@ -1351,7 +1433,8 @@ body { transition: background-color .25s ease, color .25s ease; }
     <a class="brand" href="#top" aria-label="Ahmed Wazir, home"><svg class="w" viewBox="0 0 620 100" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M332,0L348,0L355,58L363,0L381,0L389,58L396,0L412,0L399,100L380,100L372,44L364,100L345,100Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M418,100L436,0L456,0L474,100L456,100L452.5,80L439.5,80L436,100ZM442.2,63L446,36L449.8,63Z"/><path fill-rule="evenodd" d="M480,0H534V16L501,84H534V100H480V84L513,16H480Z"/><path fill-rule="evenodd" d="M540,0H558V100H540Z"/><path fill-rule="evenodd" d="M564,0H602L618,16V44L608,54L620,100H601L591,58H582V100H564ZM582,16H595L600,21V37L595,42H582Z"/></g></svg><svg class="w-stack" viewBox="0 0 306 222" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M0,122L16,122L23,180L31,122L49,122L57,180L64,122L80,122L67,222L48,222L40,166L32,222L13,222Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M86,222L104,122L124,122L142,222L124,222L120.5,202L107.5,202L104,222ZM110.2,185L114,158L117.8,185Z"/><path fill-rule="evenodd" d="M148,122H202V138L169,206H202V222H148V206L181,138H148Z"/><path fill-rule="evenodd" d="M208,122H226V222H208Z"/><path fill-rule="evenodd" d="M232,122H270L286,138V166L276,176L288,222H269L259,180H250V222H232ZM250,138H263L268,143V159L263,164H250Z"/></g></svg></a>
     <nav aria-label="Main">
       <ul>
-        <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Calculators</button><div class="dd-m"><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a></div></li>
+        <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Calculators</button><div class="dd-m"><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#stress">Off-plan stress test</a><a href="#afford">Afford from abroad</a><a href="#planner">Investor planner</a></div></li>
+        <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Dubai data</button><div class="dd-m"><a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a></div></li>
         <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Guides</button><div class="dd-m"><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a></div></li>
         <li><a href="#launches">Launches</a></li>
       </ul>
@@ -1362,7 +1445,9 @@ body { transition: background-color .25s ease, color .25s ease; }
   <div class="mobile-menu" id="mobileMenu" hidden>
     <div class="wrap">
       <p class="mm-k">Tools</p>
-      <a href="#calc">Payment plan calculator</a><a href="#mortgage">Mortgage calculator</a><a href="#yield">Rental yield calculator</a><a href="#roe">Return on equity calculator</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a>
+      <a href="#calc">Payment plan calculator</a><a href="#mortgage">Mortgage calculator</a><a href="#yield">Rental yield calculator</a><a href="#roe">Return on equity calculator</a><a href="#buyrent">Buy vs rent</a><a href="#stress">Off-plan stress test</a><a href="#afford">Afford from abroad</a><a href="#planner">Investor planner</a>
+      <p class="mm-k">Dubai data</p>
+      <a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a>
       <p class="mm-k">Guides</p>
       <a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a>
       <div class="mm-row"><a class="btn btn-red" href="https://wa.me/971586032580" target="_blank" rel="noopener">WhatsApp Ahmed</a></div>
@@ -1474,7 +1559,7 @@ body { transition: background-color .25s ease, color .25s ease; }
         <li>The payment plan, month by month</li>
         <li>Resale rules and your exit plan</li>
       </ul>
-      <div class="brief-foot" style="margin:24px 0 0"><a class="btn btn-red" href="https://wa.me/971586032580?text=Hi%20Ahmed%2C%20I%27d%20like%20to%20hear%20about%20new%20off-plan%20launches%20in%20Dubai.%20My%20budget%20and%20goal%20are%3A%20" target="_blank" rel="noopener">Message me on WhatsApp</a><a class="btn btn-ghost" href="#contact">Send an enquiry</a><a class="btn btn-ghost" href="#calc">Payment plan calculator</a></div>
+      <div class="brief-foot" style="margin:24px 0 0"><a class="btn btn-red" href="https://wa.me/971586032580?text=Hi%20Ahmed%2C%20I%27d%20like%20to%20hear%20about%20new%20off-plan%20launches%20in%20Dubai.%20My%20budget%20and%20goal%20are%3A%20" target="_blank" rel="noopener">Message me on WhatsApp</a><a class="btn btn-ghost" href="#contact">Send an enquiry</a><a class="btn btn-ghost" href="#verify">Verify a project yourself</a><a class="btn btn-ghost" href="#stress">Stress-test a plan</a></div>
     </div>
   </section>
 
@@ -2752,6 +2837,188 @@ body { transition: background-color .25s ease, color .25s ease; }
   </div>
 </section>
 
+<section class="tool-view" id="prices" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Dubai market data · <span data-dx="upd"></span></p>
+      <h2>Dubai property prices by area</h2>
+      <p class="lede">What homes actually sell for, per square foot, in Dubai's main communities, with this year's sales volume and how much of the market is buying from developers. Built from Dubai Land Department transaction records.</p>
+    </div>
+    <div class="dx-kpis" id="dx-city"></div>
+    <h3 class="dx-h">Price per sq ft by area</h3>
+    <div class="dx-ctrl"><div class="cur-seg" role="radiogroup" aria-label="Property type"><button type="button" aria-pressed="true" data-pt="apt">Apartments</button><button type="button" aria-pressed="false" data-pt="villa">Villas &amp; townhouses</button></div><input id="dx-pq" type="search" placeholder="Find an area" aria-label="Find an area"></div>
+    <ul class="dx-list" id="dx-pt"></ul>
+    <p class="fine" id="dx-pnote"></p>
+    <h3 class="dx-h">Where Dubai is buying this year</h3>
+    <p class="muted">Areas with the most sales so far this year, by Dubai Land Department district name. Most are off-plan hotspots: Dubai South, Al Barsha South (JVC and Arjan sit here), Wadi Al Safa (Dubailand) and Jabal Ali.</p>
+    <ul class="dx-list" id="dx-top"></ul>
+    <div class="dx-note"><b>Reading the numbers.</b> Averages hide a wide spread: a new tower and an older one in the same area can differ by 30% or more. Use these as a starting point, then compare the exact building's recent sales before you commit.</div>
+    <div class="brief-foot" style="margin-top:20px"><a class="btn btn-red" href="https://wa.me/971586032580?text=Hi%20Ahmed%2C%20I%27d%20like%20recent%20sales%20data%20for%20an%20area." target="_blank" rel="noopener">Ask me about an area</a><a class="btn btn-ghost" href="#rents">Rents by area</a><a class="btn btn-ghost" href="#charges">Service charges</a></div>
+    <p class="fine" id="dx-psrc"></p>
+  </div>
+</section>
+
+<section class="tool-view" id="charges" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Running costs · <span data-dx="upd"></span></p>
+      <h2>Dubai service charges by area</h2>
+      <p class="lede">The yearly fee every owner pays for building upkeep, security, pools and community areas. It is the cost buyers most often underestimate, and it comes straight out of your rent.</p>
+    </div>
+    <div class="calc-grid">
+      <form class="calc-in" onsubmit="return false">
+        <div class="field full"><label for="sc-area">Area</label><select id="sc-area"></select></div>
+        <div class="field full"><label for="sc-size">Size (sq ft, including the counted share of the balcony)</label><input id="sc-size" type="number" min="100" step="10" value="900" inputmode="numeric"></div>
+      </form>
+      <div class="calc-res">
+        <div class="dx-kpis" id="sc-out"></div>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><a class="btn btn-red" href="#yield" id="sc-yield">Use in the yield calculator</a><a class="btn btn-ghost" href="#rents">Rents by area</a></div>
+      </div>
+    </div>
+    <h3 class="dx-h">All areas</h3>
+    <ul class="dx-list" id="sc-t"></ul>
+    <div class="dx-note"><b>Check the exact building.</b> Every Dubai building's approved rate is published by the Dubai Land Department in its Service Charge Index (the Mollak system). Look it up on the <a href="https://dubailand.gov.ae/en/" target="_blank" rel="noopener">DLD website</a> or the official Dubai REST app before you buy. Off-plan buildings get their first approved budget near handover, so ask the developer for the estimate in writing.</div>
+    <p class="fine" id="sc-src"></p>
+  </div>
+</section>
+
+<section class="tool-view" id="rents" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Rent estimate · <span data-dx="upd"></span></p>
+      <h2>What homes rent for in Dubai</h2>
+      <p class="lede">Average yearly rents by area and unit type, so you can sanity-check the rent an investment is likely to earn, then send it straight to the yield calculator.</p>
+    </div>
+    <div class="calc-grid">
+      <form class="calc-in" onsubmit="return false">
+        <div class="field full"><label for="rn-area">Area</label><select id="rn-area"></select></div>
+        <div class="field full"><label for="rn-type">Unit</label><select id="rn-type"></select></div>
+      </form>
+      <div class="calc-res">
+        <div class="dx-kpis" id="rn-out"></div>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"><a class="btn btn-red" href="#yield" id="rn-yield">Use in the yield calculator</a><a class="btn btn-ghost" href="#charges">Service charges</a></div>
+      </div>
+    </div>
+    <h3 class="dx-h">Apartments, average yearly rent (AED)</h3>
+    <ul class="dx-list" id="rn-apt"></ul>
+    <h3 class="dx-h">Villas, average yearly rent (AED)</h3>
+    <ul class="dx-list" id="rn-vil"></ul>
+    <div class="dx-note"><b>Official rent cap.</b> These are market averages from listings. When a lease is renewed, the legal maximum increase is set by the RERA Rental Index, published by the Dubai Land Department. Check the exact building on the <a href="https://dubailand.gov.ae/en/" target="_blank" rel="noopener">DLD website</a> or the Dubai REST app before you rely on a renewal.</div>
+    <p class="fine" id="rn-src"></p>
+  </div>
+</section>
+
+<section class="tool-view" id="stress" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Off-plan stress test</p>
+      <h2>Can you still pay if things go wrong?</h2>
+      <p class="lede">Off-plan is a 3 to 5 year commitment. See whether your payment plan still works if mortgage rates rise, your home currency drops, or the unit sits empty after handover.</p>
+    </div>
+    <div class="calc-grid">
+      <form class="calc-in" onsubmit="return false" id="st-form">
+        <div class="field full"><label for="st-price">Property price (AED)</label><input id="st-price" type="number" min="0" step="10000" value="1200000" inputmode="numeric"></div>
+        <div class="field"><label for="st-b">Booking (%)</label><input id="st-b" type="number" min="0" max="100" value="20"></div>
+        <div class="field"><label for="st-c">During construction (%)</label><input id="st-c" type="number" min="0" max="100" value="30"></div>
+        <div class="field"><label for="st-h">On handover (%)</label><input id="st-h" type="number" min="0" max="100" value="50"></div>
+        <div class="field"><label for="st-m">Months to handover</label><input id="st-m" type="number" min="1" max="84" value="48"></div>
+        <div class="field full"><label for="st-inc">Monthly income after tax (AED)</label><input id="st-inc" type="number" min="0" step="500" value="35000" inputmode="numeric"></div>
+        <div class="field"><label for="st-out">Monthly living costs and other loans (AED)</label><input id="st-out" type="number" min="0" step="500" value="12000" inputmode="numeric"></div>
+        <div class="field"><label for="st-sav">Savings available today (AED)</label><input id="st-sav" type="number" min="0" step="10000" value="400000" inputmode="numeric"></div>
+        <div class="field"><label for="st-fin">Handover payment by</label><select id="st-fin"><option value="mort">Mortgage</option><option value="cash">Cash</option></select></div>
+        <div class="field"><label for="st-rate">Mortgage rate today (%)</label><input id="st-rate" type="number" min="0" max="15" step="0.05" value="4.5"></div>
+        <div class="field"><label for="st-rent">Expected rent after handover (AED a year)</label><input id="st-rent" type="number" min="0" step="1000" value="100000" inputmode="numeric"></div>
+        <div class="field"><label for="st-earn">Your income is paid in</label><select id="st-earn"><option value="aed">AED or USD-pegged</option><option value="other">INR, PKR, GBP or other</option></select></div>
+      </form>
+      <div class="calc-res">
+        <div class="dx-verdict" id="st-verdict"></div>
+        <ul class="dx-list" id="st-t"></ul>
+        <p class="fine">Estimates only, not financial advice. Assumes construction payments are spread evenly, a 25-year mortgage for the handover payment (cash buyers pay it from savings), a 4% transfer fee and DLD admin paid at booking, service charges of AED 15 per sq ft on a 900 sq ft unit, and your monthly surplus saved until handover. "Monthly after handover" is rent minus mortgage and service charge; a negative figure comes out of your pocket.</p>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-red" id="st-wa" href="https://wa.me/971586032580" target="_blank" rel="noopener">Talk it through with Ahmed</a><a class="btn btn-ghost" href="#calc">Payment plan calculator</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tool-view" id="afford" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Buying from abroad · planner</p>
+      <h2>What can you afford in Dubai from home?</h2>
+      <p class="lede">Your realistic Dubai budget, once your country's money-transfer rules, the payment plan and the fees are all counted. Pick where you live and what you can put in.</p>
+    </div>
+    <div class="calc-grid">
+      <form class="calc-in" onsubmit="return false">
+        <div class="field full"><label for="af-c">Where you live and earn</label><select id="af-c"><option value="in">India (resident)</option><option value="pk">Pakistan (resident)</option><option value="uk">United Kingdom</option><option value="us">United States</option><option value="sa">Saudi Arabia or the GCC</option><option value="ae">UAE resident</option><option value="nri">Indian or Pakistani living abroad (NRI / overseas)</option></select></div>
+        <div class="field"><label for="af-sav" id="af-sav-l">Savings you can use now</label><input id="af-sav" type="number" min="0" step="1000" value="50000" inputmode="numeric"></div>
+        <div class="field"><label for="af-mo" id="af-mo-l">You can set aside each month</label><input id="af-mo" type="number" min="0" step="100" value="1500" inputmode="numeric"></div>
+        <div class="field"><label for="af-cur">Amounts are in</label><select id="af-cur"><option value="USD">US dollars</option><option value="GBP">British pounds</option><option value="INR">Indian rupees</option><option value="SAR">Saudi riyals</option><option value="AED">UAE dirhams</option></select></div>
+        <div class="field"><label for="af-n">Buyers on the title</label><input id="af-n" type="number" min="1" max="4" value="1"></div>
+        <div class="field"><label for="af-m">Months until handover</label><input id="af-m" type="number" min="6" max="84" value="36"></div>
+        <div class="field"><label for="af-b">Paid before handover (%)</label><input id="af-b" type="number" min="10" max="100" value="50"><small class="muted">Booking plus construction instalments</small></div>
+        <div class="field full"><label for="af-fin">At handover</label><select id="af-fin"><option value="cash">I pay the rest in cash</option><option value="mort">I take a mortgage for the rest</option></select></div>
+      </form>
+      <div class="calc-res">
+        <div class="dx-verdict" id="af-out"></div>
+        <ul class="dx-rules" id="af-rules"></ul>
+        <p class="fine" id="af-fine"></p>
+        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-red" id="af-wa" href="https://wa.me/971586032580" target="_blank" rel="noopener">Plan it with Ahmed</a><a class="btn btn-ghost" href="#buyabroad">Rules by country</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tool-view" id="verify" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Check it yourself</p>
+      <h2>Verify any off-plan project in 8 steps</h2>
+      <p class="lede">You don't have to take anyone's word for it, mine included. Every check below uses an official Dubai Land Department source, and most take a minute on your phone.</p>
+    </div>
+    <div class="dx-prog"><div class="dd-bar"><i id="vf-fill"></i></div><b id="vf-count"></b></div>
+    <ol class="dx-steps" id="vf-steps"></ol>
+    <div class="brief-foot" style="margin-top:18px"><a class="btn btn-red" id="vf-wa" href="https://wa.me/971586032580" target="_blank" rel="noopener">Check a project with me</a><button class="btn btn-ghost" type="button" id="vf-reset">Start again</button><a class="btn btn-ghost" href="#planner">Full due diligence checklist</a></div>
+    <p class="fine">Where to check: the official Dubai REST app (Dubai Land Department) and the DLD website at <a href="https://dubailand.gov.ae/en/" target="_blank" rel="noopener">dubailand.gov.ae</a>. Service names inside the app can change; search the app for the words in bold. Your ticks stay in this browser only.</p>
+  </div>
+</section>
+
+<section class="tool-view" id="compare" hidden>
+  <div class="wrap" style="padding-block:32px 64px">
+    <a class="back" href="#top">← Back to home</a>
+    <div class="sec-head" style="margin:22px 0 24px">
+      <p class="eyebrow"><span class="dot"></span> Dubai &amp; Abu Dhabi vs the world · <span data-dx="upd"></span></p>
+      <h2>Why the UAE beats the world's big property markets</h2>
+      <p class="lede">London, New York, Singapore, Hong Kong, Paris, Monaco. Put Dubai and Abu Dhabi next to them and the numbers from the world's leading property research houses tell the same story: more home for your money, more demand, and you keep more of what you earn.</p>
+    </div>
+    <div class="dx-kpis" id="cp-kpi"></div>
+    <h3 class="dx-h">More home for your money</h3>
+    <p class="muted">Square metres of prime property that US$1 million buys.</p>
+    <ul class="dx-list" id="cp-sqm"></ul><p class="fine" id="cp-sqm-s"></p>
+    <h3 class="dx-h">Luxury prices moving up</h3>
+    <p class="muted">Change in prime home prices during 2025.</p>
+    <ul class="dx-list" id="cp-piri"></ul><p class="fine" id="cp-piri-s"></p>
+    <h3 class="dx-h">The world's busiest super-prime market</h3>
+    <p class="muted">Homes sold for US$10 million or more, July to September 2026.</p>
+    <ul class="dx-list" id="cp-super"></ul><p class="fine" id="cp-super-s"></p>
+    <h3 class="dx-h">Where millionaires are moving</h3>
+    <p class="muted">Net change in resident millionaires during 2025.</p>
+    <ul class="dx-list" id="cp-mig"></ul><p class="fine" id="cp-mig-s"></p>
+    <h3 class="dx-h">Rent that works harder</h3>
+    <p class="muted">Average gross rental yield.</p>
+    <ul class="dx-list" id="cp-yield"></ul><p class="fine" id="cp-yield-s"></p>
+    <h3 class="dx-h">Keep what you earn</h3>
+    <ul class="dx-list" id="cp-tax"></ul>
+    <div class="dx-note"><b>The short version.</b> In Dubai a million dollars buys about twice the space it does in London or New York, the luxury market grew almost eight times faster than the global average in 2025, more US$10 million homes sell here than anywhere else, and individuals pay no tax on rent or on the gain when they sell.</div>
+    <div class="brief-foot" style="margin-top:20px"><a class="btn btn-red" href="https://wa.me/971586032580?text=Hi%20Ahmed%2C%20I%27m%20comparing%20Dubai%20with%20other%20markets.%20Can%20we%20talk%3F" target="_blank" rel="noopener">Talk to Ahmed about investing here</a><a class="btn btn-ghost" href="#why">Why invest in the UAE</a><a class="btn btn-ghost" href="#prices">Dubai prices by area</a></div>
+    <p class="fine">Figures come from the published reports named under each list and are shown as reported. Property prices can fall as well as rise; past growth does not guarantee future returns, and nothing here is financial or tax advice.</p>
+  </div>
+</section>
 <section class="tool-view" id="sell" hidden>
   <div class="wrap" style="padding-block:32px 64px">
     <a class="back" href="#top">← Back to home</a>
@@ -2948,9 +3215,9 @@ body { transition: background-color .25s ease, color .25s ease; }
 <footer>
   <div class="wrap">
     <a class="brand brand-foot" href="#top" aria-label="Ahmed Wazir, home"><svg class="w" viewBox="0 0 620 100" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M332,0L348,0L355,58L363,0L381,0L389,58L396,0L412,0L399,100L380,100L372,44L364,100L345,100Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M418,100L436,0L456,0L474,100L456,100L452.5,80L439.5,80L436,100ZM442.2,63L446,36L449.8,63Z"/><path fill-rule="evenodd" d="M480,0H534V16L501,84H534V100H480V84L513,16H480Z"/><path fill-rule="evenodd" d="M540,0H558V100H540Z"/><path fill-rule="evenodd" d="M564,0H602L618,16V44L608,54L620,100H601L591,58H582V100H564ZM582,16H595L600,21V37L595,42H582Z"/></g></svg></a>
-    <span>Ahmed Wazir · RERA BRN 85446 · UAE Media Council Advertiser Permit 8476056<br>Agent at <a href="https://springfieldproperties.ae/" target="_blank" rel="noopener">Springfield Properties L.L.C S.O.C</a> · RERA ORN 11929<br>Offices in Dubai (Bay Square, Business Bay) &amp; Abu Dhabi (Wafra Square, Al Reem Island)<br>UAE off-plan, ready, resale &amp; commercial property<br><small style="display:block;margin-top:8px;color:var(--bone)">General market information and education only. Nothing on this site is an advertisement for a specific property. Projects, prices and availability are shared on request, in line with Dubai Land Department advertising rules.</small></span>
+    <span>Ahmed Wazir · RERA BRN 85446 · UAE Media Council Advertiser Permit 8476056<br>Agent at <a href="https://springfieldproperties.ae/" target="_blank" rel="noopener">Springfield Properties L.L.C S.O.C</a> · RERA ORN 11929<br>Offices in Dubai (Bay Square, Business Bay) &amp; Abu Dhabi (Wafra Square, Al Reem Island)<br>Dubai off-plan property, residential and commercial<br><small style="display:block;margin-top:8px;color:var(--bone)">General market information and education only. Nothing on this site is an advertisement for a specific property. Projects, prices and availability are shared on request, in line with Dubai Land Department advertising rules.</small></span>
     <span class="foot-follow"><a href="https://www.linkedin.com/in/ahmed-wazir/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.instagram.com/awaz.realty" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@awaz.realty" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a><br><a href="#privacy">Privacy policy</a> · © 2026 Ahmed Wazir</span>
-    <nav class="foot-guides" aria-label="Guides and tools"><span><b>Guides</b><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#abroad">From India</a><a href="#from-pakistan">From Pakistan</a><a href="#from-saudi">From Saudi Arabia</a><a href="#from-uk">From the UK</a><a href="#from-us">From the USA</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a></span><span><b>Tools</b><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a><a href="#sell">Sell or lease</a></span></nav>
+    <nav class="foot-guides" aria-label="Guides and tools"><span><b>Guides</b><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#abroad">From India</a><a href="#from-pakistan">From Pakistan</a><a href="#from-saudi">From Saudi Arabia</a><a href="#from-uk">From the UK</a><a href="#from-us">From the USA</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a></span><span><b>Tools</b><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a><a href="#sell">Sell or lease</a><a href="#stress">Stress test</a><a href="#afford">Afford from abroad</a></span><span><b>Dubai data</b><a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a></span></nav>
   </div>
 </footer>
 <div class="toast" id="toast" hidden></div>
@@ -2967,6 +3234,7 @@ body { transition: background-color .25s ease, color .25s ease; }
 {"name": "New Year's Day", "start": "2027-01-01", "end": "2027-01-01", "hijri": ""}
 ], "sources": ["https://uaeguides.ae/public-holidays/", "https://www.ohmydesk.com/blog-dubai-downtown/uae-public-holidays-2026"]}</script>
 <script type="application/json" id="rules-data">{"fy": "2026-27", "updated": "2026-11-04", "lrs_usd": 250000, "tcs_threshold_inr": 1000000, "tcs_rate_property": 20, "nro_repat_usd": 1000000, "uk_cgt_basic": 18, "uk_cgt_higher": 24, "uk_cgt_allowance_gbp": 3000, "us_fbar_usd": 10000, "us_8938_single_usd": 50000, "sources": ["https://www.rbi.org.in/scripts/FS_FAQs.aspx?Id=117", "https://charteredonline.in/budget-2026-tcs-reductions-overseas-remittance-rate-changes/"]}</script>
+<script type="application/json" id="area-data">{"updated":"2026-11-17","city":{"q":"Q3 2026","sales":29912,"value":73073675907,"median_psf":1680,"ytd_primary":83003,"ytd_resale":32986,"retrieved":"2026-10-16","source":{"name":"fäm Properties market report, DXBinteract analysis of Dubai Land Department records","url":"https://famproperties.com/real-estate-reports/2026"}},"top":[["Dubai South",12960],["Al Barsha South Fourth",7265],["Wadi Al Safa 5",5782],["Jabal Ali First",5283],["Wadi Al Safa 3",5267]],"apt":[["International City",700,850,null],["Discovery Gardens",850,1000,null],["Dubai Silicon Oasis",900,1100,28.5],["Dubai Sports City",1332,null,9.5],["Jumeirah Village Circle (JVC)",1510,null,10.6],["Arjan",1568,null,13.2],["Jumeirah Lake Towers (JLT)",1831,null,4.0],["Dubai Marina",2058,null,4.2],["Dubai Hills Estate",2432,null,null],["Business Bay",2547,null,0.4],["Dubai Creek Harbour",2600,null,6.5],["Downtown Dubai",3011,null,5.5],["Palm Jumeirah",4240,null,null]],"villa":[["DAMAC Hills 2",1015,null,12.9],["Dubai South",1331,null,21.6],["Jumeirah Village Circle (JVC)",1359,null,17.4],["Al Furjan",1531,null,22.5],["Dubailand",1582,null,23.5],["Arabian Ranches 3",1738,null,27.8],["DAMAC Hills",1908,null,11.1],["Tilal Al Ghaf",2034,null,null],["The Springs",2306,null,null],["Arabian Ranches",2417,null,15.7],["Jumeirah Golf Estates",2524,null,null],["Dubai Hills Estate",2896,null,12.7],["Palm Jumeirah",8070,null,null]],"price_source":{"name":"Real Estate Club Dubai, compiling Property Monitor (DLD transactions, 1 Jan–6 Jun 2026), Bayut 2025 sales report and Takween Aldar ranges","url":"https://realestateclubdubai.com/blog/market-analysis/dubai-property-price-per-sqft-by-area-2026-data-table","period":"1 Jan–6 Jun 2026 (ranges: early 2026; some villa areas: full-year 2025)"},"sc":[["Palm Jumeirah",35,22,62.5],["Downtown Dubai",28,18,44],["DIFC",27,20,35],["JBR",24,18,48.5],["Dubai Marina",22,14,35],["Business Bay",18,12,52],["Dubai Creek Harbour",17,14,22],["Dubai Hills Estate",16,13,22],["Jumeirah Lake Towers (JLT)",14,11,18],["Town Square",13.5,12,15],["Arjan / Al Barsha South",12.5,10,15],["Jumeirah Village Circle (JVC)",12,9,16],["Dubai South / Expo City",10,8,13],["Motor City",null,10,14],["Dubai Silicon Oasis",null,9,13],["Dubai Sports City",null,8,12],["International City",8,6.5,11]],"sc_source":{"name":"Real Estate Club Dubai building-by-building service charge database, 2026","url":"https://realestateclubdubai.com/blog/property-management/dubai-service-charges-explained-what-owners-pay-2026","period":"2026 rates, published February 2026"},"rent_apt":[["Bluewaters Island",null,313000,423000],["Al Barari",null,204000,385000],["Palm Jumeirah",null,169000,249000],["Downtown Dubai",null,133000,223000],["Dubai Hills Estate",null,107000,164000],["Dubai Marina",null,102000,156000],["Business Bay",72000,104000,148000],["Bur Dubai",56000,82000,115000],["Jumeirah Village Circle (JVC)",54000,77000,113000],["Deira",37000,65000,106000],["International City",40000,60000,81000],["Al Nahda",44000,56000,72000]],"rent_villa":[["Palm Jumeirah",null,1382000],["Jumeirah Islands",null,845000],["Al Barari",null,589000],["Nad Al Sheba",null,424000],["Jumeirah",null,396000],["Dubai Hills Estate",null,355000],["Arabian Ranches 3",170000,337000],["DAMAC Hills",211000,230000],["Dubai South",146000,191000],["The Valley",141000,181000],["Mirdif",142000,166000],["DAMAC Hills 2",112000,124000]],"rent_source":{"name":"dubizzle Dubai rental market report, H1 2026 (listing data)","url":"https://www.dubizzle.com/blog/property/dubai-h1-rental-market-report-2026/","period":"January–June 2026"},"world":{"sqm":{"rows":[["Monaco",16.0],["Hong Kong",22.5],["Singapore",28.1],["London",32.9],["New York",33.9],["Paris",37.1],["Dubai",62.2]],"src":{"name":"Knight Frank, The Wealth Report 2026 (prime property, Q4 2025)","url":"https://relocatemagazine.com/global-luxury-house-prices-rise-knight-frank-wealth-report-0426"}},"piri":{"rows":[["Dubai",25.1],["Middle East",9.4],["Latin America & Caribbean",4.7],["Asia-Pacific",3.6],["Europe",3.3],["Global average",3.2],["North America",-0.9]],"src":{"name":"Knight Frank, The Wealth Report 2026, Prime International Residential Index (2025)","url":"https://relocatemagazine.com/global-luxury-house-prices-rise-knight-frank-wealth-report-0426"}},"super":{"rows":[["Dubai",86],["Hong Kong",78],["New York",62],["Sydney",57],["Singapore",44],["London",42]],"y12":[525,9.25],"src":{"name":"Knight Frank Global Super-Prime Intelligence, Q3 2026, via The National (13 Nov 2026)","url":"https://thenationalnews.com/news/uae/2026/11/13/dubais-super-prime-property-sales-cling-on-to-global-top-spot"}},"mig":{"rows":[["United Arab Emirates",9800],["United Kingdom",-16500]],"src":{"name":"Henley & Partners estimates for 2025, via The Nation (12 Feb 2026)","url":"https://www.nationthailand.com/news/world/40062424"}},"yield":{"rows":[["Abu Dhabi",5.76],["Dubai",5.53],["New York",5.03],["Singapore",3.06]],"src":{"name":"Global Property Guide, average gross rental yields (latest, 2026)","url":"https://www.globalpropertyguide.com/middle-east/united-arab-emirates/rental-yields"}}}}</script>
 <script type="application/json" id="fx-data">{"date": "2026-11-04", "per_aed": {"USD": 0.27229, "GBP": 0.2041, "INR": 25.89}}</script>
 <script type="application/json" id="pulse-data">{"dubai": {"updated": "2026-10-31", "period": {"from": "2026-10-26", "to": "2026-10-30", "label": "Week of 26–30 Oct 2026"}, "total": 12260000000, "totalSub": "All transactions, Dubai Land Department", "mixBasis": "value", "mix": [{"name": "Sales", "aed": 7440000000, "count": 2579}, {"name": "Mortgages", "aed": 3510000000, "count": null}, {"name": "Gifts", "aed": 1310000000, "count": null}], "listTitle": "Biggest sales", "list": [{"name": "Balqis Residence – Beach Villas", "sub": "Apartment · Palm Jumeirah", "aed": 55000000}, {"name": "Bureau Lamar", "sub": "Office · Business Bay", "aed": 43760000}, {"name": "Bureau Lamar", "sub": "Office · Business Bay", "aed": 43760000}], "ytd": {"label": "First 10 months of 2026", "stats": [{"aed": 625000000000, "label": "total value"}, {"num": 181866, "label": "transactions"}, {"aed": 412000000000, "label": "in sales"}], "topAreas": ["Business Bay", "Airport City", "Al Yalayis 1"], "topAreasLabel": "best-selling areas"}, "sources": [{"name": "Arabian Business", "url": "https://www.arabianbusiness.com/real-estate/dubai-real-estate-sector-recorded-3-3bn-of-transactions-last-week-including-15m-palm-jumeirah-apartment"}, {"name": "Emirates 24|7", "url": "https://www.emirates247.com/business/dubai-real-estate-reaches-dh625-billion-in-10-months-181866-transactions-and-dh412-billion-in-sales/7301"}]}, "abudhabi": {"updated": "2026-11-03", "period": {"from": "2026-10-26", "to": "2026-11-01", "label": "Week of 26 Oct–1 Nov 2026"}, "total": 3400000000, "totalSub": "733 home sales registered with ADREC", "mixBasis": "count", "mix": [{"name": "Off-plan", "aed": null, "count": 639}, {"name": "Ready homes", "aed": null, "count": 94}], "listTitle": "Hottest areas this week", "list": [{"name": "Al Layyan", "sub": "167 sales", "aed": null}, {"name": "Al Reem Island", "sub": "115 sales", "aed": null}, {"name": "Hudayriyat Island", "sub": "104 sales · 27% of the week's value", "aed": 901200000}], "ytd": {"label": "January to September 2026", "stats": [{"aed": 175700000000, "label": "total value"}, {"num": 21416, "label": "home sales"}, {"aed": 95800000000, "label": "in home sales"}], "topAreas": ["Hudayriyat", "Saadiyat", "Al Reem", "Al Maryah", "Yas"], "topAreasLabel": "top areas by sales value, H1 2026"}, "sources": [{"name": "Projectory (ADREC registrations)", "url": "https://projectory.ae/research/26-october-1-november-2026-uae-property-market-weekly-report/"}, {"name": "IndexBox (ADREC)", "url": "https://www.indexbox.io/blog/abu-dhabi-real-estate-transactions-hit-aed1757-billion-in-first-nine-months-of-2026/"}]}}</script>
 <script type="application/json" id="video-data">{"items": [{"url": "https://youtu.be/K57zOdlWxNY", "title": "Watch the latest video", "kind": "YouTube", "date": ""}, {"url": "https://youtu.be/N_-vgSUj_f8", "title": "Watch on the channel", "kind": "YouTube", "date": ""}, {"url": "https://youtu.be/PDbLHtQgeLw", "title": "Watch on the channel", "kind": "YouTube", "date": ""}]}</script>
@@ -3191,6 +3459,13 @@ try {
 const homeEl = document.getElementById("top"), devEl = document.getElementById("developers");
 const SEO = {
   _: ["Ahmed Wazir · Dubai Off-Plan Property Agent", null],
+  compare: ["Dubai vs London, New York & Singapore Property | Ahmed Wazir", "How Dubai and Abu Dhabi compare with the world's big property markets: space per US$1M, luxury price growth, super-prime sales, millionaire inflows, yields and tax."],
+  prices: ["Dubai Property Prices by Area (Price per Sq Ft) | Ahmed Wazir", "Average price per sq ft in Dubai's main communities, this year's sales volume and the share bought off-plan from developers, from DLD transaction data."],
+  charges: ["Dubai Service Charges by Area (2026) | Ahmed Wazir", "Average service charges per sq ft in Dubai communities, with a calculator for your unit and how to check a building's official DLD rate."],
+  rents: ["Dubai Rents by Area: Studio to 4 Bed (2026) | Ahmed Wazir", "Average yearly rents in Dubai by area for studios, apartments and villas, with a one-tap link to the rental yield calculator."],
+  stress: ["Off-Plan Stress Test: Rates, Currency, Vacancy | Ahmed Wazir", "Check whether an off-plan payment plan still works if mortgage rates rise, your home currency falls or the unit sits empty after handover."],
+  afford: ["What Can I Afford in Dubai From Abroad? | Ahmed Wazir", "Your realistic Dubai property budget after home-country transfer limits, the payment plan, DLD fees and a mortgage, for India, the UK, US, GCC and more."],
+  verify: ["Verify an Off-Plan Project in 8 Steps (DLD) | Ahmed Wazir", "Check any Dubai off-plan project yourself with official Dubai Land Department sources: developer, project, escrow, ad permit, agent and Oqood."],
   developers: ["Top UAE Property Developers | Ahmed Wazir", "Who builds the UAE: background on Emaar, Nakheel, Meraas, DAMAC, Sobha and other leading developers."],
   calc: ["Off-Plan Payment Plan Calculator | Ahmed Wazir", "Work out every instalment of an off-plan payment plan, plus DLD and land department fees, in dirhams or your own currency."],
   privacy: ["Privacy Policy | Ahmed Wazir", "How Ahmed Wazir collects, uses and protects your data under the UAE data protection law (PDPL), with your rights and how to use them."],
@@ -3246,13 +3521,210 @@ const GV = (() => {
   return { init() { if (!$("gv-em")) return; ["gv-em","gv-st","gv-pr","gv-paid","gv-loan"].forEach(id => $(id).addEventListener("input", run)); run(); } };
 })();
 GV.init();
+// ---------- Dubai area data, stress test, afford-from-home planner, verify walkthrough ----------
+const DX = (() => {
+  let D = {}; try { D = JSON.parse(document.getElementById("area-data").textContent); } catch (e) {}
+  const $ = id => document.getElementById(id);
+  const n0 = n => Math.round(n).toLocaleString("en-US");
+  const aed = n => "AED " + n0(n);
+  const kshort = n => n >= 1e9 ? (n / 1e9).toFixed(1) + "bn" : n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 1 : 2) + "M" : n >= 1e3 ? Math.round(n / 1e3) + "K" : n0(n);
+  const mon = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { month: "long", year: "numeric" }) : "";
+  const src = s => s ? `Source: <a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.name)}</a>${s.period ? ", " + esc(s.period) : ""}. Figures are averages for information only and can change; they are not a valuation or an offer of any property.` : "";
+  const kpi = (k, v, s, cls) => `<div class="dx-kpi${cls ? " " + cls : ""}"><span>${k}</span><b>${v}</b>${s ? `<small>${s}</small>` : ""}</div>`;
+  const bar = (v, max) => `<td class="dx-bar" aria-hidden="true"><i style="width:${Math.max(2, v / max * 100)}%"></i></td>`;
+  const wa = t => `https://wa.me/971586032580?text=${encodeURIComponent(t)}`;
+  const fmtN = (v, f) => f === "aed" ? "AED " + n0(v) : f === "k" ? kshort(v) : f === "x" ? (Math.round(v * 10) / 10).toString() : f === "p" ? Math.round(v) + "%" : f === "s1" ? (v < 0 ? "−" : "+") + Math.abs(v).toFixed(1) + "%" : f === "s0" ? (v < 0 ? "−" : "+") + n0(Math.abs(v)) : f === "d2" ? (+v).toFixed(2) + "%" : n0(v);
+  const N = (v, f = "n") => `<b class="dx-n" data-n="${v}" data-f="${f}">${fmtN(v, f)}</b>`;
+  const line = (v, max) => `<span class="dx-line" aria-hidden="true"><i style="width:${Math.max(2, v / max * 100)}%"></i></span>`;
+  const still = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
+  function countUp(root) {
+    if (!root || still()) return;
+    root.querySelectorAll(".dx-n:not(.dx-static)").forEach(el => {
+      const t = +el.dataset.n, f = el.dataset.f, t0 = performance.now(), d = 700;
+      const step = now => { const k = Math.min(1, (now - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = fmtN(k < 1 ? t * e : t, f); if (k < 1) requestAnimationFrame(step); };
+      el.textContent = fmtN(0, f); requestAnimationFrame(step);
+    });
+  }
+  const put = (id, html) => { const el = $(id); el.innerHTML = html; countUp(el); };
+  const chg = y => y == null ? "" : `<span class="dx-chg ${y >= 0 ? "up" : "down"}">${y >= 0 ? "▲" : "▼"} ${Math.abs(y)}% <small>in 2025</small></span>`;
+  const done = {};
+
+  function prices() {
+    const c = D.city || {}, tot = (c.ytd_primary || 0) + (c.ytd_resale || 0);
+    $("dx-city").innerHTML = kpi(`Sales in ${esc(c.q || "")}`, n0(c.sales || 0), `worth AED ${kshort(c.value || 0)}`) + kpi("Median price", `AED ${n0(c.median_psf || 0)}`, "per sq ft, all homes") +
+      kpi("Bought from developers", tot ? Math.round(c.ytd_primary / tot * 100) + "%" : "—", `of ${n0(tot)} sales this year`, "red") + kpi("Resales", tot ? Math.round(c.ytd_resale / tot * 100) + "%" : "—", "bought from owners");
+    let pt = "apt";
+    const draw = () => {
+      const q = ($("dx-pq").value || "").toLowerCase(), L = (D[pt] || []).filter(r => r[0].toLowerCase().includes(q)), max = Math.max(...(D[pt] || []).map(r => r[2] || r[1]));
+      put("dx-pt", L.map(([a, lo, hi, y]) => `<li class="dx-row"><span class="dx-name">${esc(a)}</span><span class="dx-val">${hi ? N(lo) + "–" + N(hi) : N(lo)}<small>AED / sq ft</small></span>${chg(y)}${line(hi ? (lo + hi) / 2 : lo, max)}</li>`).join("") || `<li class="dx-row muted">No area matches.</li>`);
+    };
+    document.querySelectorAll("[data-pt]").forEach(b => b.addEventListener("click", () => { pt = b.dataset.pt; document.querySelectorAll("[data-pt]").forEach(x => x.setAttribute("aria-pressed", String(x === b))); draw(); }));
+    $("dx-pq").addEventListener("input", draw); draw();
+    const tmax = Math.max(...(D.top || []).map(r => r[1]));
+    put("dx-top", (D.top || []).map(([a, v], i) => `<li class="dx-row"><span class="dx-name"><span class="dx-rank">${i + 1}</span>${esc(a)}</span><span class="dx-val">${N(v)}<small>sales this year</small></span>${line(v, tmax)}</li>`).join(""));
+    $("dx-pnote").textContent = "Average sale price per square foot of built-up area. A range is shown where only a range was published. \"▲ in 2025\" compares 2025's full-year average with 2024's.";
+    $("dx-psrc").innerHTML = src(D.price_source) + `<br>Citywide figures and top areas: <a href="${esc((c.source || {}).url || "#")}" target="_blank" rel="noopener">${esc((c.source || {}).name || "")}</a>, data retrieved ${esc(c.retrieved || "")}. "Bought from developers" is primary-market sales, most of which are off-plan.`;
+  }
+
+  function charges() {
+    const L = D.sc || [], max = Math.max(...L.map(r => r[3]));
+    $("sc-area").innerHTML = L.map((r, i) => `<option value="${i}">${esc(r[0])}</option>`).join("");
+    const mx = Math.max(...L.map(r => r[1] ?? (r[2] + r[3]) / 2));
+    put("sc-t", L.map(([a, avg, lo, hi]) => { const v = avg ?? (lo + hi) / 2; return `<li class="dx-row"><span class="dx-name">${esc(a)}</span><span class="dx-val">${N(v, "x")}<small>AED / sq ft / yr</small></span><span class="dx-chg na">range ${lo}–${hi}${avg == null ? " · mid-point shown" : ""}</span>${line(v, mx)}</li>`; }).join(""));
+    const calc = () => {
+      const r = L[+$("sc-area").value] || L[0], sz = Math.max(0, +$("sc-size").value || 0), mid = r[1] ?? (r[2] + r[3]) / 2;
+      $("sc-out").innerHTML = kpi("Typical yearly charge", aed(mid * sz), `AED ${mid} per sq ft${r[1] == null ? " (middle of the range)" : ""}`, "red") + kpi("Low end", aed(r[2] * sz), `AED ${r[2]} per sq ft`) + kpi("High end", aed(r[3] * sz), `AED ${r[3]} per sq ft`) + kpi("Per month", aed(mid * sz / 12), "set aside from rent");
+      $("sc-yield").dataset.sc = mid;
+    };
+    ["sc-area", "sc-size"].forEach(id => $(id).addEventListener("input", calc)); calc();
+    $("sc-yield").addEventListener("click", () => toYield({ sc: +$("sc-yield").dataset.sc, size: +$("sc-size").value }));
+    $("sc-src").innerHTML = src(D.sc_source) + " The exact approved rate for a building is published by the Dubai Land Department.";
+  }
+
+  function rents() {
+    const A = D.rent_apt || [], V = D.rent_villa || [];
+    const opts = [...A.map(r => ["a", r]), ...V.map(r => ["v", r])].reduce((m, [k, r]) => { (m[r[0]] = m[r[0]] || {})[k] = r; return m; }, {});
+    const names = Object.keys(opts).sort();
+    $("rn-area").innerHTML = names.map(n => `<option>${esc(n)}</option>`).join("");
+    const types = () => { const o = opts[$("rn-area").value] || {}, T = []; if (o.a) [["Studio", 1], ["1 bed apartment", 2], ["2 bed apartment", 3]].forEach(([l, i]) => o.a[i] && T.push([l, o.a[i]])); if (o.v) [["3 bed villa", 1], ["4 bed villa", 2]].forEach(([l, i]) => o.v[i] && T.push([l, o.v[i]])); return T; };
+    const fillT = () => { $("rn-type").innerHTML = types().map(([l, v]) => `<option value="${v}">${esc(l)}</option>`).join(""); calc(); };
+    const calc = () => { const v = +$("rn-type").value || 0; $("rn-out").innerHTML = kpi("Average yearly rent", aed(v), esc($("rn-type").selectedOptions[0]?.text || ""), "red") + kpi("Per month", aed(v / 12), "before service charges") + kpi("Cheques", "1 to 4", "typical in Dubai; fewer cheques often earn a discount"); $("rn-yield").dataset.rent = v; };
+    $("rn-area").addEventListener("input", fillT); $("rn-type").addEventListener("input", calc); fillT();
+    const chip = (l, v) => v ? `<span class="dx-chip"><small>${l}</small>${N(v, "k")}</span>` : "";
+    put("rn-apt", A.map(r => `<li class="dx-row dx-row-r"><span class="dx-name">${esc(r[0])}</span><span class="dx-chips">${chip("Studio", r[1])}${chip("1 bed", r[2])}${chip("2 bed", r[3])}</span></li>`).join(""));
+    put("rn-vil", V.map(r => `<li class="dx-row dx-row-r"><span class="dx-name">${esc(r[0])}</span><span class="dx-chips">${chip("3 bed", r[1])}${chip("4 bed", r[2])}</span></li>`).join(""));
+    $("rn-yield").addEventListener("click", () => toYield({ rent: +$("rn-yield").dataset.rent }));
+    $("rn-src").innerHTML = src(D.rent_source) + " Listing data may differ from registered (Ejari) rents.";
+  }
+
+  function toYield(v) {
+    setTimeout(() => {
+      const set = (id, x) => { const el = $(id); if (el && x) { el.value = x; el.dispatchEvent(new Event("input", { bubbles: true })); } };
+      set("y-rent", v.rent); set("y-sc", v.sc); set("y-size", v.size);
+    }, 120);
+  }
+
+  function stress() {
+    const pmt = (loan, r, yrs) => { const i = r / 100 / 12, n = yrs * 12; return loan <= 0 ? 0 : i ? loan * i / (1 - Math.pow(1 + i, -n)) : loan / n; };
+    const calc = () => {
+      const g = id => Math.max(0, +$(id).value || 0);
+      const P = g("st-price"), b = g("st-b"), c = g("st-c"), h = g("st-h"), m = Math.max(1, g("st-m")), inc = g("st-inc"), out = g("st-out"), sav = g("st-sav"), rate = g("st-rate"), rent = g("st-rent");
+      const fin = $("st-fin").value, other = $("st-earn").value === "other";
+      if (Math.abs(b + c + h - 100) > 0.5) { $("st-verdict").innerHTML = `<p class="dx-bad">Booking, construction and handover should add up to 100% (now ${b + c + h}%).</p>`; $("st-t").innerHTML = ""; return; }
+      const upfront = P * b / 100 + P * 0.04 + 4000, perM = P * c / 100 / m, sc = 15 * 900 / 12;
+      const run = (name, o) => {
+        const incS = inc * (o.fx ? 0.85 : 1), surplus = incS - out, atHand = sav - upfront + (surplus - perM) * m;
+        const hp = P * h / 100, loan = fin === "mort" ? Math.min(hp, P * 0.5) : 0, cashNeed = hp - loan + (loan ? loan * 0.0125 + 3500 : 0);
+        const gap = cashNeed - atHand, mort = pmt(loan, rate + (o.rate || 0), 25), rentM = rent * (o.empty ? 0.5 : 11 / 12) / 12, after = rentM - mort - sc;
+        const share = incS ? perM / incS : 1;
+        const res = share <= 0.3 && gap <= 0 && after >= 0 ? ["ok", "Comfortable"] : share <= 0.45 && gap <= P * 0.1 && after >= -Math.max(0, surplus) * 0.5 ? ["mid", "Tight"] : ["bad", "At risk"];
+        return { name, perM, share, gap, after, res };
+      };
+      const S = [run("As planned", {}), run("Mortgage rates +2%", { rate: 2 }), run(other ? "Your currency −15%" : "Currency −15% (pegged: no change)", { fx: other }), run("Empty for 6 months after handover", { empty: 1 }), run("All three at once", { rate: 2, fx: other, empty: 1 })];
+      put("st-t", S.map(s => `<li class="dx-row dx-row-r dx-sc"><span class="dx-name">${esc(s.name)}</span><span class="dx-pill ${s.res[0]}">${s.res[1]}</span><span class="dx-chips"><span class="dx-chip"><small>Monthly payment</small>${N(s.perM, "aed")}</span><span class="dx-chip"><small>Of income</small>${N(s.share * 100, "p")}</span><span class="dx-chip"><small>At handover</small>${s.gap > 0 ? `<b class="dx-neg">short ${aed(s.gap)}</b>` : "<b>covered</b>"}</span><span class="dx-chip"><small>Monthly after handover</small>${s.after < 0 ? `<b class="dx-neg">−${aed(-s.after)}</b>` : `<b class="dx-pos">+${aed(s.after)}</b>`}</span></span></li>`).join(""));
+      const worst = S[4].res[0], base = S[0].res[0];
+      $("st-verdict").innerHTML = base === "bad" ? `<p class="dx-bad"><b>This plan is stretched even if nothing goes wrong.</b> Look at a lower price, a longer plan or a smaller handover payment.</p>`
+        : worst === "ok" ? `<p class="dx-good"><b>Your plan holds up even if all three go wrong at once.</b></p>`
+        : `<p class="dx-mid"><b>Fine as planned, but a shock would squeeze you.</b> Keep a cash buffer for the handover payment and the first months of rent.</p>`;
+      $("st-wa").href = wa(`Hi Ahmed, I ran your off-plan stress test: price AED ${n0(P)}, plan ${b}/${c}/${h}, ${m} months to handover. Result as planned: ${S[0].res[1]}; with all shocks: ${S[4].res[1]}. Can we talk it through?`);
+    };
+    document.querySelectorAll("#st-form input, #st-form select").forEach(el => el.addEventListener("input", calc)); calc();
+  }
+
+  function afford() {
+    const FX = (() => { try { return JSON.parse(document.getElementById("fx-data").textContent).per_aed || {}; } catch (e) { return {}; } })();
+    const R = (() => { try { return JSON.parse(document.getElementById("rules-data").textContent); } catch (e) { return {}; } })();
+    const per = c => c === "AED" ? 1 : c === "SAR" ? (FX.USD || 0.27229) * 3.75 : FX[c] || null;
+    const defCur = { in: "INR", pk: "USD", uk: "GBP", us: "USD", sa: "SAR", ae: "AED", nri: "USD" };
+    let lastC = null;
+    const calc = () => {
+      const c = $("af-c").value;
+      if (c !== lastC) { lastC = c; $("af-cur").value = defCur[c]; const def = { INR: [4000000, 100000], GBP: [60000, 1500], USD: [80000, 2000], SAR: [300000, 7000], AED: [300000, 7000] }[defCur[c]]; $("af-sav").value = def[0]; $("af-mo").value = def[1]; }
+      const cur = $("af-cur").value, rate = per(cur), g = id => Math.max(0, +$(id).value || 0);
+      const n = Math.max(1, g("af-n")), m = Math.max(1, g("af-m")), b = Math.min(100, Math.max(10, g("af-b"))) / 100, mort = $("af-fin").value === "mort";
+      const rules = [];
+      let funds = (g("af-sav") + g("af-mo") * m) / rate, capped = false;
+      if (c === "pk") {
+        $("af-out").innerHTML = `<p class="dx-bad"><b>Savings held in Pakistan generally can't be sent abroad to buy property.</b> State Bank of Pakistan rules limit residents' outward remittances, so a Dubai purchase has to be funded from money you legally hold abroad (for example foreign earnings or an existing foreign account). If that applies to you, pick "living abroad" above.</p>`;
+        $("af-rules").innerHTML = `<li>Read the <a href="#from-pakistan">Pakistan buyer guide</a> for the SBP and FBR rules, then speak to your bank before you transfer anything.</li>`;
+        $("af-fine").textContent = "General information, not legal or tax advice. Rules change; confirm with your bank and a tax adviser."; return;
+      }
+      if (c === "in") {
+        const fy = Math.floor(m / 12) + 1, capUSD = (R.lrs_usd || 250000) * n * fy, capAED = capUSD / (FX.USD || 0.27229);
+        if (funds > capAED) { funds = capAED; capped = true; }
+        const sentINR = funds * (FX.INR || 22.6), thr = (R.tcs_threshold_inr || 1000000) * n * fy, tcs = Math.max(0, sentINR - thr) * (R.tcs_rate_property || 20) / 100;
+        rules.push(`RBI's Liberalised Remittance Scheme allows <b>USD ${n0(R.lrs_usd || 250000)} per person per financial year</b> (April to March). Over up to ${fy} financial year${fy > 1 ? "s" : ""} with ${n} buyer${n > 1 ? "s" : ""}, that is up to USD ${n0(capUSD)}.${capped ? " <b>This limit sets your budget.</b>" : ""}`);
+        rules.push(`Tax collected at source (TCS) of ${R.tcs_rate_property || 20}% applies above ₹${n0(R.tcs_threshold_inr || 1000000)} a year per person: about <b>₹${n0(tcs)}</b> on this plan. You can claim it back against your income tax, but you need the cash up front.`);
+        rules.push(`Declare the property in your Indian tax return (Schedule FA) every year. <a href="#abroad">India buyer guide</a>`);
+      } else if (c === "uk") rules.push(`No limit on sending money from the UK. Rent from Dubai is taxable in the UK if you are UK resident, and a sale can attract Capital Gains Tax (${R.uk_cgt_basic || 18}% / ${R.uk_cgt_higher || 24}%). <a href="#from-uk">UK buyer guide</a>`);
+      else if (c === "us") rules.push(`No limit on sending money from the US. Report foreign accounts over USD ${n0(R.us_fbar_usd || 10000)} (FBAR), and rent and gains on your US return. <a href="#from-us">US buyer guide</a>`);
+      else if (c === "sa") rules.push(`No limit on transfers from Saudi Arabia, and GCC citizens can buy in more areas of Dubai. <a href="#from-saudi">Saudi and GCC buyer guide</a>`);
+      else if (c === "ae") rules.push(`As a UAE resident you can usually borrow more: up to 80% on a first home under AED 5 million once it is built, against about 50% for non-residents.`);
+      else rules.push(`Money you earn abroad as an NRI or overseas Pakistani isn't limited by home-country remittance rules. Keep a paper trail of where the funds came from for the bank and the developer. <a href="#buyabroad">Rules by country</a>`);
+      const ltv = mort ? (c === "ae" ? 0.8 : 0.5) : 0, equity = Math.max(b, 1 - ltv), feeRate = 0.04 + (mort ? 0.0125 : 0);
+      const price = Math.max(0, (funds - 4000) / (mort ? equity + feeRate : 1 + feeRate));
+      const loan = mort ? price * (1 - equity) : 0;
+      rules.push(`The budget counts the 4% Dubai Land Department transfer fee and admin${mort ? ", mortgage registration and bank fees" : ""}. ${mort ? `Banks lend on the finished home at handover; we assumed up to ${Math.round(ltv * 100)}% of the value.` : ""}`);
+      rules.push(`Golden Visa: a property worth AED 2 million or more can qualify you for a 10-year visa. <a href="#golden">How it works</a>`);
+      $("af-out").innerHTML = `<p class="dx-k">Your realistic Dubai budget</p><p class="dx-big">${aed(Math.round(price / 10000) * 10000)}</p><p class="muted">≈ ${cur} ${n0(price * rate)}${mort ? ` · with a mortgage of about ${aed(loan)} at handover` : " · paid in cash"}. You'd put in ${aed(funds)} over ${m} months${capped ? ", capped by your transfer limit" : ""}.</p>`;
+      $("af-rules").innerHTML = rules.map(r => `<li>${r}</li>`).join("");
+      $("af-fine").textContent = "An estimate for planning only, not financial, legal or tax advice. Exchange rates are mid-market and refreshed daily; transfer rules change, so confirm with your bank and a tax adviser in your country.";
+      $("af-wa").href = wa(`Hi Ahmed, your planner says my Dubai budget is about ${aed(Math.round(price / 10000) * 10000)} (buying from ${$("af-c").selectedOptions[0].text}). Can we plan it together?`);
+      $("af-sav-l").textContent = `Savings you can use now (${cur})`; $("af-mo-l").textContent = `You can set aside each month (${cur})`;
+    };
+    document.querySelectorAll("#afford input, #afford select").forEach(el => el.addEventListener("input", calc)); calc();
+  }
+
+  const STEPS = [
+    ["The developer is registered", "In the Dubai REST app, open <b>Developers</b> and search the developer's name.", "Listed, with an active licence.", "Not found, or a different company name from the one on your contract."],
+    ["The project is registered and approved for sale", "In Dubai REST, open <b>Projects</b> and search the project.", "Status shows it registered with DLD, with a completion percentage.", "Not listed. A project must be registered before units can be sold."],
+    ["It has an escrow account", "On the same project page, look for the <b>escrow</b> account and bank.", "An escrow account at an accredited bank, in the project's name.", "No escrow account, or a request to pay any other account."],
+    ["The advert carries a DLD permit", "Scan the QR code on the ad (the <b>Madmoun</b> code) with your phone camera.", "It opens the DLD record showing the permit, the brokerage and the agent.", "No QR code or permit number on the advert."],
+    ["Your agent is licensed", "In Dubai REST, open <b>Brokers</b> and search the agent's name or BRN, and check the brokerage's ORN.", "An active broker card linked to a licensed brokerage. Mine is BRN 85446 with Springfield Properties, ORN 11929.", "No BRN, or the agent can't show a broker card."],
+    ["Construction matches what you're told", "Compare the project's <b>completion %</b> and last inspection date in Dubai REST with the developer's update.", "The figures broadly match, and progress moves between inspections.", "Little or no progress for months, or claims well ahead of DLD's figure."],
+    ["Read the SPA before you pay more", "Ask for the sale and purchase agreement before the second payment.", "Payment plan, handover date, what happens if it's late, unit size and specs, and resale rules (minimum paid, NOC fee) all in writing.", "Pressure to pay before you've seen the SPA."],
+    ["Pay only into escrow, then get your Oqood", "Pay booking and instalments only to the escrow IBAN in the SPA. After booking, the developer registers your purchase in <b>Oqood</b>, DLD's off-plan register.", "An Oqood registration in your name you can see in Dubai REST.", "Requests to pay cash or a personal or company account outside escrow."]
+  ];
+  function verify() {
+    try { Object.assign(done, JSON.parse(localStorage.getItem("awaz-vf") || "{}")); } catch (e) {}
+    const draw = () => {
+      $("vf-steps").innerHTML = STEPS.map(([t, how, good, bad], i) => `<li class="dx-step${done[i] ? " done" : ""}"><label class="dx-st-h"><input type="checkbox" data-vf="${i}" ${done[i] ? "checked" : ""}><span><b>${esc(t)}</b></span></label><p>${how}</p><div class="dx-gb"><p><span class="dx-pill ok">Good</span> ${esc(good)}</p><p><span class="dx-pill bad">Red flag</span> ${esc(bad)}</p></div></li>`).join("");
+      const k = STEPS.filter((_, i) => done[i]).length;
+      $("vf-fill").style.width = k / STEPS.length * 100 + "%"; $("vf-count").textContent = `${k} / ${STEPS.length} checked`;
+      $("vf-wa").href = wa(["Hi Ahmed, here's where I am with checking an off-plan project:", "", ...STEPS.map(([t], i) => (done[i] ? "✅ " : "⬜ ") + t), "", "Can you help with the rest?"].join("\n"));
+      $("vf-steps").querySelectorAll("[data-vf]").forEach(c => c.addEventListener("change", () => { done[c.dataset.vf] = c.checked; try { localStorage.setItem("awaz-vf", JSON.stringify(done)); } catch (e) {} draw(); }));
+    };
+    $("vf-reset").addEventListener("click", () => { for (const k in done) delete done[k]; try { localStorage.removeItem("awaz-vf"); } catch (e) {} draw(); });
+    draw();
+  }
+
+
+  function compare() {
+    const W = D.world || {}, isUAE = n => /Dubai|Abu Dhabi|United Arab Emirates/.test(n);
+    const row = (n, v, f, unit, max, extra = "") => `<li class="dx-row${isUAE(n) ? " dx-hi" : ""}"><span class="dx-name">${esc(n)}</span><span class="dx-val">${N(v, f)}<small>${unit}</small></span>${extra}${line(Math.abs(v), max)}</li>`;
+    const list = (id, key, f, unit, sign) => { const B = W[key] || { rows: [] }, max = Math.max(...B.rows.map(r => Math.abs(r[1]))); put(id, B.rows.map(([n, v]) => row(n, v, f, unit, max)).join("")); $(id + "-s").innerHTML = `Source: <a href="${esc(B.src.url)}" target="_blank" rel="noopener">${esc(B.src.name)}</a>.`; };
+    const sq = (W.sqm || { rows: [] }).rows, dxb = (sq.find(r => r[0] === "Dubai") || [0, 0])[1], lon = (sq.find(r => r[0] === "London") || [0, 1])[1];
+    put("cp-kpi", kpi("US$1M buys in Dubai", `${dxb} sq m`, `${(dxb / lon).toFixed(1)}× London`, "red") + kpi("Dubai luxury prices, 2025", "+25.1%", "global average +3.2%") + kpi("US$10M+ homes sold", "No. 1", "Dubai, in the world") + kpi("Millionaires moving in", "No. 1", "UAE, 2025"));
+    list("cp-sqm", "sqm", "x", "sq m");
+    list("cp-piri", "piri", "s1", "in 2025");
+    list("cp-super", "super", "n", "sales");
+    const y12 = (W.super || {}).y12; if (y12) $("cp-super-s").insertAdjacentHTML("afterbegin", `Over the 12 months to September 2026 Dubai recorded ${y12[0]} sales worth US$${y12[1]} billion. `);
+    list("cp-mig", "mig", "s0", "millionaires");
+    list("cp-yield", "yield", "d2", "gross yield");
+    put("cp-tax", [["Dubai & Abu Dhabi", "0%", "tax on rent and on the gain when you sell, for individuals; no annual property tax"], ["London", "18–24%", "UK capital gains tax on a residential sale, plus income tax on rent"]].map(([n, v, d]) => `<li class="dx-row${isUAE(n) ? " dx-hi" : ""}"><span class="dx-name">${esc(n)}</span><span class="dx-val"><b class="dx-n dx-static">${v}</b></span><span class="dx-chg na">${esc(d)}</span></li>`).join(""));
+  }
+  const inits = { prices, charges, rents, stress, afford, verify, compare }, ready = {};
+  document.querySelectorAll('[data-dx="upd"]').forEach(el => el.textContent = "Updated " + mon(D.updated));
+  return { init(h) { if (inits[h] && !ready[h]) { ready[h] = true; try { inits[h](); } catch (e) { console.error(e); } } } };
+})();
+
 function route() {
   const h = location.hash.slice(1);
   seoFor(h);
-  const views = Object.fromEntries(["developers", "calc", "privacy", "yield", "roe", "mortgage", "buyrent", "why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "planner", "sell"].map(k => [k, document.getElementById(k)]));
+  const views = Object.fromEntries(["developers", "calc", "privacy", "yield", "roe", "mortgage", "buyrent", "why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "planner", "sell", "prices", "charges", "rents", "stress", "afford", "verify", "compare"].map(k => [k, document.getElementById(k)]));
   for (const [k, el] of Object.entries(views)) el.hidden = k !== h;
   const inView = h in views; homeEl.hidden = inView;
-  if (inView) { window.scrollTo(0, 0); setTimeout(() => window.scrollTo(0, 0), 50); if (h === "calc") CALC.init(); if (h === "yield") YIELD.init(); if (h === "roe") ROE.init(); if (h === "mortgage") MORT.init(); if (h === "buyrent") BUYRENT.init(); if (h === "planner") PLANNER.init(); return; }
+  if (inView) { window.scrollTo(0, 0); setTimeout(() => window.scrollTo(0, 0), 50); if (h === "calc") CALC.init(); if (h === "yield") YIELD.init(); if (h === "roe") ROE.init(); if (h === "mortgage") MORT.init(); if (h === "buyrent") BUYRENT.init(); if (h === "planner") PLANNER.init(); DX.init(h); return; }
   const t = h && document.getElementById(h);
   if (t && t !== homeEl) requestAnimationFrame(() => t.scrollIntoView()); else if (h === "top") window.scrollTo(0, 0);
 }
