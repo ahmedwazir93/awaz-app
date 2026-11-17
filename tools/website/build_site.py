@@ -30,10 +30,12 @@ SLUG = {
     "from-saudi": "buy-dubai-property-from-saudi-arabia", "from-uk": "buy-dubai-property-from-uk",
     "from-us": "buy-dubai-property-from-usa", "planner": "off-plan-due-diligence-checklist",
     "sell": "sell-off-plan-property",
+    "prices": "dubai-property-prices-by-area", "charges": "dubai-service-charges-by-area", "rents": "dubai-rent-by-area",
+    "stress": "off-plan-stress-test", "afford": "dubai-property-budget-from-abroad", "verify": "verify-off-plan-project-dubai",
 }
 # Guides get Article schema, calculators get WebApplication schema
-GUIDES = {"why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers"}
-TOOLS = {"calc", "yield", "roe", "mortgage", "buyrent", "planner"}
+GUIDES = {"why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify"}
+TOOLS = {"calc", "yield", "roe", "mortgage", "buyrent", "planner", "stress", "afford"}
 # Kept on the site but out of Google: not part of the off-plan focus
 NOINDEX = {"sell"}
 HOME_ANCHORS = {"top", "launches", "contact", "pulse", "services", "about", "reviews", "news", "follow", "toolkit", "community"}
