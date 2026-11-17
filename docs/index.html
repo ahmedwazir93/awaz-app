@@ -149,6 +149,11 @@ main { padding: calc(var(--top-h) + var(--st)) 0 calc(var(--nav-h) + var(--sb) +
 .rail { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -16px; padding: 2px 16px 6px; scrollbar-width: none; }
 .rail::-webkit-scrollbar { display: none; }
 .rail > * { scroll-snap-align: start; flex: none; }
+.mop { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin-top: 8px; font: 600 11px/1 var(--mono); letter-spacing: .04em; color: var(--mute); }
+.mop .ok { color: var(--ok); display: inline-flex; align-items: center; gap: 4px; }
+.mop .ok svg { width: 12px; height: 12px; }
+.mop .bar { height: 5px; background: var(--ink-3, var(--ink-4)); border-radius: 3px; overflow: hidden; }
+.mop .bar i { display: block; height: 100%; background: var(--ok); min-width: 2px; }
 .pc { width: 260px; border-radius: var(--r); overflow: hidden; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); text-align: left; display: block; }
 .pc .im { height: 150px; background: var(--ink-4) center/cover no-repeat; position: relative; }
 .pc .im .st { position: absolute; left: 10px; top: 10px; font: 700 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 6px 8px; border-radius: 999px; background: rgba(11,11,12,.72); color: #fff; backdrop-filter: blur(6px); }
@@ -608,11 +613,14 @@ const PARTNER_RE = /emaar|nakheel|meraas|wasl|imtiaz|damac|modon|aldar|beyond|om
 /* Only the developers Ahmed works with, and only off-plan (nothing ready or secondary) */
 const OFFPLAN_OK = r => PARTNER_RE.test(r.d || "") && r.cs !== "Completed" && (!r.h || r.h >= "2026-11");
 const isComm = t => t.some(x => /office|retail/i.test(x)) && !t.some(x => /apart|villa|town|pent|duplex/i.test(x));
+/* Project photos hosted with the app (docs/img), listed in the website's off-plan data */
+const IMGSET = new Set(((D.offplan || {}).img) || []);
+const limg = id => id && IMGSET.has(id) ? `img/r${id}.webp` : "";
 let RP = (RY.items || []).filter(OFFPLAN_OK).map(r => ({
   src: "r", key: "r" + r.id, rid: r.id, n: r.n, d: devName(r.d), em: r.em, a: r.a, ll: r.ll,
   type: isComm(r.t) ? "Commercial" : "Residential",
   from: r.p[0] || null, to: r.p[1] || null, sz: r.s, beds: r.b, units: r.t, h: r.h, status: r.ss, cs: r.cs,
-  img: r.img, url: r.u, blurb: r.x, partner: !!r.pt, fresh: !!r.new
+  img: limg(r.id) || r.img, url: r.u, blurb: r.x, partner: !!r.pt, fresh: !!r.new
 }));
 /* Full catalogue (data/projects.json, the website's Property search data) merged in when it loads */
 function mergeCatalog(list) {
@@ -621,10 +629,11 @@ function mergeCatalog(list) {
     const t = c.t || [], ss = c.ss || "";
     const rec = { src: "r", key: "r" + c.id, rid: c.id, n: c.n, d: devName(c.d), em: c.em, a: c.a, ll: c.lng ? [c.lng, c.lat] : null,
       type: isComm(t) ? "Commercial" : "Residential", from: c.p0 || null, to: c.p1 || null, sz: c.s0 ? [c.s0, c.s1] : null,
-      beds: c.b0 != null ? [c.b0, c.b1] : null, units: t, h: c.h || "", status: ss, cs: c.cs, img: c.img || "",
+      beds: c.b0 != null ? [c.b0, c.b1] : null, units: t, h: c.h || "", status: ss, cs: c.cs, img: limg(c.id) || c.img || "",
+      op: { escrow_bank: c.esc, dld_no: c.dld, completion_pct: c.cp, inspection_date: c.insp, total_units: c.tu, dld_handover: c.dh, units_available: c.ua },
       url: "https://app.reelly.ai/projects/" + c.id, blurb: c.ov || "", partner: PARTNER_RE.test(c.d || ""), fresh: /eoi|presale|start of sales|announced/i.test(ss) };
     const old = byId.get(c.id);
-    if (old) { old.blurb = old.blurb && old.blurb.length > (c.ov || "").length ? old.blurb : (c.ov || old.blurb); if (!old.img) old.img = rec.img; }
+    if (old) { old.blurb = old.blurb && old.blurb.length > (c.ov || "").length ? old.blurb : (c.ov || old.blurb); if (limg(c.id) || !old.img) old.img = rec.img; old.op = rec.op; }
     else { RP.push(rec); byId.set(c.id, rec); }
   });
   rebuildP();
@@ -640,7 +649,7 @@ let WP = [], ALLP = [];
 const OPI = (D.offplan || {}).items || {};
 const OP_BY_RID = Object.fromEntries(Object.values(OPI).filter(v => v && v.rid).map(v => [v.rid, v]));
 function opBlock(p) {
-  const o = p.src === "w" ? OPI[p.n] : OP_BY_RID[p.rid];
+  const o = (p.src === "w" ? OPI[p.n] : OP_BY_RID[p.rid]) || p.op;
   if (!o) return "";
   const mon = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "";
   let h = o.sold_out ? `<span class="op-out">Sold out · ask me for resale or similar</span>` : "";
@@ -663,7 +672,7 @@ function rebuildP() {
       src: "w", key: "w" + i, wi: i, n: p.name, d: devName(p.dev), em: p.em, a: p.loc, ll: p.ll, type: p.type,
       from: ps ? ps.aed : (r ? r.from : null), pre: ps ? ps.pre || "" : "", to: r ? r.to : null, sz: r ? r.sz : null, beds: r ? r.beds : null, units: r ? r.units : null,
       h: p.handover || (r ? r.h : ""), status: p.status, pick: p.pick, blurb: p.blurb, plan: p.plan, specs: p.specs, note: p.note,
-      img: r ? r.img : "", url: r ? r.url : "", rid: r ? r.rid : null, fresh: /expected|launch|eoi|new/i.test(p.status || "")
+      img: limg(r && r.rid) || limg((OPI[p.name] || {}).rid) || (r ? r.img : ""), url: r ? r.url : "", rid: r ? r.rid : ((OPI[p.name] || {}).rid || null), fresh: /expected|launch|eoi|new/i.test(p.status || "")
     };
   });
   const used = new Set(WP.map(w => w.rid));
@@ -1263,7 +1272,13 @@ function filtered() {
 function prCard(p) {
   const meta = [p.from ? `<span class="pr">${priceTxt(p)}</span>` : `<span class="muted">Price on request</span>`, bedsTxt(p.beds) ? `<span class="muted">${bedsTxt(p.beds)}</span>` : "", p.h ? `<span class="muted">${ymLabel(p.h)}</span>` : ""].filter(Boolean).join("");
   return `<button class="pr-card" data-p="${p.key}"><div class="im"${p.img ? ` style="background-image:url('${esc(p.img)}')"` : ""}>${p.img ? "" : devLogo(p.d, 84, 26) || ico("build")}${p.pick ? `<span class="pick-flag">PICK</span>` : ""}</div>
-    <div class="bd"><span class="k"><span>${esc(p.em)}</span>·<span class="s">${esc(p.status || p.type)}</span></span><b>${esc(p.n)}</b><small>${esc(p.d)}${p.a ? " · " + esc(p.a) : ""}</small><div class="meta">${meta}</div></div></button>`;
+    <div class="bd"><span class="k"><span>${esc(p.em)}</span>·<span class="s">${esc(p.status || p.type)}</span></span><b>${esc(p.n)}</b><small>${esc(p.d)}${p.a ? " · " + esc(p.a) : ""}</small><div class="meta">${meta}</div>${miniOp(p)}</div></button>`;
+}
+/* One-line escrow + DLD progress strip on every project card */
+function miniOp(p) {
+  const o = (p.src === "w" ? OPI[p.n] : OP_BY_RID[p.rid]) || p.op || {};
+  const has = o.completion_pct != null, pct = has ? Math.max(0, Math.min(100, +o.completion_pct)) : 0;
+  return `<div class="mop"><span class="${o.escrow_bank ? "ok" : ""}">${o.escrow_bank ? ico("check") + "Escrow" : "Escrow on request"}</span><span class="bar"><i style="width:${pct}%"></i></span><span>${has ? (pct ? Math.round(pct) + "%" : "Not started") : "—"}</span></div>`;
 }
 function projectsView() {
   const L = filtered(), ems = ["all", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman"];
