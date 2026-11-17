@@ -18,5 +18,5 @@ Built and switched off. Turning it on needs the paid and account steps below.
 4. `npx wrangler d1 create ahmed-assistant`, then `npx wrangler d1 execute ahmed-assistant --remote --file schema.sql`.
 5. Load projects: `python3 load_projects.py projects.json > projects.sql` and execute it the same way.
 6. `cp wrangler.toml.example wrangler.toml`, fill in, `npx wrangler secret put ANTHROPIC_API_KEY`, `npx wrangler deploy`.
-7. Host the desk on its own subdomain (e.g. desk.ahmedwazir.com) behind Cloudflare Access so only your email can sign in; it is never linked from the site and is set to noindex. Point it at `/api/*`.
+7. Host the desk on its own subdomain (e.g. desk.awazrealty.com) behind Cloudflare Access so only your email can sign in; it is never linked from the site and is set to noindex. Point it at `/api/*`.
 8. Add the privacy section, then the widget script tag (with `data-endpoint`) to the website and app, and set the website form endpoint to `/lead`.

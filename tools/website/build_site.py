@@ -15,7 +15,7 @@ icons are generated.
 import datetime, hashlib, json, os, re, shutil, sys
 
 SRC, OUT = sys.argv[1], sys.argv[2]
-URL = (sys.argv[sys.argv.index("--url") + 1] if "--url" in sys.argv else "https://www.ahmedwazir.com").rstrip("/")
+URL = (sys.argv[sys.argv.index("--url") + 1] if "--url" in sys.argv else "https://www.awazrealty.com").rstrip("/")
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.dirname(os.path.abspath(SRC))
 TODAY = datetime.date.today().isoformat()

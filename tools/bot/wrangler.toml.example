@@ -5,9 +5,9 @@ compatibility_date = "2026-11-01"
 
 [vars]
 OWNER_EMAIL = "ahusain@springfield-re.com"
-ALLOWED_ORIGINS = "https://www.ahmedwazir.com,https://ahmedwazir93.github.io"
+ALLOWED_ORIGINS = "https://www.awazrealty.com,https://ahmedwazir93.github.io"
 MODEL = "claude-sonnet-5-5"
-# ALERT_FROM = "bot@ahmedwazir.com"   # needs Cloudflare Email Routing on your domain
+# ALERT_FROM = "bot@awazrealty.com"   # needs Cloudflare Email Routing on your domain
 
 [[d1_databases]]
 binding = "DB"
