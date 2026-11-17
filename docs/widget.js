@@ -20,7 +20,7 @@ html[data-theme="dark"] .awb{--bg:#121214;--fg:#F4F1EE;--card:#232327;--line:#3A
 .awb button{border:0;border-radius:8px;padding:8px 12px;font:600 14px system-ui,sans-serif;cursor:pointer;background:#C8102E;color:#fff}.awb button.g{background:none;color:inherit;border:1px solid currentColor}
 .awb .cs{padding:14px;font-size:13.5px}.awb .cs p{margin:0 0 10px}.awb .cs a{color:inherit;text-decoration:underline}.awb select{border:1px solid var(--line);border-radius:8px;padding:4px;font:inherit;font-size:12px;background:var(--field);color:var(--fg)}`;
   const st = document.createElement("style"); st.textContent = css; document.head.append(st);
-  const btn = document.createElement("button"); btn.className = "awb-btn"; btn.textContent = "Ask Ahmed's assistant"; document.body.append(btn);
+  const btn = document.createElement("button"); btn.className = "awb-btn"; btn.textContent = "Ask Ahmed\u2019s AI Assistant"; document.body.append(btn);
   let box, msgs = [], sid = null, busy = false; try { sid = sessionStorage.getItem("awb-sid"); } catch (e) {}
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   function open() {
