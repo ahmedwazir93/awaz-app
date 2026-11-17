@@ -577,7 +577,7 @@ const IC = {
 const ico = (k, cls = "ic") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k] || ""}</svg>`;
 
 /* ---------- developer logos ---------- */
-const devName = d => String(d || "").replace(/\s*[×(].*$/, "").replace(/ (Properties|Developments|Developers|Development|Real Estate Development|Real Estate)$/i, "").trim();
+const devName = d => String(d || "").replace(/\s*[×(].*$/, "").replace(/ (Properties|Developments|Developers|Development|Real Estate Development|Real Estate|Group|Realty)$/i, "").trim();
 function devLogo(dev, w = 80, h = 22) {
   const d = String(dev || "").toLowerCase(), k = LG.keys.findIndex(x => d.includes(x)), html = LG.html[k];
   if (k < 0 || !html) return "";
@@ -588,9 +588,11 @@ function devLogo(dev, w = 80, h = 22) {
 const norm = s => String(s || "").toLowerCase().replace(/\b(by|the|at|residences?|tower|towers|phase \d+)\b/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
 const priceSpec = p => { const v = (p.specs || []).find(([, x]) => x && typeof x === "object"); return v ? v[1] : null; };
 const FEEMAP = p => p.em === "Abu Dhabi" ? (/Reem|Maryah/i.test(p.a || p.loc || "") ? "adgm" : "adm") : ({ Dubai: "dxb", Sharjah: "shj", "Ras Al Khaimah": "rak", Ajman: "ajm", "Umm Al Quwain": "uaq" }[p.em] || "dxb");
-const PARTNER_RE = /emaar|nakheel|meraas|wasl|imtiaz|damac|modon|aldar|beyond|omniyat|reportage|azizi/i;
+const PARTNER_RE = /emaar|nakheel|meraas|wasl|imtiaz|damac|modon|aldar|beyond|omniyat|reportage|azizi|sobha|binghatti|ellington|eagle hills|alef|majid al futtaim|cosmo|samana|danube/i;
+/* Only the developers Ahmed works with, and only off-plan (nothing ready or secondary) */
+const OFFPLAN_OK = r => PARTNER_RE.test(r.d || "") && r.cs !== "Completed" && (!r.h || r.h >= "2026-11");
 const isComm = t => t.some(x => /office|retail/i.test(x)) && !t.some(x => /apart|villa|town|pent|duplex/i.test(x));
-let RP = (RY.items || []).map(r => ({
+let RP = (RY.items || []).filter(OFFPLAN_OK).map(r => ({
   src: "r", key: "r" + r.id, rid: r.id, n: r.n, d: devName(r.d), em: r.em, a: r.a, ll: r.ll,
   type: isComm(r.t) ? "Commercial" : "Residential",
   from: r.p[0] || null, to: r.p[1] || null, sz: r.s, beds: r.b, units: r.t, h: r.h, status: r.ss, cs: r.cs,
@@ -599,7 +601,7 @@ let RP = (RY.items || []).map(r => ({
 /* Full catalogue (data/projects.json, the website's Property search data) merged in when it loads */
 function mergeCatalog(list) {
   const byId = new Map(RP.map(r => [r.rid, r]));
-  (list || []).forEach(c => {
+  (list || []).filter(OFFPLAN_OK).forEach(c => {
     const t = c.t || [], ss = c.ss || "";
     const rec = { src: "r", key: "r" + c.id, rid: c.id, n: c.n, d: devName(c.d), em: c.em, a: c.a, ll: c.lng ? [c.lng, c.lat] : null,
       type: isComm(t) ? "Commercial" : "Residential", from: c.p0 || null, to: c.p1 || null, sz: c.s0 ? [c.s0, c.s1] : null,
@@ -1193,7 +1195,7 @@ function homeView() {
       </div></div>
 
     <div class="sec"><div class="list"><button class="li" id="saveContact"><span class="ib">${ico("plus")}</span><span class="t"><b>Save Ahmed's contact</b><small>Add to your phone</small></span><span class="chev">${ico("chev")}</span></button></div></div>
-    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · NMA advertiser permit 8476056<br>Project data from developers and Reelly · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button></p>
+    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · NMA advertiser permit 8476056<br>Project data from developers · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button></p>
   </div>`;
 }
 const VCARD = ["BEGIN:VCARD", "VERSION:3.0", "N:Wazir;Ahmed;;;", "FN:Ahmed Wazir", "ORG:Springfield Properties", "TITLE:Property Consultant · RERA BRN 85446", "TEL;TYPE=CELL:" + PHONE, "EMAIL;TYPE=WORK:" + EMAIL, "URL:https://linktr.ee/ahmedwazir", "END:VCARD"].join("\n");
@@ -1231,7 +1233,7 @@ function projectsView() {
     <div class="seg top" id="srcSeg"><button data-src="w" aria-pressed="${PF.src === "w"}">Ahmed's launches · ${WP.length}</button><button data-src="all" aria-pressed="${PF.src === "all"}">All projects · ${ALLP.length}</button></div>
     <label class="search" style="margin-top:12px">${ico("match")}<input id="pq" type="search" placeholder="Project, area or developer" value="${esc(PF.q)}" autocomplete="off"></label>
     <div class="chips"><button class="chip" id="fBtn" aria-pressed="${nF > 0}">${ico("filter")}Filters${nF ? " · " + nF : ""}</button>${ems.map(e => `<button class="chip" data-em="${esc(e)}" aria-pressed="${PF.em === e}">${e === "all" ? "All emirates" : esc(e)}</button>`).join("")}</div>
-    <p class="count">${L.length} project${L.length === 1 ? "" : "s"}${PF.src === "all" ? ` · from Reelly, ${esc(fmtD(CAT_UPDATED || RY.updated, { day: "numeric", month: "short" }))}` : ""}</p>
+    <p class="count">${L.length} project${L.length === 1 ? "" : "s"}${PF.src === "all" ? ` · updated ${esc(fmtD(CAT_UPDATED || RY.updated, { day: "numeric", month: "short" }))}` : ""}</p>
     <div class="pl" id="plist">${L.length ? L.slice(0, PF.n).map(prCard).join("") : `<p class="empty">Nothing matches. Clear a filter, or message me and I'll find it.</p>`}</div>
     ${L.length > PF.n ? `<button class="btn" id="pMore" style="width:100%;margin-top:12px">Show more (${L.length - PF.n})</button>` : ""}
   </div><button class="fab" id="mapFab">${ico("map")}Map</button>`;
@@ -1301,7 +1303,7 @@ function openProject(key) {
         <button class="li" id="pdLead"><span class="ib">${ico("leads")}</span><span class="t"><b>Add as a lead's interest</b><small>New lead with this project</small></span><span class="chev">${ico("chev")}</span></button>
         ${p.url ? `<a class="li" href="${esc(p.url)}" data-ext><span class="ib">${ico("link")}</span><span class="t"><b>Open in Reelly</b><small>Units, floor plans, brochure, commission</small></span><span class="chev">${ico("chev")}</span></a>` : ""}
       </div></div>` : ""}
-      <p class="note">${p.src === "w" ? "From Ahmed's launch list" : "Listing data from Reelly"}${p.img ? "; image from Reelly" : ""}. Prices are developer list prices and can change.</p>`,
+      <p class="note">${p.src === "w" ? "From Ahmed's launch list. " : ""}Prices are developer list prices and can change. Ask Ahmed for the live price list and payment plan.</p>`,
     foot: () => `<a class="btn btn-red" href="${waLink(`Hi Ahmed, I'm interested in ${p.n} (${p.em}). Can you send me the details?`)}" data-ext>${ico("wa")}Register interest</a><a class="btn" href="tel:${PHONE}" data-ext>${ico("call")}Call</a>`,
     init(nb) {
       bindScreen(nb);

@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <meta name="robots" content="noindex">
 <style id="awaz-app-mode">
 html.app body::before, html.app .nav, html.app footer, html.app .back { display: none !important; }
@@ -1256,6 +1255,9 @@ body { transition: background-color .25s ease, color .25s ease; }
 .ps-body { padding: 14px 14px 12px; display: grid; gap: 6px; flex: 1; align-content: start; }
 .ps-loc { font: 600 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ps-body h3 { font-size: 22px; line-height: 1; }
+.ps-body { position: relative; }
+.ps-logo { position: absolute; right: 14px; top: 12px; }
+.ps-card .ps-loc { padding-right: 86px; }
 .ps-dev { font-size: 13px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ps-price { font: 800 20px var(--display); letter-spacing: .02em; margin-top: 4px; }
 .ps-price small { font: 600 11px var(--mono); letter-spacing: .08em; color: var(--mute); text-transform: uppercase; margin-right: 6px; }
@@ -1571,7 +1573,7 @@ body { transition: background-color .25s ease, color .25s ease; }
         
         <div class="lane" id="laneCom"><div class="lane-head"><h3>Commercial</h3><span class="lane-n" id="nCom"></span></div><div class="lane-list" id="listCom"></div></div>
       </div>
-      <div class="brief-foot" style="margin:24px 0 0"><button class="btn btn-ghost" type="button" id="moreLaunches">Show all launches</button><a class="btn btn-red" href="#search">Search 1,200+ projects</a><a class="btn btn-red" href="#match">Find my match</a><a class="btn btn-ghost" href="#calc">Payment calculator</a><a class="btn btn-ghost" href="#map">View on the map</a></div>
+      <div class="brief-foot" style="margin:24px 0 0"><button class="btn btn-ghost" type="button" id="moreLaunches">Show all launches</button><a class="btn btn-red" href="#search">Search all off-plan projects</a><a class="btn btn-red" href="#match">Find my match</a><a class="btn btn-ghost" href="#calc">Payment calculator</a><a class="btn btn-ghost" href="#map">View on the map</a></div>
       <p class="fine" id="fxNote">Prices, payment plans and handover dates are as published by developers and listings in November 2026 and can change without notice. Contact me for current availability before making any decision.</p>
     </div>
   </section>
@@ -2880,9 +2882,9 @@ body { transition: background-color .25s ease, color .25s ease; }
   <div class="wrap" style="padding-block:32px 64px">
     <a class="back" href="#top">← Back to home</a>
     <div class="sec-head" style="margin:22px 0 22px">
-      <p class="eyebrow"><span class="dot"></span> Property search · <span id="psTotal">1,200+</span> projects · Updated <span id="psUpd">Nov 2026</span></p>
+      <p class="eyebrow"><span class="dot"></span> Off-plan search · <span id="psTotal">340+</span> projects · Updated <span id="psUpd">Nov 2026</span></p>
       <h2>Find your off-plan property</h2>
-      <p class="lede">Every project currently selling across Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah, Ajman and Umm Al Quwain. Filter by budget, bedrooms, handover and developer, then message me for the price list, floor plans and payment plan.</p>
+      <p class="lede">Off-plan projects now selling from the developers I work with, including Emaar, Sobha, DAMAC, Aldar, Binghatti, Meraas, Nakheel and Omniyat. Filter by budget, bedrooms, handover and developer, then message me for the price list, floor plans and payment plan.</p>
     </div>
     <div class="ps-bar" id="psBar">
       <div class="ps-row">
@@ -2899,7 +2901,7 @@ body { transition: background-color .25s ease, color .25s ease; }
         <div class="ps-f"><span>Budget (AED)</span><div class="ps-pair">
           <select class="ps-sel" id="psPmin" aria-label="Minimum price"><option value="">Min</option></select>
           <select class="ps-sel" id="psPmax" aria-label="Maximum price"><option value="">Max</option></select></div></div>
-        <label class="ps-f"><span>Handover</span><select class="ps-sel" id="psHo"><option value="">Any time</option><option value="ready">Ready / this year</option><option value="2027">By end of 2027</option><option value="2028">By end of 2028</option><option value="2029">By end of 2029</option><option value="2030">2030 or later</option></select></label>
+        <label class="ps-f"><span>Handover</span><select class="ps-sel" id="psHo"><option value="">Any time</option><option value="ready">Handover in 2026</option><option value="2027">By end of 2027</option><option value="2028">By end of 2028</option><option value="2029">By end of 2029</option><option value="2030">2030 or later</option></select></label>
         <div class="ps-f wide"><span>Bedrooms</span><div class="ps-chips" id="psBeds"></div></div>
         <div class="ps-f wide"><span>Property type</span><div class="ps-chips" id="psType"></div></div>
         <div class="ps-f wide"><span>Sales stage</span><div class="ps-chips" id="psStage"></div></div>
@@ -2908,7 +2910,7 @@ body { transition: background-color .25s ease, color .25s ease; }
     <div class="ps-meta"><p class="ps-count" id="psCount" aria-live="polite">Loading projects…</p><button class="ps-reset" type="button" id="psReset">Clear all filters</button></div>
     <div class="ps-grid" id="psGrid"></div>
     <div class="ps-foot"><button class="btn btn-ghost" type="button" id="psNext" hidden>Show more projects</button><a class="btn btn-red" id="psAskAll" href="https://wa.me/971586032580" target="_blank" rel="noopener">Can't find it? Ask me</a></div>
-    <p class="ps-note">Prices are developers' published starting prices and change often; availability moves fast on new launches. Sizes and prices are indicative. Message me for the live price list, unit availability, floor plans and the full payment plan before you decide.</p>
+    <p class="ps-note">Off-plan only, from the developers I work with. Prices are developers' published starting prices and change often; availability moves fast on new launches. Sizes and prices are indicative. Message me for the live price list, unit availability, floor plans and the full payment plan before you decide.</p>
   </div>
   <dialog class="ps-dlg" id="psDlg" aria-labelledby="psDlgT"></dialog>
   <div class="ps-short" id="psShort" hidden></div>
@@ -3844,7 +3846,7 @@ const SEO = {
   "from-us": ["Buying Dubai Property as an American: IRS, FBAR & FATCA Rules | Ahmed Wazir", "US citizens buying UAE property: Schedule E rent, 30-year depreciation, capital gains, FBAR and Form 8938, and mortgage options."],
   planner: ["Off-Plan Investor Planner: Checklist, Compare Projects & Handover Calendar | Ahmed Wazir", "Off-plan due diligence checklist, side-by-side project comparison, UAE developer track records and a handover calendar for upcoming launches."],
   areas: ["Dubai & Abu Dhabi Area Guides for Property Buyers | Ahmed Wazir", "Prices, lifestyle and launches in the UAE's key communities, to help you pick where to buy."],
-  search: ["UAE Off-Plan Property Search: 1,200+ Projects in Dubai & Abu Dhabi | Ahmed Wazir", "Search every off-plan project selling in Dubai, Abu Dhabi, Sharjah, Ras Al Khaimah and Ajman by budget, bedrooms, handover and developer, then get the price list from Ahmed Wazir."],
+  search: ["Off-Plan Property Search: Emaar, Sobha, DAMAC, Aldar & More | Ahmed Wazir", "Search off-plan projects from Emaar, Sobha, DAMAC, Aldar, Binghatti, Meraas, Nakheel and other leading UAE developers by budget, bedrooms and handover, then get the price list from Ahmed Wazir."],
   sell: ["Sell or Lease Your Property in the UAE | Ahmed Wazir", "List your Dubai or UAE property for sale or rent with Ahmed Wazir, RERA BRN 85446."]
 };
 const SEO_DESC = document.querySelector('meta[name="description"]').content;
@@ -3895,7 +3897,7 @@ const PS = (() => {
   const bedTxt = b => b === 0 ? "Studio" : (Math.floor(b) + (b % 1 ? " + maid" : ""));
   const beds = p => p.b0 == null ? "" : p.b0 === p.b1 ? (p.b0 === 0 ? "Studio" : bedTxt(p.b0) + " BR") : bedTxt(p.b0) + "–" + bedTxt(p.b1) + " BR";
   const size = p => !p.s0 ? "" : UNIT.text(p.s0 === p.s1 ? p.s0.toLocaleString("en-US") + " sq ft" : p.s0.toLocaleString("en-US") + "–" + p.s1.toLocaleString("en-US") + " sq ft");
-  const ho = p => { if (isReady(p)) return "Ready"; if (!p.h) return ""; const [y, m] = p.h.split("-"); return "Q" + Math.ceil(+m / 3) + " " + y; };
+  const ho = p => { if (!p.h) return ""; const [y, m] = p.h.split("-"); return "Q" + Math.ceil(+m / 3) + " " + y; };
   const msg = p => `Hi Ahmed, I'm interested in ${p.n}${p.d ? " by " + p.d : ""}${p.a ? " in " + p.a : ""} (ref ${p.id}). Please send me the price list, available units, floor plans and payment plan.`;
   const wa = t => `https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
   const initials = n => n.split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
@@ -3904,14 +3906,14 @@ const PS = (() => {
     const b = [];
     if (p.ss === "New launch" || p.ss === "Announced") b.push(`<span class="ps-b red">${p.ss === "New launch" ? "New launch" : "Coming soon"}</span>`);
     else if (p.ss === "Pre-sale (EOI)") b.push(`<span class="ps-b red">Pre-sale · EOI</span>`);
-    if (isReady(p)) b.push(`<span class="ps-b ok">Ready</span>`); else if (p.h) b.push(`<span class="ps-b">Handover ${ho(p)}</span>`);
+    if (p.h) b.push(`<span class="ps-b">Handover ${ho(p)}</span>`);
     if (p.br) b.push(`<span class="ps-b">Branded</span>`);
     return b.join("");
   };
   const favBtn = p => `<button class="ps-fav" type="button" data-fav="${p.id}" aria-pressed="${fav.has(p.id)}" aria-label="Save ${esc(p.n)} to shortlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.2 3.4 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.6 0 6 3.7 4.5 7.3C19.5 16.4 12 21 12 21z"/></svg></button>`;
   const card = p => `<article class="ps-card">
       <div style="position:relative"><button class="ps-img" type="button" data-open="${p.id}" aria-label="Details for ${esc(p.n)}">${img(p)}</button><div class="ps-badges">${badges(p)}</div>${favBtn(p)}</div>
-      <div class="ps-body"><p class="ps-loc">${esc([p.a, p.em].filter(Boolean).join(" · "))}</p><h3>${esc(p.n)}</h3><p class="ps-dev">${esc(p.d || "")}</p>
+      <div class="ps-body"><p class="ps-loc">${esc([p.a, p.em].filter(Boolean).join(" · "))}</p><h3>${esc(p.n)}</h3><p class="ps-dev">${esc(p.d || "")}</p>${devLogo(p.d) ? `<div class="ps-logo">${devLogo(p.d)}</div>` : ""}
         <p class="ps-price">${p.p0 ? `<small>From</small>${money(p.p0)}` : `<small>Price</small>On request`}</p>
         <p class="ps-facts">${[beds(p), (p.t || []).slice(0, 3).join(", "), size(p)].filter(Boolean).map(x => `<span>${esc(x)}</span>`).join("")}</p></div>
       <div class="ps-act"><button type="button" data-open="${p.id}">Details</button><a class="wa" href="${wa(msg(p))}" target="_blank" rel="noopener">WhatsApp me</a></div>
@@ -3936,7 +3938,7 @@ const PS = (() => {
     if (F.dev && p.d !== F.dev) return false;
     if (F.pmax && !(p.p0 && p.p0 <= F.pmax)) return false;
     if (F.pmin && !(p.p1 >= F.pmin || p.p0 >= F.pmin)) return false;
-    if (F.ho) { if (F.ho === "ready") { if (!(isReady(p) || (p.h || "") <= "2026-12")) return false; } else if (F.ho === "2030") { if (!((p.h || "") >= "2030")) return false; } else if (!(p.h && p.h <= F.ho + "-12")) return false; }
+    if (F.ho) { if (F.ho === "ready") { if (!((p.h || "9") <= "2026-12")) return false; } else if (F.ho === "2030") { if (!((p.h || "") >= "2030")) return false; } else if (!(p.h && p.h <= F.ho + "-12")) return false; }
     if (F.beds.size) { if (p.b0 == null) return false; if (![...F.beds].some(b => b === 5 ? p.b1 >= 5 : b >= Math.floor(p.b0) && b <= p.b1)) return false; }
     if (F.type.size && !(p.t || []).some(t => F.type.has(t))) return false;
     if (F.stage === "new" && !["New launch", "Announced", "Pre-sale (EOI)"].includes(p.ss)) return false;
@@ -4725,5 +4727,3 @@ window.addEventListener("hashchange", route); route();
 
 document.getElementById("copySum").addEventListener("click", e => copy(lastText, e.currentTarget));
 </script>
-
-</body></html>

@@ -10,8 +10,11 @@ Projects found in several files are merged. A file whose name contains "eoi",
 """
 import datetime, json, os, re, sys
 
-PARTNERS = {"Emaar", "Nakheel", "Meraas", "Wasl", "Imtiaz Development", "DAMAC", "Modon Properties",
-            "ALDAR", "Beyond Developments", "Omniyat", "Reportage Properties", "Azizi"}
+# The developers Ahmed works with (same list as the website's developer logos). Only these are kept.
+PARTNER_KEYS = ["emaar", "nakheel", "meraas", "wasl", "imtiaz", "damac", "modon", "aldar", "beyond", "omniyat",
+                "reportage", "azizi", "sobha", "binghatti", "ellington", "eagle hills", "alef", "majid al futtaim",
+                "cosmo", "samana", "danube"]
+PARTNER_RE = re.compile(r"\b(" + "|".join(re.escape(k) for k in PARTNER_KEYS) + r")\b", re.I)
 DEV_NAMES = {"ALDAR": "Aldar", "Imtiaz Development": "Imtiaz", "Modon Properties": "Modon",
              "Beyond Developments": "Beyond", "Reportage Properties": "Reportage"}
 
@@ -53,6 +56,11 @@ def main():
             em = emirate(loc.get("region"))
             if not em:
                 continue  # outside the UAE
+            # Off-plan only, from partner developers: skip completed/ready projects and everyone else
+            if not PARTNER_RE.search(p.get("developer") or ""):
+                continue
+            if p.get("construction_status_display") == "Completed" or ((p.get("completion_datetime") or "9")[:7] < datetime.date.today().strftime("%Y-%m")):
+                continue
             done = (p.get("completion_datetime") or "")[:7]
             rec = {
                 "id": p["id"],
@@ -71,7 +79,7 @@ def main():
                 "img": ((p.get("cover_image") or {}).get("url")) or "",
                 "u": p.get("url") or "",
                 "x": first_sentence(p.get("overview")),
-                "pt": 1 if p.get("developer") in PARTNERS else 0,
+                "pt": 1,
                 "new": 1 if fresh or p.get("sale_status_display") in ("Presale (EOI)", "Start of Sales", "Announced") else 0,
             }
             old = seen.get(rec["id"])
