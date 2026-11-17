@@ -116,6 +116,14 @@ js_name = f"assets/js/site.{h8(js.encode())}.js"
 open(os.path.join(OUT, js_name), "w", encoding="utf-8").write(js)
 s = s[:main_js.start()] + f'<script src="/{js_name}"></script>' + s[main_js.end():]
 
+# 3b. AI assistant widget -> its own cached file (preview mode until data-endpoint is set)
+wm = re.search(r'<script id="awb-widget" data-endpoint="([^"]*)">(.*?)</script>', s, re.S)
+if wm:
+    wjs = rjsmin.jsmin(wm.group(2))
+    w_name = f"assets/js/widget.{h8(wjs.encode())}.js"
+    open(os.path.join(OUT, w_name), "w", encoding="utf-8").write(wjs)
+    s = s[:wm.start()] + f'<script src="/{w_name}" data-endpoint="{wm.group(1)}" defer></script>' + s[wm.end():]
+
 # 4. Split head (everything before <style>/<link css>) from body
 # The source has no <head>: meta tags and title come first, then the body content.
 first_body = s.find('<a class="skip"') if '<a class="skip"' in s else s.find("<header")
@@ -166,6 +174,13 @@ def body_for(view):
             inner = b[gt + 1:k]
             label = f'<span class="vh-k">{kw}</span>' if kw and kw.lower() not in re.sub("<[^>]+>", "", inner).lower() else ""
             b = b[:j] + '<h1 class="vh"' + b[j + 3:gt + 1] + label + inner + "</h1>" + b[k + 5:]
+            # Keep the outline in order: with no H2 left in the view, H3s read as level 2, H4s as level 3
+            se = b.find("</section>", j)
+            sec = b[j:se]
+            if "<h2" not in sec:
+                sec = re.sub(r"<h3(?![^>]*aria-level)", '<h3 aria-level="2"', sec)
+                sec = re.sub(r"<h4(?![^>]*aria-level)", '<h4 aria-level="3"', sec)
+                b = b[:j] + sec + b[se:]
     # Links: views -> real URLs; home anchors -> home page on inner pages
     def link(m):
         v = m.group(1)
