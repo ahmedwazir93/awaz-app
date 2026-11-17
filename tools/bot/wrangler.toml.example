@@ -1,0 +1,31 @@
+# Copy to wrangler.toml and fill in. Deploy with: npx wrangler deploy
+name = "ahmed-assistant"
+main = "worker.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+OWNER_EMAIL = "ahusain@springfield-re.com"
+ALLOWED_ORIGINS = "https://www.ahmedwazir.com,https://ahmedwazir93.github.io"
+MODEL = "claude-sonnet-5-5"
+# ALERT_FROM = "bot@ahmedwazir.com"   # needs Cloudflare Email Routing on your domain
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ahmed-assistant"
+database_id = "PASTE-ID-FROM: npx wrangler d1 create ahmed-assistant"
+
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
+# Meeting alerts by email (optional)
+# [[send_email]]
+# name = "ALERT"
+# destination_address = "ahusain@springfield-re.com"
+
+# Delete chats and form leads older than 12 months, every day at 03:17 UTC
+[triggers]
+crons = ["17 3 * * *"]
+
+# Secret (never commit): npx wrangler secret put ANTHROPIC_API_KEY
