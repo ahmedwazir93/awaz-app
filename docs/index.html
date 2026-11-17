@@ -649,7 +649,10 @@ function opBlock(p) {
   if (o.completion_pct != null) { const pct = Math.max(0, Math.min(100, +o.completion_pct));
     h += `<div><p class="op-k"><span>Construction (DLD)</span><b>${pct ? pct.toFixed(pct % 1 ? 1 : 0) + "%" : "Not started"}</b></p><div class="op-bar"><i style="width:${pct}%"></i></div>${o.inspection_date ? `<p class="op-k" style="margin-top:4px"><span>Inspected ${mon(o.inspection_date)}</span>${o.dld_handover ? `<span>DLD completion ${mon(o.dld_handover)}</span>` : ""}</p>` : ""}</div>`; }
   const av = (o.avail || []).filter(a => a.n > 0);
-  if (av.length && !o.sold_out) h += `<div><p class="op-k"><span>Available now</span><b>${o.units_available || av.reduce((s, a) => s + a.n, 0)} units${o.total_units ? " of " + o.total_units : ""}</b></p><div class="op-av">${av.map(a => `<span>${esc(a.t)} <b>×${a.n}</b></span>`).join("")}</div></div>`;
+  // When the developer has only listed one sample unit per type, show the types without counts
+  const counted = av.some(a => a.n > 1);
+  const nAv = av.length ? (counted ? av.reduce((s, a) => s + a.n, 0) : 0) : (o.units_available || 0);
+  if ((nAv || av.length) && !o.sold_out) h += `<div><p class="op-k"><span>${nAv ? "Available now" : "Unit types available"}</span><b>${nAv ? nAv + " unit" + (nAv === 1 ? "" : "s") + (o.total_units ? " of " + o.total_units : "") : (o.total_units ? o.total_units + " units in project" : "")}</b></p>${av.length ? `<div class="op-av">${av.map(a => `<span>${esc(a.t)}${counted ? ` <b>×${a.n}</b>` : ""}</span>`).join("")}</div>` : ""}</div>`;
   return `<div class="op">${h}</div>`;
 }
 function rebuildP() {
