@@ -15,7 +15,8 @@ Nothing else in the repo is touched. Needs Node.js (to read the PROJECTS list).
 """
 import datetime, hashlib, json, os, re, subprocess, sys, tempfile
 
-BLOCKS = ["holidays-data", "rules-data", "fx-data", "pulse-data", "video-data", "ticker-data", "news-data"]
+OPTIONAL_BLOCKS = {"offplan-data"}
+BLOCKS = ["holidays-data", "rules-data", "fx-data", "pulse-data", "video-data", "ticker-data", "news-data", "offplan-data"]
 
 APP_HEAD = r"""<meta name="robots" content="noindex">
 <style id="awaz-app-mode">
@@ -95,6 +96,8 @@ def main():
     for b in BLOCKS:
         m = re.search(r'<script type="application/json" id="%s">(.*?)</script>' % re.escape(b), html, re.S)
         if not m:
+            if b in OPTIONAL_BLOCKS:
+                continue
             sys.exit("Missing data block: " + b)
         data[b.replace("-data", "")] = json.loads(m.group(1))
     data["projects"] = extract_projects(html)
