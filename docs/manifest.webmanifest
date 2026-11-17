@@ -1,7 +1,7 @@
 {
-  "name": "AWaz Realty",
-  "short_name": "AWaz",
-  "description": "Ahmed Wazir's UAE property toolkit: calculators, guides, launches and market data.",
+  "name": "Ahmed Wazir",
+  "short_name": "Ahmed Wazir",
+  "description": "Ahmed Wazir's UAE property app: off-plan launches, calculators, buyer guides and market data.",
   "start_url": "./index.html#home",
   "scope": "./",
   "display": "standalone",

@@ -31,7 +31,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * AWaz Realty: a thin native shell around the web app on GitHub Pages.
+ * Ahmed Wazir: a thin native shell around the web app on GitHub Pages.
  * The web app updates itself daily; this shell only needs rebuilding for native changes.
  * With no connection on first launch it falls back to the copy bundled in assets/www.
  */
@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
     private static final long STALE_MS = 6L * 60 * 60 * 1000; // reload after 6 hours in the background
 
     private WebView web;
+    private FrameLayout root;
     private boolean usingOffline = false;
     private long loadedAt = 0;
 
@@ -50,7 +51,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FrameLayout root = new FrameLayout(this);
+        root = new FrameLayout(this);
         root.setBackgroundColor(Color.parseColor("#0B0B0C"));
         // Keep content clear of the status and navigation bars (edge-to-edge on Android 15+).
         root.setOnApplyWindowInsetsListener((v, insets) -> {
@@ -78,7 +79,7 @@ public class MainActivity extends Activity {
         s.setAllowFileAccess(true);
         s.setMediaPlaybackRequiresUserGesture(true);
         s.setTextZoom(100);
-        s.setUserAgentString(s.getUserAgentString() + " AWazRealtyApp/" + BuildConfig.VERSION_NAME);
+        s.setUserAgentString(s.getUserAgentString() + " AhmedWazirApp/" + BuildConfig.VERSION_NAME);
 
         web.addJavascriptInterface(new Bridge(this), "AndroidBridge");
         web.setWebViewClient(new Client());
@@ -115,6 +116,26 @@ public class MainActivity extends Activity {
         }
     }
 
+    void applyBars(boolean dark) {
+        int bg = Color.parseColor(dark ? "#0B0B0C" : "#F4F1EE");
+        getWindow().setStatusBarColor(bg);
+        getWindow().setNavigationBarColor(bg);
+        if (root != null) root.setBackgroundColor(bg);
+        if (Build.VERSION.SDK_INT >= 30) {
+            android.view.WindowInsetsController c = getWindow().getInsetsController();
+            if (c != null) {
+                int f = android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | android.view.WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                c.setSystemBarsAppearance(dark ? 0 : f, f);
+            }
+        } else {
+            View d = getWindow().getDecorView();
+            int v = d.getSystemUiVisibility();
+            v = dark ? (v & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR) : (v | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            if (Build.VERSION.SDK_INT >= 26) v = dark ? (v & ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR) : (v | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            d.setSystemUiVisibility(v);
+        }
+    }
+
     void openExternal(String url) {
         try {
             Intent i;
@@ -139,6 +160,12 @@ public class MainActivity extends Activity {
         private final Context ctx;
         Bridge(Context c) { ctx = c; }
 
+        /** Day/night: matches the status and navigation bars to the app's theme. */
+        @JavascriptInterface
+        public void setTheme(boolean dark) {
+            runOnUiThread(() -> applyBars(dark));
+        }
+
         @JavascriptInterface
         public void openExternal(String url) { runOnUiThread(() -> MainActivity.this.openExternal(url)); }
 
@@ -156,7 +183,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void copy(String text) {
             ClipboardManager cm = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-            if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("AWaz Realty", text));
+            if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Ahmed Wazir", text));
         }
 
         @JavascriptInterface

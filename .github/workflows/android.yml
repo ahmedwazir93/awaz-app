@@ -43,15 +43,15 @@ jobs:
           gradle -p android assembleRelease \
             -PappUrl="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/" \
             -PversionCode=${{ github.run_number }}
-          cp android/app/build/outputs/apk/release/app-release.apk AWaz-Realty.apk
+          cp android/app/build/outputs/apk/release/app-release.apk Ahmed-Wazir.apk
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v1.0.${{ github.run_number }}
-          name: AWaz Realty 1.0.${{ github.run_number }}
+          name: Ahmed Wazir 1.0.${{ github.run_number }}
           make_latest: true
-          files: AWaz-Realty.apk
+          files: Ahmed-Wazir.apk
           body: |
-            Install on Android: open this page on your phone, tap **AWaz-Realty.apk**, then Install.
+            Install on Android: open this page on your phone, tap **Ahmed-Wazir.apk**, then Install.
             Content and data update by themselves every morning; you only need a new APK when this page shows a newer version.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sync the AWaz Realty app with the website.
+"""Sync the Ahmed Wazir app with the website.
 
 Usage:  python3 tools/sync_from_site.py <website.html> [docs_dir]
 
