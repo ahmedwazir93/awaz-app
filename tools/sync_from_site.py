@@ -109,6 +109,11 @@ def main():
     site = site[:i] + APP_HEAD + site[i:]
     open(os.path.join(docs, "site.html"), "w", encoding="utf-8").write(site)
 
+    # Property search data published next to the website (data/projects.json)
+    src_data = os.path.join(os.path.dirname(os.path.abspath(src)), "data", "projects.json")
+    if os.path.exists(src_data):
+        os.makedirs(os.path.join(docs, "data"), exist_ok=True)
+        import shutil; shutil.copyfile(src_data, os.path.join(docs, "data", "projects.json"))
     logos = extract_logos(html)
     open(os.path.join(docs, "logos.js"), "w", encoding="utf-8").write(
         "window.APPLOGOS = " + json.dumps(logos, ensure_ascii=False, separators=(",", ":")) + ";\n")

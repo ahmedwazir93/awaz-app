@@ -365,6 +365,7 @@ document.addEventListener("click", e => {
 
 /* ---------- icons ---------- */
 const IC = {
+  search: '<path d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM15 15l6 6M7 12V9l3-2 3 2v3"/>',
   plan: '<path d="M4 5h16v15H4zM4 9h16M8 3v4M16 3v4M8 13h3M8 16h6"/>',
   cost: '<path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h4"/>',
   sell: '<path d="M4 17l6-6 4 4 6-7M14 8h6v6"/>',
@@ -404,6 +405,7 @@ const ico = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${IC[k] || ""}</sv
 
 /* ---------- catalog: what opens the website in app mode ---------- */
 const TOOLS = [
+  { id: "search", t: "Property search", d: "1,200+ off-plan projects by budget, beds and handover", i: "search", h: "search" },
   { id: "calc", t: "Payment plan", d: "Every instalment, dated, from booking to keys", i: "plan", h: "calc" },
   { id: "total", t: "Total cost", d: "Fees and cash needed to buy", i: "cost", h: "toolkit", only: "toolkit", tab: 1 },
   { id: "resale", t: "Sell before handover", d: "Profit on an off-plan flip", i: "sell", h: "toolkit", only: "toolkit", tab: 2 },
@@ -560,7 +562,7 @@ function homeView() {
   const h = new Date().getHours(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
   const p = D.pulse || {}, picks = (D.projects || []).map((x, i) => [x, i]).filter(([x]) => x.pick);
   const tick = ((D.ticker || {}).items || []);
-  const quick = ["calc", "total", "golden", "yield"].map(id => TOOLS.find(t => t.id === id));
+  const quick = ["search", "calc", "total", "golden"].map(id => TOOLS.find(t => t.id === id));
   return `<div class="screen">
     <div class="screen-head">
       <p class="eyebrow"><i></i>${hi} · RERA BRN 85446</p>
@@ -647,6 +649,7 @@ function launchesView() {
   const devs = Object.keys(dc).sort((a, b) => dc[b] - dc[a] || a.localeCompare(b));
   const list = P.map((p, i) => [p, i]).filter(([p]) => (LF.em === "all" || p.em === LF.em) && (LF.type === "all" || p.type === LF.type) && (LF.dev === "all" || devName(p.dev) === LF.dev)).sort((a, b) => (b[0].pick ? 1 : 0) - (a[0].pick ? 1 : 0));
   return `<div class="screen"><div class="screen-head"><p class="eyebrow"><i></i>On my radar</p><h1>Launches</h1><p class="sub">Off-plan and commercial projects I'm tracking. Register early: launches go to whoever's first in line.</p></div>
+    <button class="btn btn-red" data-site="search" style="width:100%;margin:0 0 12px">Search all 1,200+ projects</button>
     <div class="chips" id="emF">${ems.map(e => `<button class="chip" data-em="${esc(e)}" aria-pressed="${LF.em === e}">${e === "all" ? "All emirates" : esc(e)}</button>`).join("")}</div>
     <div class="chips" id="tyF" style="margin-top:6px">${["all", "Residential", "Commercial"].map(t => `<button class="chip" data-ty="${t}" aria-pressed="${LF.type === t}">${t === "all" ? "All types" : t}</button>`).join("")}</div>
     <label class="lf-sel"><span>Developer</span><select id="devF" aria-label="Filter by developer"><option value="all">All developers (${P.length})</option>${devs.map(d => `<option value="${esc(d)}"${LF.dev === d ? " selected" : ""}>${esc(d)} (${dc[d]})</option>`).join("")}</select></label>
