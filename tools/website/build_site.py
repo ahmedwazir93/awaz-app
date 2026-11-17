@@ -84,7 +84,11 @@ styles = list(re.finditer(r"<style>(.*?)</style>", s, re.S))
 main_css = max(styles, key=lambda m: len(m.group(1)))
 css = main_css.group(1)
 css += "\n/* Page H1 on inner pages keeps the section heading look */\n.vh { font-size: clamp(40px, 6vw, 72px); font-weight: 800; }\n.vh-k { display: block; font: 600 12px/1.4 var(--mono); letter-spacing: .14em; color: var(--red-text); margin-bottom: 12px; }\n"
-import rcssmin, rjsmin
+import rcssmin, subprocess
+def jsmin(code):
+    # esbuild understands template literals (rjsmin collapsed the spaces inside them)
+    exe = shutil.which("esbuild") or "/opt/npm-tools/node_modules/.bin/esbuild"
+    return subprocess.run([exe, "--minify", "--loader=js", "--log-level=error"], input=code, capture_output=True, text=True, check=True).stdout
 css = rcssmin.cssmin(css)
 css_name = f"assets/css/site.{h8(css.encode())}.css"
 open(os.path.join(OUT, css_name), "w", encoding="utf-8").write(css)
@@ -116,15 +120,17 @@ for old, new in [
     js = js.replace(old, new)
 js = guard + js
 js_readable = js
-js = rjsmin.jsmin(js)
+js = jsmin(js)
 js_name = f"assets/js/site.{h8(js.encode())}.js"
 open(os.path.join(OUT, js_name), "w", encoding="utf-8").write(js)
-s = s[:main_js.start()] + f'<script src="/{js_name}"></script>' + s[main_js.end():]
+_mt = main_js.group(0); _i = s.find(_mt)  # positions shift after the edits above, so locate it again
+assert _i >= 0
+s = s[:_i] + f'<script src="/{js_name}"></script>' + s[_i + len(_mt):]
 
 # 3b. AI assistant widget -> its own cached file (preview mode until data-endpoint is set)
 wm = re.search(r'<script id="awb-widget" data-endpoint="([^"]*)">(.*?)</script>', s, re.S)
 if wm:
-    wjs = rjsmin.jsmin(wm.group(2))
+    wjs = jsmin(wm.group(2))
     w_name = f"assets/js/widget.{h8(wjs.encode())}.js"
     open(os.path.join(OUT, w_name), "w", encoding="utf-8").write(wjs)
     s = s[:wm.start()] + f'<script src="/{w_name}" data-endpoint="{wm.group(1)}" defer></script>' + s[wm.end():]
@@ -180,8 +186,22 @@ def body_for(view):
             kw = re.split(r" \| |: ", seo.get(view, ("",))[0] or "")[0].strip()
             gt = b.find(">", j)
             inner = b[gt + 1:k]
-            label = f'<span class="vh-k">{kw}</span>' if kw and kw.lower() not in re.sub("<[^>]+>", "", inner).lower() else ""
+            _w = lambda t: set(re.findall(r"[a-z0-9]+", re.sub("<[^>]+>", "", t).lower())) - {"a", "an", "any", "the", "in", "of", "by", "and", "your", "to"}
+            _hw = _w(inner)
+            # Skip the keyword line when the heading already says the same thing
+            same = kw and _hw and len(_hw & _w(kw)) / len(_hw) >= 0.7
+            label = f'<span class="vh-k">{kw}</span>' if kw and not same and kw.lower() not in re.sub("<[^>]+>", "", inner).lower() else ""
             b = b[:j] + '<h1 class="vh"' + b[j + 3:gt + 1] + label + inner + "</h1>" + b[k + 5:]
+            # Don't show the same words twice: drop an eyebrow right above the H1 that repeats its keyword
+            if label:
+                norm = lambda t: re.sub(r"[^a-z0-9]", "", re.sub("<[^>]+>", "", t).lower())
+                em = None
+                for em in re.finditer(r'<p class="eyebrow">(.*?)</p>\s*', b[max(0, j - 400):j]):
+                    pass
+                if em and norm(em.group(1)) == norm(kw):
+                    a0 = max(0, j - 400)
+                    b = b[:a0 + em.start()] + b[a0 + em.end():]
+                    j -= em.end() - em.start()
             # Keep the outline in order: with no H2 left in the view, H3s read as level 2, H4s as level 3
             se = b.find("</section>", j)
             sec = b[j:se]
@@ -285,6 +305,17 @@ sm.append("</urlset>")
 open(os.path.join(OUT, "sitemap.xml"), "w").write("\n".join(sm) + "\n")
 host = URL.split("://", 1)[1]
 open(os.path.join(OUT, "CNAME"), "w").write(host + "\n")
+# Cloudflare Pages: security headers + long cache for hashed assets
+open(os.path.join(OUT, "_headers"), "w").write("""/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), geolocation=(), payment=()
+  Strict-Transport-Security: max-age=31536000
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+""")
 open(os.path.join(OUT, ".nojekyll"), "w").write("")
 json.dump({"name": "Ahmed Wazir · UAE Off-Plan Property", "short_name": "Ahmed Wazir", "start_url": "/", "display": "standalone",
            "background_color": "#0B0B0C", "theme_color": "#0B0B0C",

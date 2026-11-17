@@ -85,7 +85,9 @@ def prerender(b, view, D, pulse, news):
             b = re.sub(rf'(<div[^>]*id="pm-{k}"[^>]*>)(</div>)', lambda m: m.group(1) + static + m.group(2), b, count=1)
         items = news.get("items", [])
         if items:
-            li = "".join(f'<li><a href="{esc(n["url"])}" rel="noopener"><span>{esc(n["source"])}{" · " + esc(n["date"]) if n.get("date") else ""}</span> {esc(n["title"])}</a></li>' for n in items)
+            import datetime as _dt
+            _f = lambda d: (lambda x: f"{x.day} {x.strftime('%b')}")(_dt.date.fromisoformat(d)) if d else ""
+            li = "".join(f'<li><a href="{esc(n["url"])}" target="_blank" rel="noopener"><span class="src">{esc(n["source"])}{" · " + _f(n["date"]) if n.get("date") else ""}</span><h3>{esc(n["title"])}</h3><span class="arr" aria-hidden="true">↗</span></a></li>' for n in items[:6])
             b = re.sub(r'(<[ou]l[^>]*id="newsList"[^>]*>)(</[ou]l>)', lambda m: m.group(1) + li + m.group(2), b, count=1)
     return b
 

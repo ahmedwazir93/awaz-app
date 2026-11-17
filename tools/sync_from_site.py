@@ -18,7 +18,9 @@ import datetime, hashlib, json, os, re, subprocess, sys, tempfile
 OPTIONAL_BLOCKS = {"offplan-data"}
 BLOCKS = ["holidays-data", "rules-data", "fx-data", "pulse-data", "video-data", "ticker-data", "news-data", "offplan-data"]
 
-APP_HEAD = r"""<meta name="robots" content="noindex">
+APP_HEAD = r"""<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
 <style id="awaz-app-mode">
 html.app body::before, html.app .nav, html.app footer, html.app .back, html.app .awb-btn, html.app .awb { display: none !important; }
 html.app .tool-view > .wrap, html.app .dev-view > .wrap, html.app .map-view > .wrap { padding-top: 12px !important; }
