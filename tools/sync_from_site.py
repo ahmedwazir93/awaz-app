@@ -58,6 +58,8 @@ html.app-only main#top > section.app-keep { border-top: 0; padding-top: 16px; }
 
 
 def extract_projects(html):
+    if re.search(r"const PROJECTS = \[\];", html):
+        return []  # no listings: specific projects need a DLD advertising permit
     m = re.search(r"const PROJECTS = (\[.*?\n\]);", html, re.S)
     if not m:
         sys.exit("Could not find the PROJECTS list in the website")

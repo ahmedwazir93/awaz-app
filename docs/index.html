@@ -78,7 +78,7 @@ main { padding: calc(var(--top-h) + var(--st)) 0 calc(var(--nav-h) + var(--sb) +
 .scr { max-width: 760px; margin: 0 auto; padding: 4px 16px 0; animation: fade .22s ease; }
 @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-.tabs { position: fixed; inset: auto 0 0; z-index: 30; height: calc(var(--nav-h) + var(--sb)); padding: 0 6px var(--sb); display: grid; grid-template-columns: repeat(5, 1fr); background: color-mix(in srgb, var(--ink-2) 94%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 -1px 0 var(--line); }
+.tabs { position: fixed; inset: auto 0 0; z-index: 30; height: calc(var(--nav-h) + var(--sb)); padding: 0 6px var(--sb); display: grid; grid-template-columns: repeat(4, 1fr); background: color-mix(in srgb, var(--ink-2) 94%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 -1px 0 var(--line); }
 .tabs button { display: grid; justify-items: center; align-content: center; gap: 3px; color: var(--mute); font: 600 11px var(--body); position: relative; }
 .tabs .pill { width: 56px; height: 30px; border-radius: 999px; display: grid; place-items: center; transition: background .2s; }
 .tabs button[aria-current="page"] { color: var(--bone); }
@@ -428,7 +428,6 @@ table.t small { color: var(--mute); }
 <main id="main"></main>
 <nav class="tabs" aria-label="Sections">
   <button data-tab="home" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5.5 9.5V20h5v-6h3v6h5V9.5"/></svg></span>Home</button>
-  <button data-tab="projects"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M4 21V9l6-3v15M10 21V3l7 3.5V21M17 21v-9l3 1.5V21M2 21h20M13 9h1M13 12h1M13 15h1"/></svg></span>Projects</button>
   <button data-tab="tools"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h1M12 11h0M15.5 11h0M8.5 14.5h1M12 14.5h0M15.5 14.5h0M8.5 18h1M12 18h0M15.5 18h0"/></svg></span>Tools</button>
   <button data-tab="guides"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg></span>Guides</button>
   <button data-tab="broker"><span class="pill"><svg class="ic" viewBox="0 0 24 24" id="brokerIco"></svg></span><span id="brokerLbl">Broker</span><span class="badge" id="dueBadge" hidden></span></button>
@@ -1123,9 +1122,7 @@ const openSite = o => pushView({ t: o.t, site: o });
 const TOOLS = [
   { id: "plan", g: "Buying" }, { id: "cost", g: "Buying" }, { id: "mortgage", g: "Buying" }, { id: "golden", g: "Buying" },
   { id: "yield", g: "Investing" }, { id: "roe", g: "Investing" }, { id: "resale", g: "Investing" }, { id: "buyrent", g: "Investing" },
-  { id: "match", g: "Find a property", t: "Find my match", d: "Six questions, a shortlist", i: "match", site: { h: "match", t: "Find my match" } },
-  { id: "planner", g: "Find a property", t: "Investor planner", d: "Compare and handover calendar", i: "planner", site: { h: "planner", t: "Investor planner" } },
-  { id: "mapv", g: "Find a property", t: "Launch map", d: "Every project on satellite", i: "map" },
+  { id: "planner", g: "Before you buy", t: "Due diligence", d: "Checklist and developer track records", i: "planner", site: { h: "planner", t: "Due diligence" } },
   { id: "lrs", g: "More", t: "India LRS & TCS", d: "Remittance limits and tax", i: "india", site: { h: "abroad", t: "Buying from India" } },
   { id: "convert", g: "More" },
   { id: "glossary", g: "More", t: "Glossary", d: "Oqood, NOC, Ejari…", i: "glossary", site: { h: "toolkit", only: "toolkit", tab: 3, t: "Glossary" } },
@@ -1136,7 +1133,6 @@ const GUIDES = [
   { t: "Golden Visa through property", d: "Dubai vs Abu Dhabi rules", i: "visa", h: "golden" },
   { t: "Dubai real estate law", d: "Off-plan, escrow, handover, renting", i: "law", h: "laws" },
   { t: "Abu Dhabi real estate law", d: "Ownership, fees, committees", i: "law", h: "adlaw" },
-  { t: "Area guides", d: "Where the launches are", i: "area", h: "areas" },
   { t: "UAE developers", d: "Track records, Emaar to Aldar", i: "dev", h: "developers" },
   { t: "Sell or lease with Ahmed", d: "Owners: reach serious buyers", i: "owner", h: "sell" }
 ];
@@ -1191,8 +1187,8 @@ function holidayRail() {
 }
 function homeView() {
   const h = THEME.hour(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-  const picks = WP.filter(p => p.pick), fresh = RP.filter(p => p.fresh && p.img).slice(0, 10);
-  const Q = [["plan", "Payment plan"], ["mortgage", "Mortgage"], ["cost", "Total cost"], ["yield", "Rental yield"], ["golden", "Golden Visa"], ["resale", "Sell early"], ["roe", "ROE"], ["mapv", "Map"]];
+  
+  const Q = [["plan", "Payment plan"], ["mortgage", "Mortgage"], ["cost", "Total cost"], ["yield", "Rental yield"], ["golden", "Golden Visa"], ["resale", "Sell early"], ["roe", "ROE"]];
   return `<div class="scr">
     <div class="prof">
       <div class="prof-top"><img class="avatar" src="ahmed.jpg" alt="Ahmed Wazir" width="64" height="64">
@@ -1204,13 +1200,13 @@ function homeView() {
         <a class="act" href="mailto:${EMAIL}" data-ext><span class="c">${ico("mail")}</span>Email</a>
       </div>
     </div>
-    <button class="search" data-go="projects">${ico("match")}<span>Search ${ALLP.length} projects, areas, developers</span></button>
 
     <div class="sec"><div class="sec-t"><h2>Quick tools</h2><button class="more" data-go="tools">All ${ico("chev", "ic")}</button></div>
       <div class="grid4">${Q.map(([id, l]) => { const t = TOOLS.find(x => x.id === id); return `<button class="app" data-tool="${id}"><span class="ib">${ico(t.i)}</span>${l}</button>`; }).join("")}</div></div>
 
-    ${picks.length ? `<div class="sec"><div class="sec-t"><h2>Ahmed's picks</h2><button class="more" data-go="projects">Launches ${ico("chev")}</button></div><div class="rail">${picks.map(projCardSmall).join("")}</div></div>` : ""}
-    ${fresh.length ? `<div class="sec"><div class="sec-t"><h2>New launches</h2><button class="more" id="seeNew">See all ${ico("chev")}</button></div><div class="rail">${fresh.map(projCardSmall).join("")}</div></div>` : ""}
+<div class="sec"><div class="sec-t"><h2>New launches in Dubai</h2></div>
+      <div class="card" style="padding:16px"><p style="margin:0 0 10px">Under Dubai Land Department rules, specific projects, prices and availability can only be advertised with a DLD permit, so they aren't listed in this app. Tell me your budget and goal and I'll walk you through the launches that fit, one to one.</p>
+      <a class="act pri" style="display:inline-flex" href="${waLink("Hi Ahmed, I'd like to hear about new off-plan launches in Dubai. My budget and goal are: ")}" data-ext><span class="c">${ico("wa")}</span>Ask on WhatsApp</a></div></div>
 
     <div class="sec"><div class="sec-t"><h2>Market this week</h2><button class="more" data-tool="market">More ${ico("chev")}</button></div><div class="rail">${marketStats()}</div></div>
 
@@ -1218,7 +1214,6 @@ function homeView() {
       <div class="grid4">
         <button class="app" data-tool="news"><span class="ib">${ico("news")}</span>News</button>
         <button class="app" data-site="developers"><span class="ib">${ico("dev")}</span>Developers</button>
-        <button class="app" data-site="areas"><span class="ib">${ico("area")}</span>Areas</button>
         <button class="app" data-site="why"><span class="ib">${ico("star")}</span>Why UAE</button>
         <button class="app" data-site="buyabroad"><span class="ib">${ico("globe")}</span>From abroad</button>
         <button class="app" data-site="laws"><span class="ib">${ico("law")}</span>Dubai law</button>
@@ -1234,16 +1229,16 @@ function homeView() {
 
     <div class="sec"><div class="sec-t"><h2>Follow @awaz.realty</h2></div>
       <div class="soc">
-        <a href="https://www.instagram.com/awaz.realty" data-ext>${ico("ig")}Instagram<small>Reels & launches</small></a>
+        <a href="https://www.instagram.com/awaz.realty" data-ext>${ico("ig")}Instagram<small>Reels & market takes</small></a>
         <a href="https://www.tiktok.com/@awaz.realty" data-ext>${ico("tt")}TikTok<small>Quick takes</small></a>
         <a href="https://www.youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA?sub_confirmation=1" data-ext>${ico("yt")}YouTube<small>Subscribe</small></a>
         <a href="https://www.youtube.com/channel/UC29rND5JpEEFSATZUVwWGIw?sub_confirmation=1" data-ext>${ico("yt")}Shorts<small>Subscribe</small></a>
         <a href="https://www.linkedin.com/in/ahmed-wazir/" data-ext>${ico("li")}LinkedIn<small>Market takes</small></a>
-        <a href="${waLink("Hi Ahmed, please add me to Ahmed's UAE Real Estate Private Collection on WhatsApp.")}" data-ext>${ico("wa")}Private Collection<small>Launch alerts</small></a>
+        <a href="${waLink("Hi Ahmed, please add me to Ahmed's UAE Real Estate Private Collection on WhatsApp.")}" data-ext>${ico("wa")}Private Collection<small>Market updates</small></a>
       </div></div>
 
     <div class="sec"><div class="list"><button class="li" id="saveContact"><span class="ib">${ico("plus")}</span><span class="t"><b>Save Ahmed's contact</b><small>Add to your phone</small></span><span class="chev">${ico("chev")}</span></button></div></div>
-    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · NMA advertiser permit 8476056<br>Project data from developers · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button></p>
+    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · UAE Media Council advertiser permit 8476056<br>General information only, not an offer of any property · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button></p>
   </div>`;
 }
 const VCARD = ["BEGIN:VCARD", "VERSION:3.0", "N:Wazir;Ahmed;;;", "FN:Ahmed Wazir", "ORG:Springfield Properties", "TITLE:Property Consultant · RERA BRN 85446", "TEL;TYPE=CELL:" + PHONE, "EMAIL;TYPE=WORK:" + EMAIL, "URL:https://linktr.ee/ahmedwazir", "END:VCARD"].join("\n");
@@ -1497,7 +1492,7 @@ function brokerView() {
   const A = (id, extra = "") => { const t = BT[id]; return `<button class="app${id === "leads" && due.length ? " hot" : ""}" data-bt="${id}"><span class="ib">${ico(t.i)}</span>${esc(t.s || t.t)}${extra}</button>`; };
   return `<div class="scr"><div class="page-h"><p class="eyebrow">Broker mode · BRN 85446</p><h1 class="h-big">Your <em>toolkit</em></h1>
       <p class="sub">${due.length ? `<b style="color:var(--red-text)">${due.length} follow-up${due.length > 1 ? "s" : ""} due today.</b> ` : ""}${L.length} lead${L.length === 1 ? "" : "s"} on this phone · ${RP.length} projects from Reelly.</p></div>
-    <div class="grid4">${A("leads", due.length ? `<span class="tag">${due.length}</span>` : "")}${A("templates")}${A("shortlist")}${A("finder")}${A("cost")}${A("plan")}${A("commission")}${A("brief")}${A("checklists")}${A("convert")}${A("card")}${A("settings")}</div>
+    <div class="grid4">${A("leads", due.length ? `<span class="tag">${due.length}</span>` : "")}${A("templates")}${A("cost")}${A("plan")}${A("commission")}${A("brief")}${A("checklists")}${A("convert")}${A("card")}${A("settings")}</div>
     <div class="sec"><div class="sec-t"><h2>New on Reelly</h2><button class="more" id="seeNew2">All ${ico("chev")}</button></div><div class="rail">${RP.filter(p => p.fresh && p.img).slice(0, 10).map(projCardSmall).join("")}</div></div>
     <div class="sec"><div class="sec-t"><h2>Client tools</h2></div><div class="grid4">${["golden", "roe", "yield", "resale"].map(id => { const t = TOOLS.find(x => x.id === id); return `<button class="app" data-tool="${id}"><span class="ib">${ico(t.i)}</span>${esc(t.t.split(" ").slice(0, 2).join(" "))}</button>`; }).join("")}</div></div>
     <div class="sec"><div class="list"><button class="li" id="lockNow"><span class="ib">${ico("lock")}</span><span class="t"><b>Lock and hand to a client</b><small>Switches to client mode</small></span><span class="chev">${ico("chev")}</span></button></div></div>
@@ -1860,7 +1855,7 @@ function cardTool() {
     html: () => `<div class="cred">
         <div><span>Name</span><b>Ahmed Wazir</b></div><div><span>Role</span><b>Property Consultant</b></div>
         <div><span>RERA BRN</span><b>85446</b></div><div><span>Agency ORN</span><b>11929</b></div>
-        <div><span>NMA permit</span><b>8476056</b></div><div><span>Agency</span><b>Springfield Properties</b></div>
+        <div><span>Media Council permit</span><b>8476056</b></div><div><span>Agency</span><b>Springfield Properties</b></div>
         <div style="grid-column:1/-1"><span>WhatsApp</span><b>+971 58 603 2580</b></div>
         <div style="grid-column:1/-1"><span>Email</span><b>${EMAIL}</b></div></div>
       <div style="display:grid"><div class="qr" id="qrBox" hidden></div></div>
@@ -1934,6 +1929,7 @@ openBroker = id => { if (id === "finder") { PF.src = "all"; closeAllViews(); ret
 
 /* ---------- render ---------- */
 function render() {
+  if (TAB === "projects") TAB = "home";
   document.querySelectorAll(".tabs button").forEach(b => b.dataset.tab === TAB ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
   const m = $("main");
   m.innerHTML = { home: homeView, projects: projectsView, tools: toolsView, guides: guidesView, broker: brokerView }[TAB]();
