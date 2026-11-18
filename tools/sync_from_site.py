@@ -114,6 +114,9 @@ def main():
     if i < 0:
         i = site.find("<body>") + len("<body>")
     site = site[:i] + APP_HEAD + site[i:]
+    site = site.replace("This site uses no advertising or analytics cookies, tracking pixels or third-party trackers.",
+        "The website and the app use no advertising cookies or tracking pixels. If you choose \u201cAccept\u201d when asked, we use Google Analytics to count visits and see which pages, screens and tools people use: pages viewed, scrolling, time spent, device type, approximate location (city level) and which buttons were tapped. It doesn't receive your name, number or messages, Google's advertising features are switched off, and if you decline it doesn't load at all. On the website you can change your choice with \u201cCookie settings\u201d at the bottom of every page; in the app, use \u201cAnalytics choice\u201d at the bottom of the Home screen.")
+    site = site.replace('<li><strong>Service providers</strong> that carry our messages, such as WhatsApp (Meta) and our email provider.</li>', '<li><strong>Service providers</strong> that carry our messages, such as WhatsApp (Meta) and our email provider, host the website (Cloudflare) and, if you accept analytics, measure visits (Google Analytics).</li>')
     open(os.path.join(docs, "site.html"), "w", encoding="utf-8").write(site)
 
     # Property search data published next to the website (data/projects.json)

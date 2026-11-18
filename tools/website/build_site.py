@@ -222,6 +222,44 @@ def body_for(view):
     b = re.sub(r'href="#([a-z-]*)"', link, b)
     return geo.prerender(b, view, AREA, PULSE, NEWS)
 
+
+# ---------------- Google Analytics (website only), loaded only after the visitor accepts ----------------
+GA_ID = "GTM-P9B7V4K3"
+GA_HEAD = """<script>
+(function(){var ID=%s,K="aw-consent";window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;
+gtag("consent","default",{ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",analytics_storage:"denied"});
+function load(){if(window.__ga)return;window.__ga=1;gtag("consent","update",{analytics_storage:"granted"});var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtm.js?id="+ID;document.head.appendChild(s);gtag("js",new Date());}
+window.__awLoadGA=load;var c=null;try{c=localStorage.getItem(K)}catch(e){}if(c==="granted")load();})();
+</script>""" % json.dumps(GA_ID)
+GA_BODY = """<div class="ck" id="ck" hidden role="dialog" aria-live="polite" aria-label="Cookie choice"><p>I use Google Analytics cookies to see which pages and tools help people most. Nothing is shared for ads. <a href="/privacy-policy/#p-collect">Privacy policy</a></p><div class="ck-b"><button type="button" class="btn btn-ghost" data-ck="denied">Decline</button><button type="button" class="btn btn-red" data-ck="granted">Accept</button></div></div>
+<style>.ck{position:fixed;left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:60;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--ink-2,#151517);color:var(--bone,#F4F1EE);border:1px solid var(--line,#333);border-left:4px solid var(--red,#E0182D);padding:14px 16px;max-width:760px;margin:0 auto;box-shadow:0 10px 40px rgba(0,0,0,.45);font-size:14.5px;line-height:1.45}.ck[hidden]{display:none}.ck p{margin:0;flex:1 1 300px}.ck a{color:inherit}.ck-b{display:flex;gap:10px}.ck .btn{padding:10px 18px}body.ck-on .awb-btn{bottom:calc(var(--ck-h,120px) + 24px)!important}</style>
+<script>
+(function(){var K="aw-consent",b=document.getElementById("ck"),c=null;try{c=localStorage.getItem(K)}catch(e){}
+function show(){b.hidden=false;document.body.classList.add("ck-on");document.documentElement.style.setProperty("--ck-h",b.offsetHeight+"px")}
+function hide(){b.hidden=true;document.body.classList.remove("ck-on")}
+if(c!=="granted"&&c!=="denied")setTimeout(show,800);
+b.addEventListener("click",function(e){var v=e.target.getAttribute&&e.target.getAttribute("data-ck");if(!v)return;try{localStorage.setItem(K,v)}catch(_){}hide();if(v==="granted")window.__awLoadGA();else if(window.gtag)gtag("consent","update",{analytics_storage:"denied"});});
+// "Cookie settings" link in the footer
+var f=document.querySelector("footer");if(f){var a=document.createElement("button");a.type="button";a.className="ck-link";a.textContent="Cookie settings";a.style.cssText="background:none;border:0;padding:0;color:inherit;text-decoration:underline;cursor:pointer;font:inherit";a.onclick=show;var host=f.querySelector(".foot-legal, small, p:last-of-type")||f;host.appendChild(document.createTextNode(" \u00b7 "));host.appendChild(a);}
+// Key actions (only sent once Analytics is on)
+function ev(n,p){if(window.__ga&&window.gtag)gtag("event",n,p||{})}
+document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a,button");if(!a)return;var h=a.getAttribute("href")||"",t=(a.textContent||"").trim().slice(0,60);
+ if(/wa\\.me|whatsapp/i.test(h))ev("whatsapp_click",{link_text:t,page:location.pathname});
+ else if(/^tel:/.test(h))ev("phone_click",{page:location.pathname});
+ else if(/^mailto:/.test(h))ev("email_click",{page:location.pathname});
+ else if(/calendar\\.app\\.google|calendly/i.test(h))ev("book_call_click",{page:location.pathname});
+ else if(/talk to ahmed/i.test(t))ev("talk_to_ahmed_click",{page:location.pathname});
+ if(a.classList&&a.classList.contains("awb-btn"))ev("assistant_open",{page:location.pathname});},true);
+document.addEventListener("submit",function(e){var f=e.target;ev("generate_lead",{form_id:f.id||"form",page:location.pathname});},true);
+var used={};document.addEventListener("input",function(e){var v=window.__VIEW||"home";if(used[v]||!e.target.closest||!e.target.closest(".tool-view,.calc,form"))return;used[v]=1;ev("tool_use",{tool:v});},true);
+})();
+</script>"""
+PRIV_OLD = "This site uses no advertising or analytics cookies, tracking pixels or third-party trackers."
+PRIV_NEW = ("This site uses no advertising cookies or tracking pixels. If you choose \\u201cAccept\\u201d in the cookie banner, we use Google Analytics "
+            "to count visits and see which pages and tools people use: pages viewed, scrolling, time on page, device type, approximate location (city level) and which buttons were tapped. "
+            "It doesn't receive your name, number or messages, Google's advertising features are switched off, and if you decline it doesn't load at all. "
+            "You can change your choice any time with \\u201cCookie settings\\u201d at the bottom of every page.").encode().decode("unicode_escape")
+
 def page(view):
     title, desc = seo.get(view or "_", (None, None))
     title = title or seo["_"][0]
@@ -271,10 +309,13 @@ def page(view):
 <!-- google-site-verification: paste the Search Console meta tag here if you verify by HTML tag -->
 {head_part.strip().replace('<link rel="stylesheet" href="https://fonts.googleapis.com', '<link rel="stylesheet" media="print" onload="this.media=\'all\'" href="https://fonts.googleapis.com')}
 {''.join(ld)}<script>window.__VIEW = {json.dumps(view or "")};</script>
+{GA_HEAD}
 </head>
 <body>
 """
-    return head + body_for(view) + "\n</body>\n</html>\n"
+    b = body_for(view).replace(PRIV_OLD, PRIV_NEW)
+    b = b.replace('<li><strong>Service providers</strong> that carry our messages, such as WhatsApp (Meta) and our email provider.</li>', '<li><strong>Service providers</strong> that carry our messages, such as WhatsApp (Meta) and our email provider, host this website (Cloudflare) and, if you accept analytics cookies, measure visits (Google Analytics).</li>')
+    return head + b + "\n" + GA_BODY + "\n</body>\n</html>\n"
 
 pages = {"": "/"} | {v: f"/{SLUG[v]}/" for v in SLUG}
 for v, path in pages.items():

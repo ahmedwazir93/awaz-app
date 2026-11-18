@@ -1232,7 +1232,7 @@ function homeView() {
       <button class="btn btn-red" data-site="follow" data-only="follow" data-title="Latest videos" style="width:100%;margin-top:12px">${ico("yt")}Watch my latest videos</button></div>
 
     <div class="sec"><div class="list"><button class="li" id="saveContact"><span class="ib">${ico("plus")}</span><span class="t"><b>Save Ahmed's contact</b><small>Add to your phone</small></span><span class="chev">${ico("chev")}</span></button></div></div>
-    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · UAE Media Council advertiser permit 8476056<br>General information only, not an offer of any property · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button></p>
+    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · UAE Media Council advertiser permit 8476056<br>General information only, not an offer of any property · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button><button onclick="window.__awConsent&&__awConsent()" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Analytics choice</button></p>
   </div>`;
 }
 const VCARD = ["BEGIN:VCARD", "VERSION:3.0", "N:Wazir;Ahmed;;;", "FN:Ahmed Wazir", "ORG:Springfield Properties", "TITLE:Property Consultant · RERA BRN 85446", "TEL;TYPE=CELL:" + PHONE, "EMAIL;TYPE=WORK:" + EMAIL, "URL:https://www.awazrealty.com", "END:VCARD"].join("\n");
@@ -1919,6 +1919,32 @@ fetch("data/projects.json").then(r => r.ok ? r.json() : null).then(j => {
 }).catch(() => {});
 if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
 
+</script>
+<!-- Google Analytics: loads only after the user taps Accept -->
+<div id="ck" hidden role="dialog" aria-label="Analytics choice" style="position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:200;background:#151517;color:#F4F1EE;border:1px solid rgba(244,241,238,.15);border-left:4px solid #E0182D;border-radius:14px;padding:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);font:14px/1.45 system-ui,-apple-system,sans-serif">
+  <p style="margin:0 0 12px">I use Google Analytics to see which screens and tools help people most. Nothing is shared for ads.</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button data-ck="denied" style="background:none;border:1px solid rgba(244,241,238,.3);color:inherit;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600">Decline</button><button data-ck="granted" style="background:#C8102E;border:0;color:#fff;border-radius:10px;padding:10px 18px;font:inherit;font-weight:700">Accept</button></div>
+</div>
+<script>
+(function(){
+  var ID="GTM-P9B7V4K3",K="aw-consent",b=document.getElementById("ck"),c=null;
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;
+  gtag("consent","default",{ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",analytics_storage:"denied"});
+  function load(){if(window.__ga)return;window.__ga=1;gtag("consent","update",{analytics_storage:"granted"});var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtm.js?id="+ID;document.head.appendChild(s);gtag("js",new Date());gtag("set",{app_name:"Ahmed Wazir app"});ev("screen_view",{screen_name:location.hash.slice(1)||"home"});}
+  function ev(n,p){if(window.__ga)gtag("event",n,Object.assign({platform:"app"},p||{}))}
+  window.__awEv=ev;window.__awConsent=function(){b.hidden=false};
+  try{c=localStorage.getItem(K)}catch(e){}
+  if(c==="granted")load();else if(c!=="denied")setTimeout(function(){b.hidden=false},1500);
+  b.addEventListener("click",function(e){var v=e.target.getAttribute&&e.target.getAttribute("data-ck");if(!v)return;try{localStorage.setItem(K,v)}catch(_){}b.hidden=true;if(v==="granted")load();else gtag("consent","update",{analytics_storage:"denied"});});
+  // screens, guides and tools
+  if(typeof go==="function"){var _go=go;go=function(t){_go(t);ev("screen_view",{screen_name:t})};}
+  if(typeof pushView==="function"){var _pv=pushView;pushView=function(o){_pv(o);ev("screen_view",{screen_name:(o&&(o.t||(o.site&&o.site.h)))||"view"})};}
+  // contact taps
+  if(typeof openExt==="function"){var _ox=openExt;openExt=function(u){u=String(u||"");
+    if(/wa\.me|whatsapp/i.test(u))ev("whatsapp_click");else if(/^tel:/.test(u))ev("phone_click");else if(/^mailto:/.test(u))ev("email_click");else if(/calendar\.app\.google|calendly/i.test(u))ev("book_call_click");else ev("outbound_click",{link_domain:(u.split("/")[2]||"")});
+    return _ox.apply(this,arguments)};}
+  var used={};document.addEventListener("input",function(e){var k=location.hash||"#tools";if(used[k])return;used[k]=1;ev("tool_use",{tool:k.slice(1)})},true);
+})();
 </script>
 </body>
 </html>
