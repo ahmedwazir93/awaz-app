@@ -126,6 +126,13 @@ def extra_ld(view, D, url, canon, today, author):
             ("How much did Dubai luxury home prices rise in 2025?", "Prime prices in Dubai rose 25.1% in 2025, against a global average of 3.2% (Knight Frank Prime International Residential Index, The Wealth Report 2026)."),
             ("Which city sells the most US$10 million homes?", "Dubai was the world's busiest super-prime market in Q3 2026 with 86 sales of US$10 million or more, ahead of Hong Kong and New York (Knight Frank, via The National)."),
             ("Do you pay tax on rental income in Dubai?", "Individuals in the UAE generally pay no tax on rental income or on the gain when they sell property, and there is no annual property tax. Confirm your own position with a tax adviser.")]))
+    if view == "shjlaw":
+        out.append(faq([
+            ("Can foreigners buy property in Sharjah?", "Yes. Since Law No. 2 of 2022 and an Executive Council decision in November 2022, people of all nationalities can own property outright, with no time limit, in Sharjah's designated real estate development areas and projects. Outside those areas, ownership needs the Ruler's approval, and long-term usufruct (up to 100 years) is the usual alternative."),
+            ("What is the property transfer fee in Sharjah?", "Buyers who are not UAE or GCC citizens pay 4% of the price to the Sharjah Real Estate Registration Department (SRERD). UAE and GCC buyers pay 2%, with 1% from the seller. Admin and title deed charges are extra."),
+            ("Are off-plan payments protected in Sharjah?", "Yes. Executive Council Resolution No. 37 of 2024 requires every development project to be registered with SRERD and to have its own escrow account with an approved trustee. Payments are released only against construction progress certified by licensed engineers."),
+            ("Can a landlord raise the rent in Sharjah?", "Under Sharjah Law No. 5 of 2024, rent cannot go up for 3 years from the start of the tenancy. Leases must be certified with Sharjah Municipality within 15 days, and disputes go to the Rental Disputes Centre."),
+            ("Can a Dubai broker sell property in Sharjah?", "Brokering in Sharjah needs a Sharjah broker card from SRERD, which is separate from a Dubai RERA card. Ahmed Wazir is licensed in Dubai and refers Sharjah enquiries to a Sharjah-licensed broker.")]))
     return out
 
 
@@ -143,7 +150,7 @@ def llms_txt(url, pages, seo, D, full=False):
          "> Ahmed Wazir is a RERA-registered off-plan property consultant in Dubai (BRN 85446) with Springfield Properties L.L.C S.O.C (RERA ORN 11929), Bay Square, Business Bay. UAE Media Council advertiser permit 8476056. This site publishes free, sourced guides, calculators and market data for people buying property in Dubai, including buyers from India, Pakistan, the UK, the USA and Saudi Arabia.", "",
          "Content is general information, not financial, legal or tax advice. Figures are cited to their published sources and dated. Contact: WhatsApp +971 58 603 2580, ahusain@springfield-re.com. Languages: English, Arabic, Hindi, Urdu.", ""]
     groups = {"Dubai market data": ["compare", "prices", "rents", "charges"], "Calculators and planners": ["calc", "mortgage", "yield", "roe", "buyrent", "stress", "afford"],
-              "Guides": ["why", "golden", "laws", "adlaw", "buyabroad", "abroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "verify", "planner"]}
+              "Guides": ["why", "golden", "laws", "adlaw", "shjlaw", "buyabroad", "abroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "verify", "planner"]}
     for g, keys in groups.items():
         L.append(f"## {g}")
         for k in keys:

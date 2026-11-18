@@ -27,7 +27,7 @@ SLUG = {
     "calc": "off-plan-payment-plan-calculator", "privacy": "privacy-policy",
     "yield": "rental-yield-calculator", "roe": "return-on-equity-calculator", "mortgage": "uae-mortgage-calculator",
     "buyrent": "buy-vs-rent-calculator", "why": "why-invest-in-uae-real-estate", "golden": "uae-golden-visa-property",
-    "laws": "dubai-real-estate-law", "adlaw": "abu-dhabi-real-estate-law", "abroad": "buy-uae-property-from-india",
+    "laws": "dubai-real-estate-law", "adlaw": "abu-dhabi-real-estate-law", "shjlaw": "sharjah-real-estate-law", "abroad": "buy-uae-property-from-india",
     "buyabroad": "buy-uae-property-from-abroad", "from-pakistan": "buy-dubai-property-from-pakistan",
     "from-saudi": "buy-dubai-property-from-saudi-arabia", "from-uk": "buy-dubai-property-from-uk",
     "from-us": "buy-dubai-property-from-usa", "planner": "off-plan-due-diligence-checklist",
@@ -37,7 +37,7 @@ SLUG = {
     "compare": "dubai-vs-global-property-markets",
 }
 # Guides get Article schema, calculators get WebApplication schema
-GUIDES = {"why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify", "compare"}
+GUIDES = {"why", "golden", "laws", "adlaw", "shjlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify", "compare"}
 TOOLS = {"calc", "yield", "roe", "mortgage", "buyrent", "planner", "stress", "afford"}
 # Kept on the site but out of Google: not part of the off-plan focus
 NOINDEX = {"sell"}
@@ -291,7 +291,7 @@ open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(nf)
 open(os.path.join(OUT, "robots.txt"), "w").write(geo.robots(URL))
 open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA))
 open(os.path.join(OUT, "llms-full.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA, full=True))
-prio = lambda v: "1.0" if not v else ("0.9" if v in ("golden", "laws", "adlaw", "calc") else "0.7")
+prio = lambda v: "1.0" if not v else ("0.9" if v in ("golden", "laws", "adlaw", "shjlaw", "calc") else "0.7")
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for v, path in pages.items():
     if v in NOINDEX:

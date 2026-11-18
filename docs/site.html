@@ -905,6 +905,18 @@ footer .wrap { display: flex; justify-content: space-between; gap: 24px; flex-wr
 .n5 { grid-column: 1; grid-row: 2; } .n6 { grid-column: 4; grid-row: 2; }
 .n7 { grid-column: 1 / 3; grid-row: 3; } .n8 { grid-column: 3 / 5; grid-row: 3; }
 @media (max-width: 760px) { .lw-hub { grid-template-columns: repeat(2, minmax(0,1fr)); } .lw-core { grid-column: 1 / -1; grid-row: 1; } .lw-node { grid-column: auto !important; grid-row: auto !important; } .lw-node.n1, .lw-node.n8 { grid-column: 1 / -1 !important; } .lw-node b { font-size: 17px; overflow-wrap: anywhere; } }
+.vs3, .lawlist, .policy .vs3, .policy .lawlist { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 10px; }
+.vs3 li { border: 1px solid var(--line); background: var(--ink-2); padding: 14px 16px; display: grid; grid-template-columns: 170px minmax(0,1fr); gap: 12px; align-items: start; }
+.vs3-k { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 19px; line-height: 1.05; color: var(--bone); }
+.vs3-v { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
+.vs3-v span { font-size: 14.5px; line-height: 1.45; color: var(--bone); min-width: 0; }
+.vs3-v i { display: block; font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); margin-bottom: 3px; }
+.vs3-v .me { border-left: 3px solid var(--red); padding-left: 10px; }
+.vs3-v .me i { color: var(--red-text); }
+.lawlist li { border-left: 3px solid var(--red); background: var(--ink-2); padding: 12px 16px; display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 12px; }
+.lawlist b { color: var(--bone); font-size: 15px; }
+.lawlist span { color: var(--mute); font-size: 14.5px; line-height: 1.45; }
+@media (max-width: 760px) { .vs3 li, .lawlist li { grid-template-columns: minmax(0,1fr); gap: 8px; } .vs3-v { grid-template-columns: minmax(0,1fr); gap: 8px; } .vs3-v span:not(.me) { padding-left: 13px; } }
 .lw-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 0; counter-reset: f; }
 .lw-flow li { counter-increment: f; position: relative; padding: 34px 10px 0 0; display: grid; gap: 4px; align-content: start; }
 .lw-flow li::before { content: counter(f); position: absolute; top: 0; left: 0; width: 26px; height: 26px; display: grid; place-items: center; background: var(--ink); border: 2px solid var(--red); font: 900 14px/1 var(--display); color: var(--bone); z-index: 1; }
@@ -1471,7 +1483,7 @@ body { transition: background-color .25s ease, color .25s ease; }
       <ul>
         <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Calculators</button><div class="dd-m"><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#stress">Off-plan stress test</a><a href="#afford">Afford from abroad</a><a href="#planner">Investor planner</a></div></li>
         <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Dubai data</button><div class="dd-m"><a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a></div></li>
-        <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Guides</button><div class="dd-m"><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a></div></li>
+        <li class="dd"><button type="button" class="dd-b" aria-haspopup="true">Guides</button><div class="dd-m"><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#shjlaw">Sharjah Real Estate Law</a><a href="#developers">Developers</a></div></li>
         <li><a href="#launches">Launches</a></li>
       </ul>
       <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><span></span><span></span><span></span></button>
@@ -1485,7 +1497,7 @@ body { transition: background-color .25s ease, color .25s ease; }
       <p class="mm-k">Dubai data</p>
       <a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a>
       <p class="mm-k">Guides</p>
-      <a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a>
+      <a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#shjlaw">Sharjah Real Estate Law</a><a href="#developers">Developers</a>
       <div class="mm-row"><a class="btn btn-red" href="https://wa.me/971586032580" target="_blank" rel="noopener">WhatsApp Ahmed</a></div>
     </div>
   </div>
@@ -2545,6 +2557,105 @@ body { transition: background-color .25s ease, color .25s ease; }
     </article>
   </div>
 </section>
+<section class="tool-view" id="shjlaw" hidden>
+  <div class="wrap" style="padding-block:32px 72px">
+    <a class="back" href="#top">← Back to home</a>
+    <article class="policy gv-page lw">
+      <p class="eyebrow"><span class="dot"></span> Guide · How Sharjah real estate works</p>
+      <h2>Sharjah Real Estate Law</h2>
+      <p class="lede">The rules behind Sharjah property, in plain English: who can own and where, how off-plan money is protected, what a landlord can and can't do, and the fees to budget for. Sharjah opened ownership to all nationalities in 2022 and rewrote its development and rental rules in 2024.</p>
+      <div class="gv-facts">
+        <div><b>2022</b><span>the year all nationalities could own in development areas</span></div>
+        <div><b>4%</b><span>transfer fee for buyers from outside the UAE and GCC</span></div>
+        <div><b>Escrow</b><span>required for every off-plan project since 2024</span></div>
+        <div><b>3 years</b><span>before a tenant's rent can go up</span></div>
+      </div>
+      <p class="lw-note">I'm licensed in Dubai (RERA BRN 85446). Sharjah has its own regulator and broker licence, so for Sharjah property I'll connect you with a broker licensed in Sharjah.</p>
+      <nav class="toc" aria-label="On this page">
+        <a href="#shjlaw" data-jump="s-who">Who's who</a><a href="#shjlaw" data-jump="s-own">Who can own</a><a href="#shjlaw" data-jump="s-offplan">Off-plan</a><a href="#shjlaw" data-jump="s-rent">Renting it out</a><a href="#shjlaw" data-jump="s-fees">Fees</a><a href="#shjlaw" data-jump="s-vs">Sharjah vs Dubai vs Abu Dhabi</a><a href="#shjlaw" data-jump="s-index">The laws</a>
+      </nav>
+
+      <h3 id="s-who">Who's who in Sharjah real estate</h3>
+      <p>The <strong>Sharjah Real Estate Registration Department (SRERD)</strong> is the centre of it all: it registers ownership, off-plan sales and developers, licenses brokers and approves property adverts.</p>
+      <figure class="gv-fig" aria-label="Diagram of the Sharjah real estate ecosystem">
+        <figcaption class="gv-cap"><span>Visual 1</span>The Sharjah real estate ecosystem</figcaption>
+        <div class="lw-hub">
+          <div class="lw-core"><b>SRERD</b><span>Sharjah Real Estate Registration Department</span><em>Keeps the property register, registers developers and projects, licenses brokers and approves ads.</em></div>
+          <div class="lw-node n1"><b>Executive Council</b><span>Issues the decisions that set where all nationalities can own and how projects are run.</span></div>
+          <div class="lw-node n2"><b>Property register</b><span>The official record. You only own once the sale is registered.</span></div>
+          <div class="lw-node n3"><b>Project register</b><span>Every development project must be registered here before units are marketed.</span></div>
+          <div class="lw-node n4"><b>Escrow trustees</b><span>Approved banks holding each project's escrow account.</span></div>
+          <div class="lw-node n5"><b>Licensed brokers</b><span>Only brokers with a Sharjah broker card can represent Sharjah property.</span></div>
+          <div class="lw-node n6"><b>Sharjah Municipality</b><span>Building permits and certifying lease contracts.</span></div>
+          <div class="lw-node n7"><b>Rental Disputes Centre</b><span>Its own courts for landlord and tenant cases, set up in 2024.</span></div>
+          <div class="lw-node n8"><b>Engineering consultants</b><span>Certify construction progress before escrow money is released.</span></div>
+        </div>
+      </figure>
+
+      <h3 id="s-own">Who can own, and where</h3>
+      <p>Sharjah's starting rule is that property ownership belongs to UAE and GCC citizens. Law No. 2 of 2022 added exceptions, and a 2022 Executive Council decision used them to open development areas to everyone.</p>
+      <div class="lw-grid">
+        <div class="lw-card"><b>UAE &amp; GCC citizens</b><span>Can own property across the emirate.</span></div>
+        <div class="lw-card"><b>All nationalities</b><span>Can own outright, with no time limit, in real estate development areas and projects approved under Executive Council rules.</span></div>
+        <div class="lw-card"><b>Outside those areas</b><span>Ownership needs the Ruler's approval. Long-term usufruct (the right to use a property, up to 100 years) is the usual alternative.</span></div>
+        <div class="lw-card"><b>Family transfers</b><span>Property can pass by inheritance, or be transferred to first-degree relatives.</span></div>
+        <div class="lw-card"><b>Register or it doesn't count</b><span>Ownership passes when SRERD registers it. Owners must tell SRERD about ownership changes.</span></div>
+        <div class="lw-card"><b>Check the exact plot</b><span>Before paying anything, confirm with SRERD that the project is in a designated development area.</span></div>
+      </div>
+
+      <h3 id="s-offplan">How off-plan money is protected</h3>
+      <p>Executive Council Resolution No. 37 of 2024 sets the rules for development projects. In order, this is what has to happen before your money can be spent:</p>
+      <figure class="gv-fig" aria-label="Steps that protect an off-plan buyer in Sharjah">
+        <figcaption class="gv-cap"><span>Visual 2</span>From project to title deed</figcaption>
+        <ol class="lw-flow">
+          <li><span class="lw-who">Developer</span><b>Registered</b><p>Proves solvency, liquidity and technical experience to SRERD.</p></li>
+          <li><span class="lw-who">Project</span><b>Registered</b><p>On the Development Register before any unit is marketed.</p></li>
+          <li><span class="lw-who">Bank</span><b>Escrow opened</b><p>A dedicated account with an approved trustee.</p></li>
+          <li><span class="lw-who">SRERD</span><b>Ads approved</b><p>The developer needs written approval to advertise.</p></li>
+          <li><span class="lw-who">You</span><b>Pay into escrow</b><p>Each buyer's payments sit in a sub-account for their unit.</p></li>
+          <li><span class="lw-who">Engineers</span><b>Release by progress</b><p>Money goes out only against certified construction progress.</p></li>
+          <li class="end"><span class="lw-who">SRERD</span><b>Title deed</b><p>Issued in your name at completion.</p></li>
+        </ol>
+        <p class="lw-note">If something goes wrong, SRERD can freeze escrow payments, and in serious cases cancel the project, wind up the escrow account and refund buyers. Using escrow money for another project is banned and can cost a developer its licence.</p>
+      </figure>
+      <div class="lw-grid">
+        <div class="lw-card"><b>First instalment</b><span>Capped at 20% of the price under the 2018 sales rules, unless the contract says otherwise.</span></div>
+        <div class="lw-card"><b>Pay as it's built</b><span>Instalments should follow construction progress, as certified by Sharjah Municipality or the authority in charge.</span></div>
+        <div class="lw-card"><b>Cancelling a project</b><span>Needs SRERD approval and public notice. Buyers get 15 days to object, which pauses the cancellation.</span></div>
+      </div>
+
+      <h3 id="s-rent">If you rent it out</h3>
+      <p>Law No. 5 of 2024 replaced Sharjah's old rental law, and Law No. 6 of 2024 set up a dedicated Rental Disputes Centre.</p>
+      <figure class="gv-fig" aria-label="Key rules for landlords in Sharjah">
+        <figcaption class="gv-cap"><span>Visual 3</span>Landlord rules at a glance</figcaption>
+        <div class="lw-broker">
+          <div><p class="tm-k">The lease</p>
+            <ul class="lw-checks"><li>Certified with Sharjah Municipality within 15 days</li><li>A certified lease can be enforced directly</li><li>Covers residential, commercial and industrial property</li></ul></div>
+          <div><p class="tm-k">Rent</p>
+            <ul class="lw-checks"><li>No increase for 3 years from the start of the tenancy</li><li>Later increases are judged against similar properties</li><li>Rent is due on time, as agreed in the lease</li></ul></div>
+          <div><p class="tm-k">Ending a lease early</p>
+            <ol class="lw-steps"><li>Only on grounds set out in the law</li><li>Such as rent unpaid for more than 15 days</li><li>Or a breach, demolition or major renovation</li><li>Disputes go to the Rental Disputes Centre</li></ol></div>
+        </div>
+      </figure>
+
+      <h3 id="s-fees">Government fees</h3>
+      <div class="lw-grid">
+        <div class="lw-card"><b>Transfer fee</b><span>4% of the price, paid by the buyer, if you're not a UAE or GCC citizen. UAE and GCC buyers pay 2%, plus 1% from the seller.</span></div>
+        <div class="lw-card"><b>Admin &amp; title deed</b><span>Registration and title deed charges come on top. Ask SRERD for the current schedule before you sign.</span></div>
+        <div class="lw-card"><b>Golden Visa</b><span>The UAE's 10-year Golden Visa through property (AED 2 million) is a federal rule, so Sharjah property can count.</span></div>
+      </div>
+
+      <h3 id="s-vs">Sharjah vs Dubai vs Abu Dhabi at a glance</h3>
+      <ul class="vs3"><li><b class="vs3-k">Regulator</b><div class="vs3-v"><span class="me"><i>Sharjah</i>SRERD</span><span><i>Dubai</i>DLD and its arm RERA</span><span><i>Abu Dhabi</i>ADREC, under DMT</span></div></li><li><b class="vs3-k">Where foreigners own</b><div class="vs3-v"><span class="me"><i>Sharjah</i>Designated development areas and projects</span><span><i>Dubai</i>Designated freehold areas</span><span><i>Abu Dhabi</i>Designated investment zones</span></div></li><li><b class="vs3-k">Off-plan escrow</b><div class="vs3-v"><span class="me"><i>Sharjah</i>Resolution 37 of 2024</span><span><i>Dubai</i>Law No. 8 of 2007</span><span><i>Abu Dhabi</i>Law No. 3 of 2015, locked until 20% built</span></div></li><li><b class="vs3-k">Transfer fee</b><div class="vs3-v"><span class="me"><i>Sharjah</i>4% for non-GCC buyers</span><span><i>Dubai</i>4%</span><span><i>Abu Dhabi</i>2%</span></div></li><li><b class="vs3-k">Broker licence</b><div class="vs3-v"><span class="me"><i>Sharjah</i>Sharjah broker card (SRERD)</span><span><i>Dubai</i>RERA card (BRN)</span><span><i>Abu Dhabi</i>ADREC licence</span></div></li><li><b class="vs3-k">Property ads</b><div class="vs3-v"><span class="me"><i>Sharjah</i>SRERD approval</span><span><i>Dubai</i>DLD permit (Trakheesi)</span><span><i>Abu Dhabi</i>ADREC approval</span></div></li><li><b class="vs3-k">Golden Visa through property</b><div class="vs3-v"><span class="me"><i>Sharjah</i>AED 2M (federal rule)</span><span><i>Dubai</i>AED 2M property value</span><span><i>Abu Dhabi</i>AED 2M of your own equity</span></div></li></ul>
+
+      <h3 id="s-index">The laws behind it, in one line each</h3>
+      <ul class="lawlist"><li><b>Law No. 5 of 2010</b><span>Real estate registration: the register, and who may own property in Sharjah.</span></li><li><b>Law No. 2 of 2022</b><span>Amends the 2010 law: adds the exceptions that let non-GCC buyers own.</span></li><li><b>Executive Council decision, Nov 2022</b><span>Lets all nationalities own outright in development areas and projects.</span></li><li><b>Resolution No. 34 of 2018</b><span>Selling units off-plan: payment schedules, guarantees, cancellations and fees.</span></li><li><b>Resolution No. 37 of 2024</b><span>Development projects: registration, escrow and penalties.</span></li><li><b>Law No. 5 of 2024</b><span>Leasing: lease certification, rent increases and ending a tenancy.</span></li><li><b>Law No. 6 of 2024</b><span>Sets up the Rental Disputes Centre.</span></li></ul>
+
+      <div class="brief-foot" style="margin-top:8px"><a class="btn btn-red" href="https://wa.me/971586032580?text=Hi%20Ahmed%2C%20I%27m%20interested%20in%20property%20in%20Sharjah.%20Can%20you%20connect%20me%20with%20a%20Sharjah-licensed%20broker%3F" target="_blank" rel="noopener">Get connected for Sharjah</a><a class="btn btn-ghost" href="#laws">Dubai Real Estate Law</a><a class="btn btn-ghost" href="#adlaw">Abu Dhabi Real Estate Law</a></div>
+      <p class="fine">A plain-English summary for general information, not legal advice. Based on published summaries of Sharjah Law No. 2 of 2022, Executive Council Resolutions No. 34 of 2018 and No. 37 of 2024, and Laws No. 5 and 6 of 2024 (Al Tamimi &amp; Co., BSA Law, Gulf News). Fees and procedures change, so confirm current figures with the Sharjah Real Estate Registration Department before you buy.</p>
+    </article>
+  </div>
+</section>
 
 <section class="tool-view" id="abroad" hidden>
   <div class="wrap" style="padding-block:32px 72px">
@@ -3272,7 +3383,7 @@ body { transition: background-color .25s ease, color .25s ease; }
     <a class="brand brand-foot" href="#top" aria-label="Ahmed Wazir, home"><svg class="w" viewBox="0 0 620 100" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M332,0L348,0L355,58L363,0L381,0L389,58L396,0L412,0L399,100L380,100L372,44L364,100L345,100Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M418,100L436,0L456,0L474,100L456,100L452.5,80L439.5,80L436,100ZM442.2,63L446,36L449.8,63Z"/><path fill-rule="evenodd" d="M480,0H534V16L501,84H534V100H480V84L513,16H480Z"/><path fill-rule="evenodd" d="M540,0H558V100H540Z"/><path fill-rule="evenodd" d="M564,0H602L618,16V44L608,54L620,100H601L591,58H582V100H564ZM582,16H595L600,21V37L595,42H582Z"/></g></svg></a>
     <span>Ahmed Wazir · RERA BRN 85446 · UAE Media Council Advertiser Permit 8476056<br>Agent at <a href="https://springfieldproperties.ae/" target="_blank" rel="noopener">Springfield Properties L.L.C S.O.C</a> · RERA ORN 11929<br>Offices in Dubai (Bay Square, Business Bay) &amp; Abu Dhabi (Wafra Square, Al Reem Island)<br>Dubai off-plan property, residential and commercial<br><small style="display:block;margin-top:8px;color:var(--bone)">General market information and education only. Nothing on this site is an advertisement for a specific property. Projects, prices and availability are shared on request, in line with Dubai Land Department advertising rules.</small></span>
     <span class="foot-follow"><a href="https://www.linkedin.com/in/ahmed-wazir/" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://www.instagram.com/awaz.realty" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@awaz.realty" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a><br><a href="#privacy">Privacy policy</a> · © 2026 Ahmed Wazir</span>
-    <nav class="foot-guides" aria-label="Guides and tools"><span><b>Guides</b><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#abroad">From India</a><a href="#from-pakistan">From Pakistan</a><a href="#from-saudi">From Saudi Arabia</a><a href="#from-uk">From the UK</a><a href="#from-us">From the USA</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#developers">Developers</a></span><span><b>Tools</b><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a><a href="#sell">Sell or lease</a><a href="#stress">Stress test</a><a href="#afford">Afford from abroad</a></span><span><b>Dubai data</b><a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a></span></nav>
+    <nav class="foot-guides" aria-label="Guides and tools"><span><b>Guides</b><a href="#why">Why invest in the UAE</a><a href="#golden">Golden Visa</a><a href="#buyabroad">Buying from abroad</a><a href="#abroad">From India</a><a href="#from-pakistan">From Pakistan</a><a href="#from-saudi">From Saudi Arabia</a><a href="#from-uk">From the UK</a><a href="#from-us">From the USA</a><a href="#laws">Dubai Real Estate Law</a><a href="#adlaw">Abu Dhabi Real Estate Law</a><a href="#shjlaw">Sharjah Real Estate Law</a><a href="#developers">Developers</a></span><span><b>Tools</b><a href="#calc">Payment plan</a><a href="#mortgage">Mortgage</a><a href="#yield">Rental yield</a><a href="#roe">Return on equity</a><a href="#buyrent">Buy vs rent</a><a href="#planner">Investor planner</a><a href="#sell">Sell or lease</a><a href="#stress">Stress test</a><a href="#afford">Afford from abroad</a></span><span><b>Dubai data</b><a href="#compare">Dubai vs the world</a><a href="#prices">Prices by area</a><a href="#rents">Rents by area</a><a href="#charges">Service charges</a><a href="#verify">Verify a project</a></span></nav>
   </div>
 </footer>
 <div class="toast" id="toast" hidden></div>
@@ -3528,6 +3639,7 @@ const SEO = {
   why: ["Why Invest in UAE Real Estate in 2026 | Ahmed Wazir", "Tax, yields, visas and demand: the case for buying property in Dubai and the UAE, with the facts behind it."],
   golden: ["Golden Visa Through Property: AED 2M Rules | Ahmed Wazir", "Dubai vs Abu Dhabi vs other emirates: how each counts the AED 2M Golden Visa threshold for off-plan and mortgaged property, with an eligibility checker."],
   laws: ["Dubai Property Law: RERA, DLD & Escrow | Ahmed Wazir", "Plain-English guide to Dubai property law: DLD and RERA, Oqood, escrow, off-plan defaults, broker rules, Ejari, rent caps and service charges."],
+  shjlaw: ["Sharjah Real Estate Law Explained (2026) | Ahmed Wazir", "Plain-English guide to buying in Sharjah: who can own since 2022, off-plan escrow, the 2024 rental law, fees, and how it compares with Dubai and Abu Dhabi."],
   adlaw: ["Abu Dhabi Real Estate Law Explained (2026) | Ahmed Wazir", "Plain-English guide to Abu Dhabi property law: ADREC, the 20% escrow rule, off-plan buyer default, owners' committees, fees and penalties."],
   abroad: ["Buy Dubai Property from India: LRS & NRI | Ahmed Wazir", "How resident Indians and NRIs can buy UAE property legally: RBI LRS limit, TCS on remittances, NRE/NRO rules, Schedule FA and buying remotely."],
   buyabroad: ["Buy Dubai Property from Abroad | Ahmed Wazir", "How to buy UAE property from India, Pakistan, Saudi Arabia, the UK or the USA: money transfer rules, tax at home and buying remotely."],
@@ -3773,7 +3885,7 @@ const DX = (() => {
 function route() {
   const h = location.hash.slice(1);
   seoFor(h);
-  const views = Object.fromEntries(["developers", "calc", "privacy", "yield", "roe", "mortgage", "buyrent", "why", "golden", "laws", "adlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "planner", "sell", "prices", "charges", "rents", "stress", "afford", "verify", "compare"].map(k => [k, document.getElementById(k)]));
+  const views = Object.fromEntries(["developers", "calc", "privacy", "yield", "roe", "mortgage", "buyrent", "why", "golden", "laws", "adlaw", "shjlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "planner", "sell", "prices", "charges", "rents", "stress", "afford", "verify", "compare"].map(k => [k, document.getElementById(k)]));
   for (const [k, el] of Object.entries(views)) el.hidden = k !== h;
   const inView = h in views; homeEl.hidden = inView;
   if (inView) { window.scrollTo(0, 0); setTimeout(() => window.scrollTo(0, 0), 50); if (h === "calc") CALC.init(); if (h === "yield") YIELD.init(); if (h === "roe") ROE.init(); if (h === "mortgage") MORT.init(); if (h === "buyrent") BUYRENT.init(); if (h === "planner") PLANNER.init(); DX.init(h); return; }
