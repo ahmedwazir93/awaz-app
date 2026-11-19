@@ -68,6 +68,15 @@ p { margin: 0; }
 .wm svg { height: 19px; width: auto; display: block; color: var(--bone); }
 .tb-btn { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: var(--bone); }
 .tb-btn:active { background: var(--ink-3); }
+.cur-pop { position: relative; }
+.cur-b { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--bone); cursor: pointer; }
+.cur-b .dh { width: auto; height: 13px; margin: 0; }
+.cur-b .cv { width: 9px; height: 6px; opacity: .7; }
+.cur-m { position: absolute; top: calc(100% + 8px); right: 0; z-index: 80; display: grid; grid-template-columns: repeat(4, 44px); gap: 4px; padding: 6px; border-radius: 14px; background: var(--ink-2, var(--ink-3)); border: 1px solid var(--line); box-shadow: 0 12px 32px rgba(0,0,0,.35); }
+.cur-m[hidden] { display: none; }
+.cur-m button { height: 40px; border-radius: 10px; border: 0; background: transparent; color: var(--bone); font: 700 16px var(--body); display: grid; place-items: center; cursor: pointer; }
+.cur-m button .dh { width: auto; height: 15px; margin: 0; }
+.cur-m button[aria-checked="true"] { background: var(--red); color: #fff; }
 .chip-sel { appearance: none; -webkit-appearance: none; height: 34px; padding: 0 12px; border-radius: 999px; background: var(--ink-3); border: 0; font: 700 12px var(--mono); letter-spacing: .04em; color: var(--bone); }
 .mode { height: 34px; padding: 0 12px 0 10px; border-radius: 999px; background: var(--ink-3); display: inline-flex; align-items: center; gap: 7px; font: 700 12px var(--body); }
 .mode i { width: 8px; height: 8px; border-radius: 50%; background: var(--mute); }
@@ -422,7 +431,7 @@ table.t small { color: var(--mute); }
 <header class="topbar" id="topbar">
   <a class="wm" href="#home" aria-label="Ahmed Wazir, home" onclick="event.preventDefault();go('home')"><svg  viewBox="0 0 620 100" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M332,0L348,0L355,58L363,0L381,0L389,58L396,0L412,0L399,100L380,100L372,44L364,100L345,100Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M418,100L436,0L456,0L474,100L456,100L452.5,80L439.5,80L436,100ZM442.2,63L446,36L449.8,63Z"/><path fill-rule="evenodd" d="M480,0H534V16L501,84H534V100H480V84L513,16H480Z"/><path fill-rule="evenodd" d="M540,0H558V100H540Z"/><path fill-rule="evenodd" d="M564,0H602L618,16V44L608,54L620,100H601L591,58H582V100H564ZM582,16H595L600,21V37L595,42H582Z"/></g></svg></a>
   <button class="tb-btn" id="themeBtn" aria-label="Appearance"></button>
-  <select class="chip-sel" id="cur" aria-label="Show amounts in"><option>AED</option><option>USD</option><option>GBP</option><option>INR</option></select>
+  <div class="cur-pop"><button class="chip-sel cur-b" id="cur" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="curM" aria-label="Show amounts in"></button><div class="cur-m" id="curM" role="radiogroup" aria-label="Show amounts in" hidden></div></div>
   <button class="mode" id="modeChip" type="button" aria-label="Switch between client and broker mode"><i></i><span>Client</span></button>
 </header>
 <main id="main"></main>
@@ -1897,8 +1906,37 @@ function render() {
 }
 
 /* ---------- top bar ---------- */
-$("cur").value = CUR;
-$("cur").addEventListener("change", e => { CUR = e.target.value; S.set("aw-cur", CUR); render(); const top = STACK[STACK.length - 1]; if (top && top.o.refresh) top.o.refresh(); });
+// Currency picker: symbols only, never currency letters
+{
+  const b = $("cur"), m = $("curM"), SY = c => c === "AED" ? DH : SYM[c];
+  const NAME = { AED: "UAE dirham", USD: "US dollar", GBP: "British pound", INR: "Indian rupee" };
+  const paint = () => { b.innerHTML = SY(CUR) + '<svg class="cv" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'; m.innerHTML = ["AED", "USD", "GBP", "INR"].map(c => `<button type="button" role="radio" data-c="${c}" aria-checked="${c === CUR}" aria-label="${NAME[c]}">${SY(c)}</button>`).join(""); };
+  const shut = () => { m.hidden = true; b.setAttribute("aria-expanded", "false"); };
+  b.addEventListener("click", e => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute("aria-expanded", String(!m.hidden)); });
+  m.addEventListener("click", e => { const x = e.target.closest("[data-c]"); if (!x) return; CUR = x.dataset.c; S.set("aw-cur", CUR); paint(); shut(); render(); const top = STACK[STACK.length - 1]; if (top && top.o.refresh) top.o.refresh(); });
+  document.addEventListener("click", e => { if (!e.target.closest(".cur-pop")) shut(); });
+  paint();
+}
+// Amounts written on screen use symbols, never "AED", "USD", "GBP" or "INR" (shared text messages keep the letters)
+{
+  const RX = /AED\s?(?=\d)|\bAED\b|(?:US\$|\bUSD)\s?(?=\d)|\bGBP\s?(?=\d)|\bINR\s?(?=\d)/g;
+  const SKIP = "script,style,textarea,input,select,option,svg,code,[data-nofx]";
+  const fix = n => {
+    const t = n.nodeValue; if (!t || !/AED|USD|US\$|GBP|INR/.test(t)) return;
+    const p = n.parentElement; if (!p || p.closest(SKIP)) return;
+    RX.lastIndex = 0; if (!RX.test(t)) return; RX.lastIndex = 0;
+    const f = document.createDocumentFragment(); let last = 0, m;
+    while ((m = RX.exec(t))) {
+      f.append(t.slice(last, m.index)); last = m.index + m[0].length;
+      if (m[0].startsWith("AED")) { const tp = document.createElement("template"); tp.innerHTML = DH; f.append(tp.content.firstChild); }
+      else f.append({ U: "$", G: "£", I: "₹" }[m[0][0]]);
+    }
+    f.append(t.slice(last)); n.replaceWith(f);
+  };
+  const scan = r => { if (r.nodeType === 3) return fix(r); if (r.nodeType !== 1) return; const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT), L = []; while (w.nextNode()) L.push(w.currentNode); L.forEach(fix); };
+  scan(document.body);
+  new MutationObserver(R => R.forEach(r => { if (r.type === "characterData") fix(r.target); else r.addedNodes.forEach(scan); })).observe(document.body, { childList: true, subtree: true, characterData: true });
+}
 function paintThemeBtn() { const m = THEME.mode(); $("themeBtn").innerHTML = ico(m === "auto" ? "auto" : m === "light" ? "sun" : "moon"); }
 $("themeBtn").addEventListener("click", () => {
   const m = THEME.mode();
