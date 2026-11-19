@@ -1114,6 +1114,7 @@ const TOOLS = [
   { id: "faq", g: "More", t: "Buyer FAQ", d: "The questions everyone asks", i: "faq", site: { h: "toolkit", only: "toolkit", tab: 4, t: "Buyer FAQ" } }
 ].map(t => Object.assign({}, CALCS[t.id] ? { t: CALCS[t.id].t, d: CALCS[t.id].d, i: CALCS[t.id].i } : {}, t));
 const GUIDES = [
+  { t: "Market reports", d: "Springfield monthly and quarterly Dubai reports", i: "news", h: "reports" },
   { t: "Dubai vs the world", d: "How the UAE beats London, New York, Singapore", i: "pulse", h: "compare" },
   { t: "Dubai prices by area", d: "Price per sq ft and where Dubai is buying", i: "chart", h: "prices" },
   { t: "Dubai rents by area", d: "Studio to 4 bed, straight into the yield calculator", i: "rent", h: "rents" },
@@ -1203,6 +1204,7 @@ function homeView() {
     <div class="sec"><div class="sec-t"><h2>Explore</h2></div>
       <div class="grid4">
         <button class="app" data-tool="news"><span class="ib">${ico("news")}</span>News</button>
+        <button class="app" data-site="reports" data-title="Market reports"><span class="ib">${ico("chart")}</span>Reports</button>
         <button class="app" data-site="compare" data-title="Dubai vs the world"><span class="ib">${ico("pulse")}</span>Dubai vs world</button>
         <button class="app" data-site="prices" data-title="Prices by area"><span class="ib">${ico("chart")}</span>Prices</button>
         <button class="app" data-site="developers"><span class="ib">${ico("dev")}</span>Developers</button>

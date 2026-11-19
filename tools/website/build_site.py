@@ -35,9 +35,10 @@ SLUG = {
     "prices": "dubai-property-prices-by-area", "charges": "dubai-service-charges-by-area", "rents": "dubai-rent-by-area",
     "stress": "off-plan-stress-test", "afford": "dubai-property-budget-from-abroad", "verify": "verify-off-plan-project-dubai",
     "compare": "dubai-vs-global-property-markets",
+    "reports": "uae-property-market-reports",
 }
 # Guides get Article schema, calculators get WebApplication schema
-GUIDES = {"why", "golden", "laws", "adlaw", "shjlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify", "compare"}
+GUIDES = {"why", "golden", "laws", "adlaw", "shjlaw", "abroad", "buyabroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "prices", "charges", "rents", "verify", "compare", "reports"}
 TOOLS = {"calc", "yield", "roe", "mortgage", "buyrent", "planner", "stress", "afford"}
 # Kept on the site but out of Google: not part of the off-plan focus
 NOINDEX = {"sell"}
@@ -329,10 +330,17 @@ nf = nf.replace("<title>", "<title>Page not found · ", 1)
 open(os.path.join(OUT, "404.html"), "w", encoding="utf-8").write(nf)
 
 # 6. Crawl files
+# Machine-readable copy of every dataset on the site, plus the update registry (what each figure is, its source and when it is next due)
+os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
+_blocks = {m.group(1): json.loads(m.group(2)) for m in re.finditer(r'<script type="application/json" id="([a-z-]+)-data">(.*?)</script>', _SRC_TXT, re.S) if m.group(1) not in ("social", "video", "holidays")}
+open(os.path.join(OUT, "data", "site-data.json"), "w", encoding="utf-8").write(json.dumps(_blocks, ensure_ascii=False, indent=1))
+_reg = os.path.join(os.path.dirname(os.path.abspath(SRC)), "data", "registry.json")
+if os.path.exists(_reg):
+    open(os.path.join(OUT, "data", "registry.json"), "w", encoding="utf-8").write(open(_reg, encoding="utf-8").read())
 open(os.path.join(OUT, "robots.txt"), "w").write(geo.robots(URL))
 open(os.path.join(OUT, "llms.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA))
 open(os.path.join(OUT, "llms-full.txt"), "w", encoding="utf-8").write(geo.llms_txt(URL, pages, seo, AREA, full=True))
-prio = lambda v: "1.0" if not v else ("0.9" if v in ("golden", "laws", "adlaw", "shjlaw", "calc") else "0.7")
+prio = lambda v: "1.0" if not v else ("0.9" if v in ("golden", "laws", "adlaw", "shjlaw", "calc", "reports") else "0.7")
 sm = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
 for v, path in pages.items():
     if v in NOINDEX:

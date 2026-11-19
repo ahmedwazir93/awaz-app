@@ -44,7 +44,7 @@ def prerender(b, view, D, pulse, news):
         c = D.get("city", {})
         tot = c.get("ytd_primary", 0) + c.get("ytd_resale", 0)
         kp = lambda k, v, s: f'<div class="dx-kpi"><span>{esc(k)}</span><b>{esc(v)}</b><small>{esc(s)}</small></div>'
-        b = _fill(b, "dx-city", kp(f"Sales in {c.get('q', '')}", n0(c.get("sales", 0)), f"worth AED {_k(c.get('value', 0))}") + kp("Median price", f"AED {n0(c.get('median_psf', 0))}", "per sq ft, all homes")
+        b = _fill(b, "dx-city", kp(f"Sales in {c.get('q', '')}", n0(c.get("sales", 0)), f"worth AED {_k(c.get('value', 0))}") + kp(c.get("psf_label", "Median price"), f"AED {n0(c.get('median_psf', 0))}", "per sq ft, all homes")
                   + (kp("Bought from developers", f"{round(c['ytd_primary'] / tot * 100)}%", f"of {n0(tot)} sales this year") + kp("Resales", f"{round(c['ytd_resale'] / tot * 100)}%", "bought from owners") if tot else ""))
         rows = D.get("apt", []) + [[a + " (villas)", lo, hi, y] for a, lo, hi, y in D.get("villa", [])]
         mx = max((hi or lo) for _, lo, hi, _ in rows)
@@ -149,7 +149,7 @@ def llms_txt(url, pages, seo, D, full=False):
     L = ["# Ahmed Wazir", "",
          "> Ahmed Wazir is a RERA-registered off-plan property consultant in Dubai (BRN 85446) with Springfield Properties L.L.C S.O.C (RERA ORN 11929), Bay Square, Business Bay. UAE Media Council advertiser permit 8476056. This site publishes free, sourced guides, calculators and market data for people buying property in Dubai, including buyers from India, Pakistan, the UK, the USA and Saudi Arabia.", "",
          "Content is general information, not financial, legal or tax advice. Figures are cited to their published sources and dated. Contact: WhatsApp +971 58 603 2580, ahusain@springfield-re.com. Languages: English, Arabic, Hindi, Urdu.", ""]
-    groups = {"Dubai market data": ["compare", "prices", "rents", "charges"], "Calculators and planners": ["calc", "mortgage", "yield", "roe", "buyrent", "stress", "afford"],
+    groups = {"Market reports and data": ["reports", "compare", "prices", "rents", "charges"], "Calculators and planners": ["calc", "mortgage", "yield", "roe", "buyrent", "stress", "afford"],
               "Guides": ["why", "golden", "laws", "adlaw", "shjlaw", "buyabroad", "abroad", "from-pakistan", "from-saudi", "from-uk", "from-us", "developers", "verify", "planner"]}
     for g, keys in groups.items():
         L.append(f"## {g}")
@@ -161,7 +161,7 @@ def llms_txt(url, pages, seo, D, full=False):
     if full:
         c, W = D.get("city", {}), D.get("world", {})
         L += ["## Key facts (with sources)", f"Updated {D.get('updated', '')}.", ""]
-        L.append(f"- Dubai {c.get('q')}: {n0(c.get('sales', 0))} sales worth AED {_k(c.get('value', 0))}; median AED {n0(c.get('median_psf', 0))} per sq ft. Source: {c.get('source', {}).get('name')} ({c.get('source', {}).get('url')})")
+        L.append(f"- Dubai {c.get('q')}: {n0(c.get('sales', 0))} home sales worth AED {_k(c.get('value', 0))}; {c.get('psf_label', 'median').lower()} AED {n0(c.get('median_psf', 0))} per sq ft. Source: {c.get('source', {}).get('name')} ({c.get('source', {}).get('url')})")
         L.append("- Average apartment prices per sq ft (" + D["price_source"]["period"] + "): " + "; ".join(f"{a} AED {n0(lo)}{'–' + n0(hi) if hi else ''}" for a, lo, hi, _ in D.get("apt", [])) + f". Source: {D['price_source']['name']} ({D['price_source']['url']})")
         L.append("- Average villa prices per sq ft: " + "; ".join(f"{a} AED {n0(lo)}" for a, lo, hi, _ in D.get("villa", [])) + ".")
         L.append("- Service charges (AED per sq ft per year, typical): " + "; ".join(f"{a} {_x(avg)} (range {lo}–{hi})" for a, avg, lo, hi in D.get("sc", []) if avg) + f". Source: {D['sc_source']['name']} ({D['sc_source']['url']})")
