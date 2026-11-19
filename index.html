@@ -1,0 +1,1990 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<title>Ahmed Wazir</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0B0B0C">
+<meta name="description" content="Ahmed Wazir's UAE property app: off-plan launches, calculators, buyer guides and market data.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<script>
+/* Theme before first paint: light by day (6:00-18:00 Dubai), dark at night, unless picked by hand */
+(function () {
+  var m = "auto"; try { m = localStorage.getItem("aw-theme") || "auto"; } catch (e) {}
+  var h = +new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dubai", hour: "numeric", hourCycle: "h23" }).format(new Date());
+  document.documentElement.setAttribute("data-theme", m === "light" || m === "dark" ? m : (h >= 6 && h < 18 ? "light" : "dark"));
+})();
+</script>
+<style>
+/* App system: tokens per theme, rounded tiles and sheets, one red accent for actions and live numbers. */
+:root {
+  --ink: #0B0B0C; --ink-2: #151517; --ink-3: #1E1E21; --ink-4: #26262A; --line: #2B2A2E;
+  --bone: #F4F1EE; --mute: #A6A2A8; --red: #D7192A; --red-text: #FF4252; --red-soft: rgba(215,25,42,.16);
+  --ok: #3FBF7F; --ok-soft: rgba(63,191,127,.14); --warn: #E8B44A; --warn-soft: rgba(232,180,74,.14);
+  --shadow: 0 8px 30px rgba(0,0,0,.45); --logo-filter: none; --scrim: rgba(0,0,0,.55);
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", Impact, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --r: 16px; --r-sm: 12px; --nav-h: 66px; --top-h: 58px;
+  --st: env(safe-area-inset-top, 0px); --sb: env(safe-area-inset-bottom, 0px);
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  --ink: #F4F1EE; --ink-2: #FFFFFF; --ink-3: #EDE9E4; --ink-4: #E2DDD7; --line: #DAD4CD;
+  --bone: #121214; --mute: #5C5860; --red: #D7192A; --red-text: #B8101F; --red-soft: rgba(215,25,42,.10);
+  --ok: #1B7A4B; --ok-soft: rgba(27,122,75,.10); --warn: #8F6200; --warn-soft: rgba(143,98,0,.10);
+  --shadow: 0 6px 24px rgba(30,20,10,.12); --logo-filter: brightness(0) opacity(.82); --scrim: rgba(20,16,12,.35);
+  color-scheme: light;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; min-height: 100%; }
+body { background: var(--ink); color: var(--bone); font: 15px/1.45 var(--body); -webkit-font-smoothing: antialiased; overscroll-behavior-y: none; -webkit-user-select: none; user-select: none; }
+input, textarea, .sel { -webkit-user-select: text; user-select: text; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; padding: 0; }
+:focus-visible { outline: 2px solid var(--red-text); outline-offset: 2px; }
+[hidden] { display: none !important; }
+h1, h2, h3 { margin: 0; }
+p { margin: 0; }
+.dh { width: .78em; height: .72em; vertical-align: -.02em; margin-right: .06em; }
+.ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.mono { font-family: var(--mono); }
+.muted { color: var(--mute); }
+.disp { font-family: var(--display); text-transform: uppercase; letter-spacing: .005em; line-height: .95; }
+.lg { color: var(--bone); }
+.lg-png { filter: var(--logo-filter); }
+
+/* ---------- frame ---------- */
+.topbar { position: fixed; inset: 0 0 auto; z-index: 30; height: calc(var(--top-h) + var(--st)); padding: var(--st) 12px 0 16px; display: flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--ink) 90%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.topbar.lined { box-shadow: 0 1px 0 var(--line); }
+.wm { display: flex; align-items: center; height: 40px; margin-right: auto; }
+.wm svg { height: 19px; width: auto; display: block; color: var(--bone); }
+.tb-btn { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: var(--bone); }
+.tb-btn:active { background: var(--ink-3); }
+.cur-pop { position: relative; }
+.cur-b { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--bone); cursor: pointer; }
+.cur-b .dh { width: auto; height: 13px; margin: 0; }
+.cur-b .cv { width: 9px; height: 6px; opacity: .7; }
+.cur-m { position: absolute; top: calc(100% + 8px); right: 0; z-index: 80; display: grid; grid-template-columns: repeat(4, 44px); gap: 4px; padding: 6px; border-radius: 14px; background: var(--ink-2, var(--ink-3)); border: 1px solid var(--line); box-shadow: 0 12px 32px rgba(0,0,0,.35); }
+.cur-m[hidden] { display: none; }
+.cur-m button { height: 40px; border-radius: 10px; border: 0; background: transparent; color: var(--bone); font: 700 16px var(--body); display: grid; place-items: center; cursor: pointer; }
+.cur-m button .dh { width: auto; height: 15px; margin: 0; }
+.cur-m button[aria-checked="true"] { background: var(--red); color: #fff; }
+.chip-sel { appearance: none; -webkit-appearance: none; height: 34px; padding: 0 12px; border-radius: 999px; background: var(--ink-3); border: 0; font: 700 12px var(--mono); letter-spacing: .04em; color: var(--bone); }
+.mode { height: 34px; padding: 0 12px 0 10px; border-radius: 999px; background: var(--ink-3); display: inline-flex; align-items: center; gap: 7px; font: 700 12px var(--body); }
+.mode i { width: 8px; height: 8px; border-radius: 50%; background: var(--mute); }
+.mode.on { background: var(--red); color: #fff; }
+.mode.on i { background: #fff; }
+
+main { padding: calc(var(--top-h) + var(--st)) 0 calc(var(--nav-h) + var(--sb) + 28px); }
+.scr { max-width: 760px; margin: 0 auto; padding: 4px 16px 0; animation: fade .22s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.tabs { position: fixed; inset: auto 0 0; z-index: 30; height: calc(var(--nav-h) + var(--sb)); padding: 0 6px var(--sb); display: grid; grid-template-columns: repeat(4, 1fr); background: color-mix(in srgb, var(--ink-2) 94%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 -1px 0 var(--line); }
+.tabs button { display: grid; justify-items: center; align-content: center; gap: 3px; color: var(--mute); font: 600 11px var(--body); position: relative; }
+.tabs .pill { width: 56px; height: 30px; border-radius: 999px; display: grid; place-items: center; transition: background .2s; }
+.tabs button[aria-current="page"] { color: var(--bone); }
+.tabs button[aria-current="page"] .pill { background: var(--red-soft); color: var(--red-text); }
+.badge { position: absolute; top: 6px; left: calc(50% + 10px); min-width: 17px; height: 17px; padding: 0 5px; border-radius: 999px; background: var(--red); color: #fff; font: 700 10px/17px var(--mono); text-align: center; }
+
+/* ---------- headings ---------- */
+.h-big { font: 900 40px/0.95 var(--display); text-transform: uppercase; }
+.h-big em { font-style: normal; color: var(--red-text); }
+.sec { margin-top: 26px; }
+.sec-t { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+.sec-t h2 { font: 800 15px var(--body); letter-spacing: .01em; }
+.sec-t .more { font: 700 13px var(--body); color: var(--red-text); display: inline-flex; align-items: center; gap: 2px; }
+.eyebrow { font: 600 11px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); }
+.sub { color: var(--mute); font-size: 14px; }
+.page-h { padding: 12px 0 16px; display: grid; gap: 6px; }
+.note { color: var(--mute); font-size: 12px; margin-top: 10px; line-height: 1.5; }
+
+/* ---------- profile card ---------- */
+.prof { margin-top: 8px; border-radius: 22px; padding: 18px; background: linear-gradient(135deg, var(--ink-2), var(--ink-3)); box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.prof::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 160px; border-radius: 50%; background: radial-gradient(circle, var(--red-soft), transparent 70%); pointer-events: none; }
+.prof-top { display: flex; gap: 14px; align-items: center; }
+.avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: 0 0 0 3px var(--ink-2), 0 0 0 5px var(--red); background: var(--ink-4); }
+.prof-n { font: 900 26px/1 var(--display); text-transform: uppercase; }
+.prof-r { color: var(--mute); font-size: 13px; margin-top: 4px; }
+.verified { display: inline-flex; align-items: center; gap: 5px; margin-top: 7px; font: 600 11px var(--mono); letter-spacing: .04em; color: var(--ok); background: var(--ok-soft); padding: 4px 8px; border-radius: 999px; }
+.verified svg { width: 13px; height: 13px; }
+.acts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 16px; }
+.act { display: grid; justify-items: center; gap: 6px; font: 600 12px var(--body); color: var(--bone); }
+.act span.c { width: 52px; height: 52px; border-radius: 18px; display: grid; place-items: center; background: var(--ink-4); }
+.act.pri span.c { background: var(--red); color: #fff; }
+.act:active span.c { transform: scale(.94); }
+
+.search { display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 16px; border-radius: 999px; background: var(--ink-3); color: var(--mute); font-size: 14.5px; width: 100%; text-align: left; margin-top: 16px; }
+.search input { flex: 1; min-width: 0; background: none; border: 0; outline: none; font-size: 16px; color: var(--bone); }
+
+/* ---------- launcher grid ---------- */
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px 6px; }
+.app { display: grid; justify-items: center; gap: 7px; text-align: center; font: 600 11.5px/1.2 var(--body); color: var(--bone); position: relative; }
+.app .ib { width: 58px; height: 58px; border-radius: 19px; display: grid; place-items: center; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); color: var(--red-text); transition: transform .12s; }
+.app .ib .ic { width: 26px; height: 26px; }
+.app:active .ib { transform: scale(.92); }
+.app .tag { position: absolute; top: -4px; right: calc(50% - 36px); background: var(--red); color: #fff; font: 700 9px/1 var(--mono); padding: 3px 5px; border-radius: 999px; }
+.app.hot .ib { background: var(--red); color: #fff; box-shadow: none; }
+
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.tile { background: var(--ink-2); border-radius: var(--r); padding: 16px; text-align: left; display: grid; gap: 6px; align-content: start; min-height: 116px; box-shadow: inset 0 0 0 1px var(--line); position: relative; }
+.tile:active { transform: scale(.98); }
+.tile .ib { width: 40px; height: 40px; border-radius: 13px; background: var(--red-soft); color: var(--red-text); display: grid; place-items: center; margin-bottom: 4px; }
+.tile b { font: 800 15px/1.2 var(--body); }
+.tile small { color: var(--mute); font-size: 12.5px; line-height: 1.35; }
+.tile .tag { position: absolute; top: 14px; right: 14px; font: 700 10px/1 var(--mono); padding: 4px 7px; border-radius: 999px; background: var(--red); color: #fff; }
+.grp-t { font: 600 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 22px 2px 10px; }
+
+/* ---------- lists ---------- */
+.list { background: var(--ink-2); border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.li { display: flex; align-items: center; gap: 14px; padding: 14px 16px; width: 100%; text-align: left; position: relative; }
+.li + .li::before { content: ""; position: absolute; top: 0; left: 70px; right: 0; height: 1px; background: var(--line); }
+.li:active { background: var(--ink-3); }
+.li .ib { width: 40px; height: 40px; border-radius: 12px; background: var(--ink-3); color: var(--red-text); display: grid; place-items: center; flex: none; font-size: 21px; }
+.li .t { flex: 1; min-width: 0; }
+.li .t b { display: block; font-weight: 700; font-size: 15px; }
+.li .t small { display: block; color: var(--mute); font-size: 12.5px; margin-top: 1px; }
+.li .chev { color: var(--mute); }
+.li.hot .t b::before { content: "HOT"; font: 700 9.5px/1 var(--mono); background: var(--red); color: #fff; padding: 3px 5px; border-radius: 4px; margin-right: 7px; vertical-align: 2px; }
+
+/* ---------- carousels ---------- */
+.rail { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -16px; padding: 2px 16px 6px; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.rail > * { scroll-snap-align: start; flex: none; }
+.mop { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 8px; margin-top: 8px; font: 600 11px/1 var(--mono); letter-spacing: .04em; color: var(--mute); }
+.mop .ok { color: var(--ok); display: inline-flex; align-items: center; gap: 4px; }
+.mop .ok svg { width: 12px; height: 12px; }
+.mop .bar { height: 5px; background: var(--ink-3, var(--ink-4)); border-radius: 3px; overflow: hidden; }
+.mop .bar i { display: block; height: 100%; background: var(--ok); min-width: 2px; }
+.pc { width: 260px; border-radius: var(--r); overflow: hidden; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); text-align: left; display: block; }
+.pc .im { height: 150px; background: var(--ink-4) center/cover no-repeat; position: relative; }
+.pc .im .st { position: absolute; left: 10px; top: 10px; font: 700 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 6px 8px; border-radius: 999px; background: rgba(11,11,12,.72); color: #fff; backdrop-filter: blur(6px); }
+.pc .im .st.r { background: var(--red); }
+.pc .im .noimg { position: absolute; inset: 0; display: grid; place-items: center; color: var(--mute); }
+.pc .bd { padding: 12px 14px 14px; display: grid; gap: 3px; }
+.pc .bd b { font: 800 16px/1.2 var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc .bd small { color: var(--mute); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc .bd .pr { font: 800 15px var(--body); margin-top: 4px; color: var(--red-text); }
+.stat { width: 168px; border-radius: var(--r); background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); padding: 14px; display: grid; gap: 4px; }
+.stat span { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.stat b { font: 900 30px/1 var(--display); }
+.stat small { color: var(--mute); font-size: 12px; }
+.up { color: var(--ok); } .down { color: var(--red-text); }
+.bar3 { display: flex; height: 5px; gap: 2px; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+
+/* ---------- project list ---------- */
+.seg { display: flex; padding: 4px; border-radius: 999px; background: var(--ink-3); gap: 4px; }
+.seg button { flex: 1; height: 38px; border-radius: 999px; font: 700 13px var(--body); color: var(--mute); white-space: nowrap; padding: 0 10px; }
+.seg button[aria-pressed="true"] { background: var(--ink-2); color: var(--bone); box-shadow: var(--shadow); }
+.chips { display: flex; gap: 8px; overflow-x: auto; margin: 12px -16px 0; padding: 0 16px 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip { flex: none; height: 36px; padding: 0 14px; border-radius: 999px; background: var(--ink-3); font: 600 13px var(--body); color: var(--bone); display: inline-flex; align-items: center; gap: 6px; }
+.chip[aria-pressed="true"] { background: var(--bone); color: var(--ink); }
+.chip .ic { width: 16px; height: 16px; }
+.pl { display: grid; gap: 12px; margin-top: 14px; }
+.pr-card { display: grid; grid-template-columns: 112px 1fr; gap: 12px; padding: 10px; border-radius: var(--r); background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); text-align: left; width: 100%; }
+.pr-card:active { background: var(--ink-3); }
+.pr-card .im { border-radius: 12px; background: var(--ink-4) center/cover no-repeat; min-height: 104px; position: relative; display: grid; place-items: center; overflow: hidden; }
+.pr-card .im .lgbox { color: var(--bone); opacity: .85; padding: 8px; }
+.pr-card .bd { min-width: 0; display: grid; gap: 3px; align-content: start; padding: 2px 4px 2px 0; }
+.pr-card .k { display: flex; gap: 6px; align-items: center; font: 600 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+.pr-card .k .s { color: var(--red-text); }
+.pr-card b { font: 800 16px/1.2 var(--body); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pr-card small { color: var(--mute); font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pr-card .meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; font-size: 12.5px; }
+.pr-card .meta .pr { font-weight: 800; color: var(--bone); }
+.pick-flag { position: absolute; left: 6px; top: 6px; background: var(--red); color: #fff; font: 700 9px/1 var(--mono); letter-spacing: .05em; padding: 4px 6px; border-radius: 999px; }
+.empty { text-align: center; color: var(--mute); padding: 40px 16px; border: 1px dashed var(--line); border-radius: var(--r); }
+.count { font: 600 12px var(--mono); color: var(--mute); margin-top: 14px; }
+.fab { position: fixed; right: 16px; bottom: calc(var(--nav-h) + var(--sb) + 16px); z-index: 25; height: 50px; padding: 0 20px 0 16px; border-radius: 999px; background: var(--bone); color: var(--ink); font: 800 14px var(--body); display: inline-flex; align-items: center; gap: 8px; box-shadow: var(--shadow); }
+
+/* ---------- screens (pushed views) ---------- */
+.view { position: fixed; inset: 0; z-index: 50; background: var(--ink); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.8,.2,1); visibility: hidden; }
+.view.open { transform: none; visibility: visible; }
+.vbar { flex: none; height: calc(54px + var(--st)); padding: var(--st) 6px 0; display: flex; align-items: center; gap: 2px; background: var(--ink); box-shadow: 0 1px 0 var(--line); position: relative; z-index: 2; }
+.vbar h2 { flex: 1; font: 800 17px var(--body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left: 4px; }
+.vbody { flex: 1; overflow-y: auto; position: relative; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.vbody iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: var(--ink); }
+.vin { padding: 16px 16px calc(110px + var(--sb)); max-width: 760px; margin: 0 auto; }
+.vin.flush { padding-top: 0; }
+.vfoot { flex: none; z-index: 3; padding: 10px 16px calc(10px + var(--sb)); display: flex; gap: 8px; background: var(--ink); box-shadow: 0 -1px 0 var(--line); }
+.vin.hasfoot { padding-bottom: 28px; }
+.vfoot .btn { white-space: nowrap; font-size: 14px; padding: 0 12px; }
+.vfoot .btn-red { flex: 1.7; }
+.vfoot .btn { flex: 1; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; background: var(--ink); z-index: 1; }
+.bars { display: flex; gap: 4px; align-items: flex-end; height: 28px; }
+.bars i { width: 5px; border-radius: 3px; background: var(--red); animation: eq .9s ease-in-out infinite; }
+.bars i:nth-child(2) { animation-delay: .15s } .bars i:nth-child(3) { animation-delay: .3s } .bars i:nth-child(4) { animation-delay: .45s }
+@keyframes eq { 0%,100% { height: 25% } 50% { height: 100% } }
+@media (prefers-reduced-motion: reduce) { .view, .sheet .panel { transition: none } .bars i { animation: none; height: 60% } .scr { animation: none } }
+
+/* ---------- bottom sheet ---------- */
+.sheet { position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end; background: var(--scrim); opacity: 0; visibility: hidden; transition: opacity .2s; }
+.sheet.open { opacity: 1; visibility: visible; }
+.sheet .panel { width: 100%; max-height: 86vh; overflow-y: auto; background: var(--ink-2); border-radius: 24px 24px 0 0; padding: 10px 16px calc(20px + var(--sb)); transform: translateY(100%); transition: transform .26s cubic-bezier(.2,.8,.2,1); }
+.sheet.open .panel { transform: none; }
+.grab { width: 40px; height: 5px; border-radius: 3px; background: var(--line); margin: 0 auto 14px; }
+.sheet h3 { font: 800 18px var(--body); margin-bottom: 4px; }
+.fl-t { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin: 18px 0 8px; }
+.wrapchips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 50px; padding: 0 18px; border-radius: 14px; font: 800 14.5px var(--body); background: var(--ink-3); color: var(--bone); }
+.btn:active { transform: scale(.98); }
+.btn-red { background: var(--red); color: #fff; }
+.btn-light { background: var(--bone); color: var(--ink); }
+.btn-sm { height: 40px; padding: 0 14px; border-radius: 12px; font-size: 13px; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-row .btn { flex: 1 1 auto; }
+.btn .ic { width: 19px; height: 19px; }
+
+/* ---------- project detail ---------- */
+.hero-im { height: 260px; margin: 0 -16px; background: var(--ink-4) center/cover no-repeat; position: relative; display: grid; place-items: center; }
+.hero-im::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, var(--ink), transparent 55%); }
+.hero-im .lgbox { color: var(--bone); transform: scale(1.6); }
+.pd-k { display: flex; gap: 6px; flex-wrap: wrap; margin-top: -26px; position: relative; z-index: 1; }
+.pill { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; font: 700 11px var(--mono); letter-spacing: .04em; text-transform: uppercase; background: var(--ink-3); color: var(--bone); }
+.pill.r { background: var(--red); color: #fff; }
+.pill.g { background: var(--ok-soft); color: var(--ok); }
+.pd-n { font: 900 38px/.95 var(--display); text-transform: uppercase; margin-top: 12px; }
+.pd-l { color: var(--mute); margin-top: 6px; }
+.op { margin-top: 12px; padding: 12px; border: 1px solid var(--line); border-radius: var(--r); display: grid; gap: 10px; }
+.op-esc { display: flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--ok) 15%, transparent); border-left: 4px solid var(--ok); border-radius: 6px; padding: 8px 10px; font: 700 13px/1.3 var(--body); color: var(--ok); }
+.op-esc svg { width: 16px; height: 16px; flex: none; }
+.op-esc small { display: block; font-weight: 500; color: var(--mute); }
+.op-esc.na { background: var(--ink-3); border-left-color: var(--line); color: var(--mute); }
+.op-k { display: flex; justify-content: space-between; gap: 8px; font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+.op-k b { color: var(--bone); }
+.op-bar { height: 8px; background: var(--ink-3); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+.op-bar i { display: block; height: 100%; background: var(--ok); min-width: 3px; }
+.op-av { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.op-av span { font: 600 12px/1 var(--body); padding: 6px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--soft, var(--bone)); }
+.op-out { justify-self: start; font: 800 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; background: var(--red); color: #fff; padding: 6px 8px; border-radius: 4px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-radius: var(--r); overflow: hidden; margin-top: 16px; box-shadow: inset 0 0 0 1px var(--line); }
+.facts div { background: var(--ink-2); padding: 12px 14px; }
+.facts span { display: block; font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.facts b { display: block; font: 800 16px/1.25 var(--body); margin-top: 3px; }
+.callout { margin-top: 14px; padding: 14px; border-radius: var(--r-sm); background: var(--red-soft); border-left: 3px solid var(--red); font-size: 14px; }
+.quick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 18px; }
+.quick button, .quick a { display: grid; justify-items: center; gap: 6px; padding: 12px 4px; border-radius: 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); font: 600 11.5px var(--body); }
+.quick .ic { color: var(--red-text); }
+.mini-map { height: 190px; border-radius: var(--r); overflow: hidden; margin-top: 16px; background: var(--ink-3); }
+
+/* ---------- calculators ---------- */
+.res { position: sticky; top: 0; z-index: 2; margin: -16px -16px 0; padding: 12px 16px 10px; background: var(--ink); }
+.res-card { border-radius: 20px; padding: 14px 18px; background: linear-gradient(135deg, #1b0a0d, #3a0d14 60%, #5b0f1a); color: #fff; box-shadow: var(--shadow); }
+:root[data-theme="light"] .res-card { background: linear-gradient(135deg, #2a0b10, #8a1020 70%, #c4172a); }
+.res-card span { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; opacity: .78; }
+.res-card b { display: block; font: 900 38px/1 var(--display); margin-top: 4px; }
+.res-card small { display: block; opacity: .82; font-size: 12.5px; margin-top: 4px; }
+.res-card.ok { background: linear-gradient(135deg, #07261a, #0d4a31); }
+.res-card.ck { background: linear-gradient(135deg, #2b2006, #5a420a); }
+.kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.kpi { background: var(--ink-2); border-radius: 14px; padding: 12px; box-shadow: inset 0 0 0 1px var(--line); }
+.kpi span { display: block; font: 600 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--mute); }
+.kpi b { display: block; font: 800 18px/1.2 var(--body); margin-top: 3px; }
+.kpi small { display: block; color: var(--mute); font-size: 11.5px; margin-top: 2px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 6px; }
+.fd { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0; }
+.fd.full { grid-column: 1 / -1; }
+.fd label { font: 600 12px var(--body); color: var(--mute); }
+.inp { display: flex; align-items: center; height: 52px; border-radius: 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); padding: 0 12px; gap: 6px; }
+.inp:focus-within { box-shadow: inset 0 0 0 2px var(--bone); }
+.inp input, .inp select { flex: 1; min-width: 0; width: 100%; height: 100%; border: 0; background: none; outline: none; font-size: 16px; font-weight: 600; color: var(--bone); appearance: none; -webkit-appearance: none; }
+.inp .u { font: 600 12px var(--mono); color: var(--mute); }
+.inp.sel::after { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--mute); border-bottom: 2px solid var(--mute); transform: rotate(45deg) translateY(-3px); flex: none; }
+.inp select option { background: var(--ink-2); color: var(--bone); }
+.qc { display: flex; gap: 6px; flex-wrap: wrap; }
+.qc button { height: 30px; padding: 0 10px; border-radius: 999px; background: var(--ink-3); font: 600 12px var(--body); color: var(--mute); }
+.segf { display: flex; padding: 3px; border-radius: 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); gap: 3px; }
+.segf button { flex: 1; min-height: 44px; border-radius: 11px; font: 700 13px/1.15 var(--body); color: var(--mute); padding: 4px 6px; }
+.segf button[aria-pressed="true"] { background: var(--bone); color: var(--ink); }
+.tgl { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 0 14px; border-radius: 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); font-weight: 600; font-size: 14px; }
+.sw { position: relative; width: 48px; height: 28px; flex: none; }
+.sw input { position: absolute; opacity: 0; inset: 0; margin: 0; }
+.sw i { position: absolute; inset: 0; border-radius: 999px; background: var(--ink-4); transition: background .2s; pointer-events: none; }
+.sw i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.sw input:checked + i { background: var(--red); }
+.sw input:checked + i::after { transform: translateX(20px); }
+.err { color: var(--red-text); font-size: 12.5px; }
+.card { background: var(--ink-2); border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+table.t { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.t td { padding: 12px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+table.t tr:first-child td { border-top: 0; }
+table.t td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-weight: 700; }
+table.t tr.tot td { font-weight: 800; }
+table.t tr.hl td { color: var(--red-text); }
+table.t small { color: var(--mute); }
+.tl { display: grid; gap: 0; }
+.tl-i { display: grid; grid-template-columns: 18px 1fr auto; gap: 12px; padding: 10px 14px; align-items: center; position: relative; }
+.tl-i::before { content: ""; position: absolute; left: 22px; top: 0; bottom: 0; width: 2px; background: var(--line); }
+.tl-i:first-child::before { top: 50%; } .tl-i:last-child::before { bottom: 50%; }
+.tl-i i { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-4); box-shadow: 0 0 0 3px var(--ink-2); position: relative; z-index: 1; margin-left: 4px; }
+.tl-i.k i { background: var(--red); }
+.tl-i b { font-size: 14px; display: block; }
+.tl-i small { color: var(--mute); font-size: 12px; }
+.tl-i .n { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; font-size: 14px; }
+.tl-i .n small { display: block; font-weight: 500; }
+.bn { display: grid; grid-template-columns: 110px 1fr 56px; gap: 10px; align-items: center; font-size: 12.5px; padding: 6px 0; }
+.bn .tr { height: 8px; border-radius: 4px; background: var(--ink-3); overflow: hidden; }
+.bn .tr i { display: block; height: 100%; border-radius: 4px; }
+.bn b { text-align: right; }
+.calc-acts { display: flex; gap: 8px; margin-top: 16px; }
+.calc-acts .btn { flex: 1; }
+
+/* ---------- forms (broker) ---------- */
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.f { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0; }
+.f.full { grid-column: 1 / -1; }
+.f label { font: 600 12px var(--body); color: var(--mute); }
+.f input, .f select, .f textarea { width: 100%; background: var(--ink-2); border: 0; box-shadow: inset 0 0 0 1px var(--line); padding: 13px 12px; border-radius: 14px; font-size: 16px; color: var(--bone); }
+.f textarea { min-height: 120px; resize: vertical; line-height: 1.45; }
+.f input:focus, .f select:focus, .f textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--bone); }
+.toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); border-radius: 14px; }
+.toggle input { width: 22px; height: 22px; accent-color: var(--red); }
+.result { margin-top: 18px; background: var(--ink-2); border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.result .big { padding: 18px 16px; border-bottom: 1px solid var(--line); }
+.result .big span { font: 600 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.result .big b { display: block; font: 900 40px/1.05 var(--display); margin-top: 6px; }
+.result .big small { color: var(--mute); font-size: 12.5px; }
+.actions { padding: 14px 16px; display: flex; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--line); }
+.actions .btn { flex: 1 1 140px; }
+.panel { background: var(--ink-2); border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--line); padding: 16px; }
+.row { display: flex; align-items: center; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); width: 100%; text-align: left; }
+.row:last-child { border-bottom: 0; }
+.row .t { flex: 1; min-width: 0; }
+.row .t b { display: block; font-weight: 700; font-size: 15px; }
+.row .t small { color: var(--mute); font-size: 12.5px; }
+.row .go { color: var(--mute); }
+.seg2 { display: flex; padding: 3px; border-radius: 14px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); gap: 3px; }
+.seg2 button { flex: 1; height: 42px; border-radius: 11px; font: 700 13px var(--body); color: var(--mute); }
+.seg2 button[aria-pressed="true"] { background: var(--bone); color: var(--ink); }
+/* old broker class names map onto the new look */
+.seg:not(.top) { }
+.prog { height: 6px; border-radius: 3px; background: var(--ink-3); margin: 8px 0 4px; overflow: hidden; }
+.prog i { display: block; height: 100%; background: var(--red); border-radius: 3px; }
+.ck label { display: grid; grid-template-columns: 24px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: start; }
+.ck input { width: 20px; height: 20px; accent-color: var(--red); margin: 2px 0 0; }
+.ck b { font-weight: 600; }
+.ck small { display: block; color: var(--mute); font-size: 12.5px; }
+.ck input:checked + span b { color: var(--mute); text-decoration: line-through; }
+.lead { background: var(--ink-2); border-radius: var(--r); box-shadow: inset 0 0 0 1px var(--line); padding: 14px; display: grid; gap: 8px; }
+.lead.due { box-shadow: inset 3px 0 0 var(--red), inset 0 0 0 1px var(--line); }
+.lead-h { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.lead-h b { font-size: 16px; }
+.stage { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 5px 8px; border-radius: 999px; background: var(--ink-3); color: var(--mute); white-space: nowrap; }
+.lead .meta { color: var(--mute); font-size: 13px; }
+.lead .btn-row .btn { height: 38px; padding: 0 10px; font-size: 12.5px; border-radius: 10px; }
+.cred { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border-radius: var(--r); overflow: hidden; }
+.cred div { background: var(--ink-2); padding: 12px; }
+.cred span { font: 600 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.cred b { display: block; font: 700 16px var(--body); margin-top: 3px; word-break: break-word; }
+.qr { background: #fff; padding: 12px; justify-self: center; margin-top: 14px; border-radius: 12px; }
+
+/* ---------- lock ---------- */
+.lock { text-align: center; padding: 30px 16px; display: grid; gap: 18px; justify-items: center; }
+.dots { display: flex; gap: 16px; }
+.dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--mute); }
+.dots i.on { background: var(--red); border-color: var(--red); }
+.pad { display: grid; grid-template-columns: repeat(3, 76px); gap: 12px; }
+.pad button { height: 76px; border-radius: 50%; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); font: 800 28px var(--display); }
+.pad button:active { background: var(--ink-3); }
+.shake { animation: shake .35s; }
+@keyframes shake { 20%,60% { transform: translateX(-8px) } 40%,80% { transform: translateX(8px) } }
+
+/* ---------- misc ---------- */
+.hd-c { width: 150px; border-radius: var(--r); padding: 12px; background: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line); display: grid; gap: 3px; }
+.hd-c b { font-size: 14px; } .hd-c span { color: var(--mute); font-size: 12px; } .hd-c em { font: 700 10.5px var(--mono); font-style: normal; text-transform: uppercase; letter-spacing: .06em; color: var(--red-text); }
+.hd-c.today { background: var(--red); color: #fff; box-shadow: none; } .hd-c.today span, .hd-c.today em { color: rgba(255,255,255,.85); }
+.hd-c.past { opacity: .5; }
+.fx3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.fx3 div { background: var(--ink-2); border-radius: 14px; padding: 12px; box-shadow: inset 0 0 0 1px var(--line); }
+.fx3 span { font: 600 10.5px var(--mono); color: var(--mute); }
+.fx3 b { display: block; font: 800 16px var(--body); margin-top: 2px; }
+.soc { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.soc a { background: var(--ink-2); border-radius: 14px; box-shadow: inset 0 0 0 1px var(--line); padding: 14px 8px; text-align: center; font: 700 13px var(--body); display: grid; gap: 2px; justify-items: center; }
+.soc a .ic { color: var(--red-text); margin-bottom: 4px; }
+.soc a small { color: var(--mute); font-size: 11px; font-weight: 500; }
+.foot { color: var(--mute); font-size: 11.5px; text-align: center; margin: 30px 0 0; line-height: 1.6; }
+.toast { position: fixed; left: 50%; bottom: calc(var(--nav-h) + var(--sb) + 18px); transform: translateX(-50%); z-index: 90; background: var(--bone); color: var(--ink); padding: 11px 18px; border-radius: 999px; font: 700 13px var(--body); max-width: calc(100% - 32px); box-shadow: var(--shadow); }
+#map { position: absolute; inset: 0; background: #0d1117; }
+.leaflet-container { font: 13px var(--body); }
+.mk-pin { width: 16px; height: 16px; border-radius: 50%; background: var(--red); border: 2px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,.5); }
+.mk-pin.w { background: #fff; border-color: var(--red); width: 20px; height: 20px; }
+.map-card { position: absolute; left: 12px; right: 12px; bottom: calc(14px + var(--sb)); z-index: 500; }
+.map-tools { position: absolute; top: 12px; left: 12px; right: 12px; z-index: 500; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.map-tools .chip { background: rgba(11,11,12,.8); color: #fff; backdrop-filter: blur(6px); }
+.map-tools .chip[aria-pressed="true"] { background: #fff; color: #0B0B0C; }
+@media (min-width: 600px) { .grid4 { grid-template-columns: repeat(6, 1fr); } .tiles { grid-template-columns: repeat(3, 1fr); } }
+.btn-ghost { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+</style>
+</head>
+<body>
+<header class="topbar" id="topbar">
+  <a class="wm" href="#home" aria-label="Ahmed Wazir, home" onclick="event.preventDefault();go('home')"><svg  viewBox="0 0 620 100" aria-hidden="true"><g fill="var(--red)"><path fill-rule="evenodd" d="M0,100L18,0L38,0L56,100L38,100L34.5,80L21.5,80L18,100ZM24.2,63L28,36L31.8,63Z"/><path fill-rule="evenodd" d="M332,0L348,0L355,58L363,0L381,0L389,58L396,0L412,0L399,100L380,100L372,44L364,100L345,100Z"/></g><g fill="currentColor"><path fill-rule="evenodd" d="M62,0H80V41H98V0H116V100H98V59H80V100H62Z"/><path fill-rule="evenodd" d="M122,100V0H142L158,44L174,0H194V100H177V42L164,80H152L139,42V100Z"/><path fill-rule="evenodd" d="M200,0H246V16H218V41H240V57H218V84H246V100H200Z"/><path fill-rule="evenodd" d="M252,0H290L306,16V84L290,100H252ZM270,16H283L288,21V79L283,84H270Z"/><path fill-rule="evenodd" d="M418,100L436,0L456,0L474,100L456,100L452.5,80L439.5,80L436,100ZM442.2,63L446,36L449.8,63Z"/><path fill-rule="evenodd" d="M480,0H534V16L501,84H534V100H480V84L513,16H480Z"/><path fill-rule="evenodd" d="M540,0H558V100H540Z"/><path fill-rule="evenodd" d="M564,0H602L618,16V44L608,54L620,100H601L591,58H582V100H564ZM582,16H595L600,21V37L595,42H582Z"/></g></svg></a>
+  <button class="tb-btn" id="themeBtn" aria-label="Appearance"></button>
+  <div class="cur-pop"><button class="chip-sel cur-b" id="cur" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="curM" aria-label="Show amounts in"></button><div class="cur-m" id="curM" role="radiogroup" aria-label="Show amounts in" hidden></div></div>
+  <button class="mode" id="modeChip" type="button" aria-label="Switch between client and broker mode"><i></i><span>Client</span></button>
+</header>
+<main id="main"></main>
+<nav class="tabs" aria-label="Sections">
+  <button data-tab="home" aria-current="page"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M3 11 12 4l9 7M5.5 9.5V20h5v-6h3v6h5V9.5"/></svg></span>Home</button>
+  <button data-tab="tools"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h1M12 11h0M15.5 11h0M8.5 14.5h1M12 14.5h0M15.5 14.5h0M8.5 18h1M12 18h0M15.5 18h0"/></svg></span>Tools</button>
+  <button data-tab="guides"><span class="pill"><svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/></svg></span>Guides</button>
+  <button data-tab="broker"><span class="pill"><svg class="ic" viewBox="0 0 24 24" id="brokerIco"></svg></span><span id="brokerLbl">Broker</span><span class="badge" id="dueBadge" hidden></span></button>
+</nav>
+<div class="sheet" id="sheet" hidden><div class="panel" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden role="status"></div>
+<script src="data.js"></script>
+<script src="reelly.js"></script>
+<script src="logos.js"></script>
+<style>.awb-btn{bottom:calc(var(--nav-h) + var(--sb) + 12px)!important}.awb{bottom:calc(var(--nav-h) + var(--sb) + 70px)!important;height:min(520px,calc(100vh - var(--nav-h) - 170px))!important}</style>
+<script src="widget.js" data-endpoint="" defer></script>
+<script>
+"use strict";
+/* ============================================================
+   Ahmed Wazir app. Client mode by default, broker mode behind a PIN.
+   Native screens and calculators (same formulas as the website);
+   long-form guides open the synced website in app mode.
+   Data: data.js (website, daily), reelly.js (Reelly catalogue), logos.js.
+   ============================================================ */
+const D = window.APPDATA || {};
+const RY = window.REELLY || { items: [] };
+const LG = window.APPLOGOS || { keys: [], html: [], css: "" };
+if (LG.css) document.head.insertAdjacentHTML("beforeend", `<style id="lg-css">${LG.css}</style>`);
+const WA = "971586032580", PHONE = "+971586032580", EMAIL = "ahusain@springfield-re.com";
+const BOOK = "https://calendar.app.google/T7Str2jVSvmZEARA9";
+const SIGN = "Ahmed Wazir · Springfield Properties\nRERA BRN 85446\nWhatsApp +971 58 603 2580\nwww.awazrealty.com";
+const NB = window.AndroidBridge || null;
+const FX = Object.assign({ USD: 0.27229, GBP: 0.2033, INR: 25.91 }, (D.fx || {}).per_aed || {});
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const DH = '<svg class="dh" viewBox="0 0 22 20" role="img" aria-label="AED"><path d="M5 2.5v15M5 2.5h5a7.5 7.5 0 0 1 0 15H5M1 8h19M1 12h19" fill="none" stroke="currentColor" stroke-width="2.2"/></svg>';
+
+/* ---------- storage ---------- */
+const S = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+  sset(k, v) { try { v == null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, v); } catch (e) {} }
+};
+
+/* ---------- theme: light by day, dark at night ---------- */
+const THEME = {
+  mode() { try { return localStorage.getItem("aw-theme") || "auto"; } catch (e) { return "auto"; } },
+  hour() { return +new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Dubai", hour: "numeric", hourCycle: "h23" }).format(new Date()); },
+  now() { const m = this.mode(); return m === "light" || m === "dark" ? m : (this.hour() >= 6 && this.hour() < 18 ? "light" : "dark"); },
+  apply() {
+    const t = this.now(), r = document.documentElement;
+    r.setAttribute("data-theme", t);
+    const bg = t === "light" ? "#F4F1EE" : "#0B0B0C";
+    document.querySelector('meta[name="theme-color"]').setAttribute("content", bg);
+    if (NB && NB.setTheme) try { NB.setTheme(t === "dark"); } catch (e) {}
+    document.querySelectorAll("iframe.site").forEach(f => { try { f.contentDocument.documentElement.setAttribute("data-theme", t); } catch (e) {} });
+    if (window.MAPV) MAPV.retheme && MAPV.retheme();
+  },
+  set(m) { try { localStorage.setItem("aw-theme", m); } catch (e) {} this.apply(); }
+};
+THEME.apply();
+setInterval(() => THEME.apply(), 5 * 60 * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) THEME.apply(); });
+
+/* ---------- money ---------- */
+function compact(n) {
+  const f = (v, u) => (v >= 100 ? Math.round(v) : +v.toFixed(v >= 10 ? 1 : 2)).toString() + u;
+  const a = Math.abs(n), s = n < 0 ? "-" : "";
+  if (a >= 1e9) return s + f(a / 1e9, "bn"); if (a >= 1e6) return s + f(a / 1e6, "M"); if (a >= 1e3) return s + f(a / 1e3, "K"); return s + Math.round(a);
+}
+function inr(n) { if (Math.abs(n) >= 1e7) { const c = n / 1e7; return "₹" + (Math.abs(c) >= 100 ? Math.round(c).toLocaleString("en-IN") : c.toFixed(Math.abs(c) >= 10 ? 1 : 2)) + " Cr"; } return "₹" + (n / 1e5).toFixed(1) + " L"; }
+let CUR = S.get("aw-cur", "AED");
+const SYM = { USD: "$", GBP: "£", INR: "₹" };
+const conv = n => CUR === "AED" ? n : n * FX[CUR];
+const short = n => CUR === "INR" ? inr(conv(n)) : (n < 0 ? "-" : "") + (CUR === "AED" ? DH : SYM[CUR]) + compact(Math.abs(conv(n)));
+const full = n => (n < 0 ? "-" : "") + (CUR === "AED" ? DH : SYM[CUR]) + Math.round(Math.abs(conv(n))).toLocaleString(CUR === "INR" ? "en-IN" : "en-US");
+const aedTxt = n => "AED " + Math.round(n).toLocaleString("en-US");
+const curTxt = n => CUR === "AED" ? "" : ` (about ${SYM[CUR]}${Math.round(conv(n)).toLocaleString(CUR === "INR" ? "en-IN" : "en-US")})`;
+const num = v => Math.max(0, +String(v).replace(/,/g, "") || 0);
+const pct = (n, d = 2) => (isFinite(n) ? n.toFixed(d) : "0.00") + "%";
+const fmtD = (d, o = { day: "numeric", month: "short" }) => { if (!d) return ""; const x = new Date(String(d).length <= 10 ? d + "T12:00:00" : d); return isNaN(x) ? String(d) : x.toLocaleDateString("en-GB", o); };
+const today = () => { const d = new Date(); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+const ymLabel = s => { if (!s) return "TBA"; const [y, m] = s.split("-").map(Number); return "Q" + Math.ceil(m / 3) + " " + y; };
+
+/* ---------- phone bridge ---------- */
+function openExt(url) { if (NB && NB.openExternal) NB.openExternal(url); else window.open(url, "_blank", "noopener"); }
+const waLink = (text, to = WA) => `https://wa.me/${to}${text ? "?text=" + encodeURIComponent(text) : ""}`;
+const waPhone = p => { let d = String(p || "").replace(/[^\d+]/g, ""); if (d.startsWith("+")) d = d.slice(1); else if (d.startsWith("00")) d = d.slice(2); else if (d.startsWith("05")) d = "971" + d.slice(1); else if (d.startsWith("5") && d.length === 9) d = "971" + d; return d; };
+function shareText(text, title = "Ahmed Wazir") {
+  if (NB && NB.share) return NB.share(text, title);
+  if (navigator.share) return navigator.share({ title, text }).catch(() => {});
+  copyText(text);
+}
+function copyText(text) {
+  if (NB && NB.copy) { NB.copy(text); toast("Copied"); return; }
+  (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(() => toast("Copied"), () => {
+    const t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); toast("Copied"); } catch (e) {} t.remove();
+  });
+}
+let tt; function toast(m) { const t = $("toast"); t.textContent = m; t.hidden = false; clearTimeout(tt); tt = setTimeout(() => t.hidden = true, 2200); }
+const vib = () => { try { navigator.vibrate && navigator.vibrate(8); } catch (e) {} };
+document.addEventListener("click", e => {
+  const a = e.target.closest("a[data-ext]"); if (a) { e.preventDefault(); openExt(a.href); }
+});
+
+/* ---------- icons ---------- */
+const IC = {
+  check: '<path d="M4 12l5 5L20 6"/>',
+  home: '<path d="M3 11 12 4l9 7M5.5 9.5V20h5v-6h3v6h5V9.5"/>',
+  build: '<path d="M4 21V9l6-3v15M10 21V3l7 3.5V21M17 21v-9l3 1.5V21M2 21h20M13 9h1M13 12h1M13 15h1"/>',
+  calc: '<rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M8.5 7h7M8.5 11h1M12 11h0M15.5 11h0M8.5 14.5h1M12 14.5h0M15.5 14.5h0M8.5 18h1M12 18h0M15.5 18h0"/>',
+  book: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/>',
+  lock: '<rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>',
+  brief: '<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18"/>',
+  plan: '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4M8 13h3M8 16.5h6"/>',
+  cost: '<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 15.5h7M9 19h4"/>',
+  sell: '<path d="M4 17l5.5-5.5 4 4L20 9M14.5 9H20v5.5"/>',
+  yield: '<path d="M4 20V11M9.5 20V5M15 20v-7M20.5 20V8M2 20.5h20"/>',
+  roe: '<path d="M3 17c4 0 5-10 9-10s5 6 9 6M3 21h18"/>',
+  mort: '<path d="M3 11 12 4l9 7M6 9.5V20h12V9.5M12 12.5v4.5M10 14.5h4"/>',
+  rent: '<path d="M7 7h11l-3.5-3.5M17 17H6l3.5 3.5"/>',
+  visa: '<rect x="4" y="3" width="16" height="18" rx="2.5"/><circle cx="12" cy="10" r="3"/><path d="M8 17h8"/>',
+  india: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+  match: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/>',
+  planner: '<rect x="5" y="4" width="14" height="17" rx="2.5"/><path d="M9 9.5l1.5 1.5L14 7.5M9 15h6"/>',
+  map: '<path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20zM9 4v13.5M15 6.5V20"/>',
+  glossary: '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19M9 7.5h6"/>',
+  faq: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.6 2.6 0 1 1 3.6 2.4c-.7.3-1.1.9-1.1 1.6v.6M12 16.8h0"/>',
+  law: '<path d="M12 3v18M5 7h14M7 7l-3 7h6zM17 7l-3 7h6M8 21h8"/>',
+  star: '<path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"/>',
+  area: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  dev: '<path d="M4 21V6l8-3v18M12 9l8 2.5V21M2 21h20M7 8h2M7 12h2M7 16h2M15 14h2M15 17.5h2"/>',
+  owner: '<path d="M3 11 12 4l9 7M6 9.5V20h12V9.5M9.5 15.5l2 2 3.5-4"/>',
+  money: '<rect x="3" y="6" width="18" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.8"/><path d="M6.5 9.5h0M17.5 14.5h0"/>',
+  quote: '<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h5"/>',
+  leads: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17.5 7v6M14.5 10h6"/>',
+  msg: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',
+  check: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l3 3 5-6"/>',
+  chart: '<path d="M4 19V9M9 19V5M14 19v-6M19 19v-9M2 21h20"/>',
+  conv: '<path d="M4 8h13l-3.5-3.5M20 16H7l3.5 3.5"/>',
+  card: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10.5" r="2"/><path d="M5.8 16c.5-1.5 1.8-2.2 3.2-2.2s2.7.7 3.2 2.2M14.5 9.5h4M14.5 13h3"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  wa: '<path d="M4 20l1.3-4A8 8 0 1 1 8 19z"/><path d="M9 8.8c0 3.2 3 6.2 6.2 6.2l1-1.5-2.1-1-1 .9c-1-.5-2-1.5-2.5-2.5l.9-1-1-2.1z"/>',
+  call: '<path d="M5 4h3.5l2 5-2.5 1.5a11 11 0 0 0 5.5 5.5L15 13.5l5 2V19a1.5 1.5 0 0 1-1.5 1.5A15.5 15.5 0 0 1 3.5 5.5 1.5 1.5 0 0 1 5 4z"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/>',
+  cal: '<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4M12 12.5v4M10 14.5h4"/>',
+  news: '<rect x="3" y="5" width="15" height="15" rx="2"/><path d="M18 9h3v9a2 2 0 0 1-2 2M7 9h7M7 12.5h7M7 16h4"/>',
+  pulse: '<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+  globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  share: '<path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 13v6.5A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V13"/>',
+  back: '<path d="M15 5l-7 7 7 7"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  chev: '<path d="M9 5l7 7-7 7"/>',
+  filter: '<path d="M4 6h16M7 12h10M10 18h4"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>',
+  moon: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+  auto: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17A8.5 8.5 0 0 0 12 3.5z" fill="currentColor"/>',
+  heart: '<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.5 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>',
+  bed: '<path d="M3 18V7M3 14h18v4M21 14v-2.5A2.5 2.5 0 0 0 18.5 9H11v5M6.5 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>',
+  size: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
+  key: '<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/>',
+  pdf: '<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h6M9 16.5h6"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3.3-3.3a4 4 0 0 0-5.7-5.7L12 6.3M14 10a4 4 0 0 0-5.7 0L5 13.3a4 4 0 0 0 5.7 5.7l1.3-1.3"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/>',
+  ig: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17 7h0"/>',
+  tt: '<path d="M14 3v11.5a3.5 3.5 0 1 1-3.5-3.5M14 3c.5 2.6 2.4 4.4 5 4.6"/>',
+  yt: '<rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10 9.2v5.6l4.8-2.8z"/>',
+  li: '<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5V16M8 8h0M12 16v-3.3a2.2 2.2 0 0 1 4.4 0V16M12 10.5V16"/>',
+  tree: '<path d="M12 3v18M12 8l-4-3M12 12l5-4M12 16l-5-3"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  verified: '<path d="M12 2.5l2.4 1.8 3 .1.9 2.9 2.3 1.9-1 2.8 1 2.8-2.3 1.9-.9 2.9-3 .1L12 21.5l-2.4-1.8-3-.1-.9-2.9L3.4 14.8l1-2.8-1-2.8 2.3-1.9.9-2.9 3-.1z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>'
+};
+const ico = (k, cls = "ic") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k] || ""}</svg>`;
+
+/* ---------- developer logos ---------- */
+const devName = d => String(d || "").replace(/\s*[×(].*$/, "").replace(/ (Properties|Developments|Developers|Development|Real Estate Development|Real Estate|Group|Realty)$/i, "").trim();
+function devLogo(dev, w = 80, h = 22) {
+  const d = String(dev || "").toLowerCase(), k = LG.keys.findIndex(x => d.includes(x)), html = LG.html[k];
+  if (k < 0 || !html) return "";
+  return `<span class="lgbox" aria-hidden="true">` + html.replace(/style="width:(\d+)px;height:(\d+)px"/, (m, W, H) => { const r = Math.min(w / W, h / H); return `style="width:${Math.round(W * r)}px;height:${Math.round(H * r)}px"`; }) + `</span>`;
+}
+
+/* ---------- projects: website launches + Reelly catalogue ---------- */
+const norm = s => String(s || "").toLowerCase().replace(/\b(by|the|at|residences?|tower|towers|phase \d+)\b/g, " ").replace(/[^a-z0-9]+/g, " ").trim();
+const priceSpec = p => { const v = (p.specs || []).find(([, x]) => x && typeof x === "object"); return v ? v[1] : null; };
+const FEEMAP = p => p.em === "Abu Dhabi" ? (/Reem|Maryah/i.test(p.a || p.loc || "") ? "adgm" : "adm") : ({ Dubai: "dxb", Sharjah: "shj", "Ras Al Khaimah": "rak", Ajman: "ajm", "Umm Al Quwain": "uaq" }[p.em] || "dxb");
+const PARTNER_RE = /emaar|nakheel|meraas|wasl|imtiaz|damac|modon|aldar|beyond|omniyat|reportage|azizi|sobha|binghatti|ellington|eagle hills|alef|majid al futtaim|cosmo|samana|danube/i;
+/* Only the developers Ahmed works with, and only off-plan (nothing ready or secondary) */
+const OFFPLAN_OK = r => PARTNER_RE.test(r.d || "") && r.cs !== "Completed" && (!r.h || r.h >= "2026-11");
+const isComm = t => t.some(x => /office|retail/i.test(x)) && !t.some(x => /apart|villa|town|pent|duplex/i.test(x));
+/* Project photos hosted with the app (docs/img), listed in the website's off-plan data */
+const IMGSET = new Set(((D.offplan || {}).img) || []);
+const limg = id => id && IMGSET.has(id) ? `img/r${id}.webp` : "";
+let RP = (RY.items || []).filter(OFFPLAN_OK).map(r => ({
+  src: "r", key: "r" + r.id, rid: r.id, n: r.n, d: devName(r.d), em: r.em, a: r.a, ll: r.ll,
+  type: isComm(r.t) ? "Commercial" : "Residential",
+  from: r.p[0] || null, to: r.p[1] || null, sz: r.s, beds: r.b, units: r.t, h: r.h, status: r.ss, cs: r.cs,
+  img: limg(r.id) || r.img, url: r.u, blurb: r.x, partner: !!r.pt, fresh: !!r.new
+}));
+/* Full catalogue (data/projects.json, the website's Property search data) merged in when it loads */
+function mergeCatalog(list) {
+  const byId = new Map(RP.map(r => [r.rid, r]));
+  (list || []).filter(OFFPLAN_OK).forEach(c => {
+    const t = c.t || [], ss = c.ss || "";
+    const rec = { src: "r", key: "r" + c.id, rid: c.id, n: c.n, d: devName(c.d), em: c.em, a: c.a, ll: c.lng ? [c.lng, c.lat] : null,
+      type: isComm(t) ? "Commercial" : "Residential", from: c.p0 || null, to: c.p1 || null, sz: c.s0 ? [c.s0, c.s1] : null,
+      beds: c.b0 != null ? [c.b0, c.b1] : null, units: t, h: c.h || "", status: ss, cs: c.cs, img: limg(c.id) || c.img || "",
+      op: { escrow_bank: c.esc, dld_no: c.dld, completion_pct: c.cp, inspection_date: c.insp, total_units: c.tu, dld_handover: c.dh, units_available: c.ua },
+      url: "https://app.reelly.ai/projects/" + c.id, blurb: c.ov || "", partner: PARTNER_RE.test(c.d || ""), fresh: /eoi|presale|start of sales|announced/i.test(ss) };
+    const old = byId.get(c.id);
+    if (old) { old.blurb = old.blurb && old.blurb.length > (c.ov || "").length ? old.blurb : (c.ov || old.blurb); if (limg(c.id) || !old.img) old.img = rec.img; old.op = rec.op; }
+    else { RP.push(rec); byId.set(c.id, rec); }
+  });
+  rebuildP();
+}
+let RBYN = {};
+function reellyFor(n, em) {
+  const k = norm(n); if (k.length < 4) return null;
+  if (RBYN[k]) return RBYN[k].find(r => r.em === em) || RBYN[k][0];
+  return RP.find(r => r.em === em && (norm(r.n).startsWith(k + " ") || k.startsWith(norm(r.n) + " ")) && norm(r.n).length >= 6) || null;
+}
+let WP = [], ALLP = [];
+/* Off-plan checks from the website: escrow, DLD construction progress, availability by type */
+const OPI = (D.offplan || {}).items || {};
+const OP_BY_RID = Object.fromEntries(Object.values(OPI).filter(v => v && v.rid).map(v => [v.rid, v]));
+function opBlock(p) {
+  const o = (p.src === "w" ? OPI[p.n] : OP_BY_RID[p.rid]) || p.op;
+  if (!o) return "";
+  const mon = d => d ? new Date(d + "T12:00:00").toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : "";
+  let h = o.sold_out ? `<span class="op-out">Sold out · ask me for resale or similar</span>` : "";
+  h += o.escrow_bank ? `<div class="op-esc">${ico("check")}<span>Escrow registered${o.dld_no ? " · DLD " + esc(o.dld_no) : ""}<small>${esc(o.escrow_bank)}</small></span></div>`
+    : `<div class="op-esc na"><span>${p.em === "Dubai" ? "Escrow details on request" : "Escrow via " + (p.em === "Abu Dhabi" ? "ADREC" : "the emirate's regulator") + " · ask me"}</span></div>`;
+  if (o.completion_pct != null) { const pct = Math.max(0, Math.min(100, +o.completion_pct));
+    h += `<div><p class="op-k"><span>Construction (DLD)</span><b>${pct ? pct.toFixed(pct % 1 ? 1 : 0) + "%" : "Not started"}</b></p><div class="op-bar"><i style="width:${pct}%"></i></div>${o.inspection_date ? `<p class="op-k" style="margin-top:4px"><span>Inspected ${mon(o.inspection_date)}</span>${o.dld_handover ? `<span>DLD completion ${mon(o.dld_handover)}</span>` : ""}</p>` : ""}</div>`; }
+  const av = (o.avail || []).filter(a => a.n > 0);
+  // When the developer has only listed one sample unit per type, show the types without counts
+  const counted = av.some(a => a.n > 1);
+  const nAv = av.length ? (counted ? av.reduce((s, a) => s + a.n, 0) : 0) : (o.units_available || 0);
+  if ((nAv || av.length) && !o.sold_out) h += `<div><p class="op-k"><span>${nAv ? "Available now" : "Unit types available"}</span><b>${nAv ? nAv + " unit" + (nAv === 1 ? "" : "s") + (o.total_units ? " of " + o.total_units : "") : (o.total_units ? o.total_units + " units in project" : "")}</b></p>${av.length ? `<div class="op-av">${av.map(a => `<span>${esc(a.t)}${counted ? ` <b>×${a.n}</b>` : ""}</span>`).join("")}</div>` : ""}</div>`;
+  return `<div class="op">${h}</div>`;
+}
+function rebuildP() {
+  RBYN = {}; RP.forEach(r => { const k = norm(r.n); if (k.length >= 4) (RBYN[k] = RBYN[k] || []).push(r); });
+  WP = (D.projects || []).map((p, i) => {
+    const ps = priceSpec(p), r = reellyFor(p.name, p.em);
+    return {
+      src: "w", key: "w" + i, wi: i, n: p.name, d: devName(p.dev), em: p.em, a: p.loc, ll: p.ll, type: p.type,
+      from: ps ? ps.aed : (r ? r.from : null), pre: ps ? ps.pre || "" : "", to: r ? r.to : null, sz: r ? r.sz : null, beds: r ? r.beds : null, units: r ? r.units : null,
+      h: p.handover || (r ? r.h : ""), status: p.status, pick: p.pick, blurb: p.blurb, plan: p.plan, specs: p.specs, note: p.note,
+      img: limg(r && r.rid) || limg((OPI[p.name] || {}).rid) || (r ? r.img : ""), url: r ? r.url : "", rid: r ? r.rid : ((OPI[p.name] || {}).rid || null), fresh: /expected|launch|eoi|new/i.test(p.status || "")
+    };
+  });
+  const used = new Set(WP.map(w => w.rid));
+  ALLP = WP.concat(RP.filter(r => !used.has(r.rid)));
+}
+rebuildP();
+const findP = key => ALLP.find(p => p.key === key);
+const bedsTxt = b => { if (!b || b[0] == null) return ""; const f = x => x === 0 ? "Studio" : (x % 1 ? x : Math.round(x)); return b[0] === b[1] ? (b[0] === 0 ? "Studio" : f(b[0]) + " BR") : `${f(b[0])}–${f(b[1])} BR`; };
+const sizeTxt = s => !s || !s[0] ? "" : s[0] === s[1] ? `${s[0].toLocaleString("en-US")} sq ft` : `${s[0].toLocaleString("en-US")}–${s[1].toLocaleString("en-US")} sq ft`;
+const priceTxt = p => p.from ? `${p.pre || ""}${short(p.from)}` : "Price on request";
+
+/* ================= CALCULATORS (formulas match the website) ================= */
+const FEES = [
+  { id: "dxb", label: "Dubai · DLD 4%", auth: "DLD", pct: 4, dubai: 1 },
+  { id: "adm", label: "Abu Dhabi · ADM 2%", auth: "ADM", pct: 2, abu: 1 },
+  { id: "adgm", label: "Abu Dhabi · Reem & Maryah · ADGM 2%", auth: "ADGM", pct: 2, abu: 1 },
+  { id: "shj", label: "Sharjah 4%", auth: "Sharjah", pct: 4 },
+  { id: "ajm", label: "Ajman 4%", auth: "Ajman", pct: 4 },
+  { id: "rak", label: "Ras Al Khaimah 4%", auth: "RAK", pct: 4 },
+  { id: "uaq", label: "Umm Al Quwain 4%", auth: "UAQ", pct: 4 },
+  { id: "none", label: "Transfer fee waived", auth: "Transfer", pct: 0 }
+];
+const fee = id => { const o = FEES.find(x => x.id === id) || FEES[0]; return { id: o.id, pct: o.pct, rate: o.pct / 100, dubai: !!o.dubai, abu: !!o.abu, short: o.auth, label: `${o.auth} transfer fee (${o.pct}%)` }; };
+const FEE_F = { id: "fee", l: "Emirate / transfer fee", t: "sel", def: "dxb", opts: FEES.map(f => [f.id, f.label]), full: 1 };
+const emi = (loan, ratePct, years) => { const r = ratePct / 1200, n = years * 12; return r ? loan * r / (1 - Math.pow(1 + r, -n)) : loan / n; };
+const PLAN_PRESETS = WP.filter(p => p.type === "Residential" && p.from && p.plan).map(p => p);
+const addM = (d, n) => new Date(d.getFullYear(), d.getMonth() + n, 1);
+const ymd = d => d.toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+const bars = rows => { const mx = Math.max(1e-9, ...rows.map(r => Math.abs(r[1] || 0))); return rows.map(([l, v, c, t]) => `<div class="bn"><span>${esc(l)}</span><span class="tr"><i style="width:${Math.max(1, Math.abs(v || 0) / mx * 100)}%;background:${c}"></i></span><b>${t}</b></div>`).join(""); };
+const tbl = (rows, tot) => `<div class="card"><table class="t">${rows.map(([l, v, cls]) => `<tr${cls ? ` class="${cls}"` : ""}><td>${l}</td><td class="n">${v}</td></tr>`).join("")}${tot ? `<tr class="tot"><td>${tot[0]}</td><td class="n">${tot[1]}</td></tr>` : ""}</table></div>`;
+
+const CALCS = {
+  plan: {
+    t: "Payment plan", i: "plan", d: "Every instalment, dated, from booking to keys",
+    fields: [
+      { id: "proj", l: "Project", t: "sel", def: "", full: 1, opts: [["", "Your own numbers"]].concat(PLAN_PRESETS.map(p => [p.key, p.n + " · " + p.d])),
+        apply(v) { const p = findP(v.proj); if (!p) return; v.price = Math.round(p.from); v.b = p.plan.b; v.c = p.plan.c; v.h = p.plan.h; if (p.h) v.ho = p.h; v.fee = FEEMAP(p); } },
+      { id: "price", l: "Unit price", t: "money", def: 2000000, full: 1, q: [1e6, 2e6, 3e6, 5e6] },
+      { id: "b", l: "Booking", t: "pct", def: 20 }, { id: "c", l: "Construction", t: "pct", def: 50 },
+      { id: "h", l: "On handover", t: "pct", def: 30 }, { id: "post", l: "Post-handover months", t: "num", def: 24 },
+      { id: "plq", l: "Common plans", t: "quick", full: 1, q: [["10/50/40", "10/50/40"], ["20/40/40", "20/40/40"], ["20/50/30", "20/50/30"], ["10/40/50", "10/40/50"], ["20/30/50", "20/30/50"], ["60/40", "20/40/40"]],
+        apply(v, q) { const [b, c, h] = q.split("/").map(Number); if (h === undefined) { v.b = 20; v.c = 40; v.h = 40; } else { v.b = b; v.c = c; v.h = h; } } },
+      { id: "ho", l: "Handover", t: "month", def: "2029-12" },
+      { id: "fq", l: "Construction payments", t: "sel", def: "3", opts: [["1", "Monthly"], ["3", "Quarterly"], ["6", "Every 6 months"]] },
+      FEE_F
+    ],
+    run(v) {
+      const p = Math.max(0, 100 - v.b - v.c - v.h);
+      if (v.b + v.c + v.h > 100) return { err: "Booking, construction and handover add up to more than 100%." };
+      const f = fee(v.fee), fq = +v.fq, post = Math.max(1, v.post || 1);
+      const [hy, hm] = (v.ho || "2029-12").split("-").map(Number), now = new Date(), start = new Date(now.getFullYear(), now.getMonth(), 1), ho = new Date(hy, hm - 1, 1);
+      const span = Math.max(0, (ho.getFullYear() - start.getFullYear()) * 12 + ho.getMonth() - start.getMonth()), nC = Math.max(1, Math.floor(span / fq));
+      const dld = v.price * f.rate, up = v.price * v.b / 100 + dld, perC = v.c ? v.price * v.c / 100 / nC : 0, perP = p ? v.price * p / 100 / post : 0;
+      const freq = fq === 1 ? "monthly" : fq === 3 ? "quarterly" : "every 6 months";
+      const rows = [{ d: start, w: `Booking · ${v.b}%`, a: v.price * v.b / 100, k: 1 }];
+      if (dld) rows.push({ d: start, w: f.label, a: dld, fee: 1 });
+      if (v.c) for (let i = 1; i <= nC; i++) rows.push({ d: addM(start, Math.min(span, i * fq)), w: `Construction ${i} of ${nC}`, a: perC });
+      if (v.h) rows.push({ d: ho, w: `On handover · ${v.h}%`, a: v.price * v.h / 100, k: 1 });
+      if (p) for (let i = 1; i <= post; i++) rows.push({ d: addM(ho, i), w: `Post-handover ${i} of ${post}`, a: perP });
+      let cum = 0; rows.forEach(r => { if (!r.fee) cum += r.a; r.c = cum / v.price * 100; });
+      const proj = findP(v.proj);
+      return {
+        hero: { k: "Due at booking", v: full(up), s: `${v.b}% down${dld ? ` + ${f.pct}% ${f.short} fee` : ""}` },
+        kpis: [["Construction", v.c ? full(perC) : "—", v.c ? `${nC} × ${freq}` : "None"], ["On handover", v.h ? full(v.price * v.h / 100) : "—", ymd(ho)],
+               ["After handover", p ? full(perP) : "—", p ? `${post} monthly · ${p}%` : "None"], ["Total incl. fee", full(v.price + dld), `Plan ${v.b}/${v.c}/${v.h}${p ? "/" + p : ""}`]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Schedule</h2><span class="muted" style="font-size:12px">${rows.length} payments</span></div><div class="card tl">${rows.map(r => `<div class="tl-i${r.k ? " k" : ""}"><i></i><div><b>${esc(r.w)}</b><small>${ymd(r.d)}</small></div><div class="n">${full(r.a)}${r.fee ? "" : `<small>${Math.round(r.c)}% paid</small>`}</div></div>`).join("")}</div>`,
+        text: [`Payment plan${proj ? " · " + proj.n : ""}`, "", `Price: ${aedTxt(v.price)}`, `Plan: ${v.b}/${v.c}/${v.h}${p ? "/" + p + " post-handover" : ""}`, "",
+          `• At booking: ${aedTxt(up)} (${v.b}%${dld ? ` + ${f.pct}% ${f.short} fee` : ""})`, v.c ? `• Construction: ${nC} × ${aedTxt(perC)} ${freq}` : "", v.h ? `• On handover (${ymd(ho)}): ${aedTxt(v.price * v.h / 100)}` : "", p ? `• After handover: ${post} × ${aedTxt(perP)} monthly` : "",
+          "", `Total incl. fee: ${aedTxt(v.price + dld)}${curTxt(v.price + dld)}`].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n")
+      };
+    }
+  },
+
+  cost: {
+    t: "Total cost", i: "cost", d: "Fees and cash you need to buy",
+    fields: [
+      { id: "client", l: "Client name", t: "text", def: "", broker: 1 }, { id: "project", l: "Property", t: "text", def: "", broker: 1 },
+      { id: "price", l: "Price", t: "money", def: 2000000, full: 1, q: [1e6, 2e6, 3e6, 5e6] },
+      { id: "st", l: "Buying", t: "seg", def: "op", opts: [["op", "Off-plan"], ["ready", "Ready / resale"]], full: 1 },
+      FEE_F,
+      { id: "loan", l: "Mortgage loan (0 if cash)", t: "money", def: 0, full: 1, q: [0, 1e6, 1.5e6, 2e6] },
+      { id: "size", l: "Size", t: "num", def: 1000, u: "sq ft" }, { id: "scr", l: "Service charge", t: "num", def: 15, u: "AED/ft" }
+    ],
+    run(v) {
+      const f = fee(v.fee), price = v.price, loan = Math.min(price, v.loan), ready = v.st === "ready";
+      const mreg = f.dubai ? loan * 0.0025 + 290 : f.abu ? Math.min(loan * 0.001, 1e6) : loan * 0.0025;
+      const rows = [[f.label, price * f.rate]];
+      if (f.dubai) rows.push(["DLD admin and title deed", 580]);
+      if (f.dubai && ready) rows.push(["Registration trustee", price >= 500000 ? 4200 : 2100]);
+      if (loan > 0) rows.push([`Mortgage registration${f.abu ? " (0.1%)" : " (0.25% + AED 290)"}`, mreg], ["Bank valuation (approx.)", 3150], ["Bank arrangement fee (up to 1% + VAT)", loan * 0.0105]);
+      const fees = rows.reduce((a, r) => a + r[1], 0), cash = price - loan + fees, sc = v.size * v.scr;
+      return {
+        hero: { k: "Total cash to complete", v: full(cash), s: `${short(price - loan)} ${loan ? "down payment" : "price"} + ${short(fees)} fees (${(fees / Math.max(1, price) * 100).toFixed(1)}%)` },
+        kpis: [["Fees", full(fees), (fees / Math.max(1, price) * 100).toFixed(1) + "% of price"], ["Service charge", full(sc), "a year, approx."]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Breakdown</h2></div>` + tbl(rows.map(([l, x]) => [esc(l), full(x)]), ["Fees total", full(fees)]) + `<p class="note">Estimates. Bank fees vary by lender; off-plan buyers may also pay developer admin or Oqood charges.</p>`,
+        text: [`Hi${v.client ? " " + v.client.split(" ")[0] : ""}, here's the cost breakdown${v.project ? " for " + v.project : ""}:`, "", `Price: ${aedTxt(price)}`, loan ? `Mortgage: ${aedTxt(loan)} (down payment ${aedTxt(price - loan)})` : "Cash purchase", "",
+          ...rows.map(([l, x]) => `• ${l}: ${aedTxt(x)}`), "", `Fees total: ${aedTxt(fees)}`, `Total cash to complete: ${aedTxt(cash)}${curTxt(cash)}`, "", "Estimates; final figures confirmed at transfer."].join("\n")
+      };
+    }
+  },
+
+  mortgage: {
+    t: "Mortgage", i: "mort", d: "Monthly payment and cash to complete",
+    fields: [
+      { id: "price", l: "Property price", t: "money", def: 2000000, full: 1, q: [1e6, 2e6, 3e6, 5e6] },
+      { id: "st", l: "Property", t: "seg", def: "ready", opts: [["ready", "Ready"], ["off", "Off-plan"]] },
+      { id: "res", l: "Residency", t: "seg", def: "res", opts: [["res", "Resident"], ["non", "Non-resident"]] },
+      { id: "buyer", l: "Buyer", t: "seg", def: "expat", opts: [["expat", "Expat"], ["national", "UAE national"]] },
+      { id: "home", l: "Home", t: "seg", def: "first", opts: [["first", "First"], ["second", "Second+"]] },
+      { id: "down", l: "Down payment", t: "pct", def: 20 }, { id: "rate", l: "Interest rate", t: "pct", def: 4.5, step: .05 },
+      { id: "years", l: "Term", t: "num", def: 25, u: "years" }, { id: "income", l: "Monthly income", t: "money", def: 0 },
+      FEE_F
+    ],
+    run(v) {
+      const ltv = v.st === "off" || v.res === "non" ? 50 : v.home !== "first" ? (v.buyer === "national" ? 65 : 60) : v.price <= 5e6 ? (v.buyer === "national" ? 85 : 80) : (v.buyer === "national" ? 75 : 70);
+      const minDown = 100 - ltv, down = Math.max(v.down, minDown), years = Math.min(25, Math.max(1, v.years || 25)), f = fee(v.fee);
+      const loan = v.price * (1 - down / 100), pay = emi(loan, v.rate, years), interest = pay * years * 12 - loan;
+      const rows = [["Down payment (" + down + "%)", v.price * down / 100]];
+      if (f.rate) rows.push([f.label, v.price * f.rate]);
+      if (f.dubai) rows.push(["DLD admin and title deed", 580], ["Registration trustee fee", v.price >= 500000 ? 4200 : 2100]);
+      rows.push(f.abu ? ["Mortgage registration (0.1%)", Math.min(loan * 0.001, 1e6)] : ["Mortgage registration (0.25%" + (f.dubai ? " + AED 290)" : ")"), loan * 0.0025 + (f.dubai ? 290 : 0)]);
+      rows.push(["Bank valuation (approx.)", 3150], ["Bank arrangement fee (up to 1% + VAT)", loan * 0.0105]);
+      const cash = rows.reduce((a, r) => a + r[1], 0), dbr = v.income ? pay / v.income * 100 : null;
+      return {
+        warn: v.down < minDown ? `The minimum down payment here is ${minDown}%, so I've used that.` : "",
+        hero: { k: "Monthly payment", v: full(pay), s: `${years} years at ${v.rate}% · loan ${short(loan)} (${100 - down}%, max ${ltv}%)` },
+        kpis: [["Cash upfront", short(cash), "down payment + fees"], ["Total interest", short(interest), "over the full term"], ["Max loan", ltv + "%", "of the price"], ["Affordability", dbr == null ? "—" : pct(dbr, 0), dbr == null ? "add income to check" : dbr <= 50 ? "within the 50% limit" : "over the 50% limit"]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Cash to complete</h2></div>` + tbl(rows.map(([l, x]) => [esc(l), full(x)]), ["Total", full(cash)]),
+        text: [`Mortgage estimate`, "", `Price: ${aedTxt(v.price)} · ${v.st === "off" ? "Off-plan" : "Ready"}`, `Down payment: ${down}% · ${years} years at ${v.rate}%`, `Monthly payment: ${aedTxt(pay)}${curTxt(pay)}`, `Cash upfront incl. fees: ${aedTxt(cash)}`].join("\n")
+      };
+    }
+  },
+
+  yield: {
+    t: "Rental yield", i: "yield", d: "Gross and net, against the Dubai average",
+    fields: [
+      { id: "price", l: "Price", t: "money", def: 1500000, full: 1, q: [8e5, 1.5e6, 2.5e6, 4e6] },
+      { id: "rent", l: "Annual rent", t: "money", def: 110000, full: 1, q: [6e4, 1.1e5, 1.6e5, 2.5e5] },
+      { id: "size", l: "Size", t: "num", def: 900, u: "sq ft" }, { id: "sc", l: "Service charge", t: "num", def: 18, u: "AED/ft" },
+      { id: "mgmt", l: "Management", t: "pct", def: 5 }, { id: "maint", l: "Maintenance", t: "pct", def: 5 },
+      { id: "vac", l: "Empty weeks a year", t: "num", def: 2, u: "wks" }, FEE_F,
+      { id: "costs", l: "Count buying costs", t: "tog", def: 1 }
+    ],
+    run(v) {
+      const f = fee(v.fee), buy = v.costs ? v.price * f.rate + (f.dubai ? (v.price >= 500000 ? 4200 : 2100) + 580 : 0) : 0;
+      const eff = v.rent * (1 - Math.min(52, v.vac) / 52), costs = v.size * v.sc + v.rent * (v.mgmt + v.maint) / 100, net = eff - costs;
+      const gross = v.price ? v.rent / v.price * 100 : 0, netY = v.price ? net / (v.price + buy) * 100 : 0, pay = net > 0 ? (v.price + buy) / net : Infinity;
+      return {
+        hero: { k: "Net yield", v: pct(netY), s: `Gross ${pct(gross)} · after costs${buy ? ", on price plus buying costs" : ""}` },
+        kpis: [["Net income", short(net), short(net / 12) + " a month"], ["Running costs", short(costs), "a year"], ["Gross yield", pct(gross), "rent ÷ price"], ["Pays for itself", isFinite(pay) ? pay.toFixed(1) + " yrs" : "—", "from net rent"]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Against the market</h2></div><div class="card" style="padding:10px 14px">${bars([["Your gross", gross, "var(--red)", pct(gross, 1)], ["Your net", netY, "var(--bone)", pct(netY, 1)], ["Dubai apartments", 7, "var(--mute)", "7.0%"], ["Dubai villas", 5, "var(--mute)", "5.0%"]])}</div>`,
+        text: [`Rental yield`, "", `Price: ${aedTxt(v.price)}`, `Annual rent: ${aedTxt(v.rent)}`, `Gross yield: ${pct(gross)} · Net yield: ${pct(netY)}`, `Net income: ${aedTxt(net)} a year`].join("\n")
+      };
+    }
+  },
+
+  resale: {
+    t: "Sell before handover", i: "sell", d: "Profit on an off-plan resale",
+    fields: [
+      { id: "price", l: "You bought at", t: "money", def: 1800000, full: 1 },
+      { id: "sell", l: "Selling for", t: "money", def: 2100000, full: 1 },
+      { id: "paid", l: "Paid so far", t: "pct", def: 40 }, { id: "min", l: "Developer minimum", t: "pct", def: 40 },
+      { id: "noc", l: "NOC fee", t: "money", def: 5000 }, FEE_F
+    ],
+    run(v) {
+      const f = fee(v.fee), paidPct = Math.min(100, v.paid), paid = v.price * paidPct / 100, dld = v.price * f.rate + (f.dubai ? 580 : 0);
+      const costs = v.noc, gain = v.sell - v.price - costs - dld, cash = paid + dld, roi = cash ? gain / cash * 100 : 0;
+      const can = paidPct >= v.min, buyerPays = paid + (v.sell - v.price);
+      return {
+        hero: { k: can ? "You can resell now" : `Pay ${v.min - paidPct}% more to resell`, v: (gain >= 0 ? "+" : "−") + short(Math.abs(gain)).replace("-", ""), s: `${pct(roi, 1)} on the ${short(cash)} you've put in`, cls: gain > 0 && can ? "ok" : can ? "" : "ck" },
+        kpis: [["Cash you put in", short(cash), "paid + transfer fee"], ["Buyer pays you", short(buyerPays), "your payments + premium"], ["Premium", short(v.sell - v.price), "over your price"], ["Selling costs", short(costs), "developer NOC"]],
+        body: `<p class="note">The buyer pays you what you've paid the developer plus the premium, then takes over the remaining instalments.${can ? "" : ` You need ${short(v.price * (v.min - paidPct) / 100)} more paid before the developer issues a NOC.`}</p>`,
+        text: [`Off-plan resale`, "", `Bought at ${aedTxt(v.price)}, ${paidPct}% paid`, `Selling at ${aedTxt(v.sell)}`, `${gain >= 0 ? "Profit" : "Loss"}: ${aedTxt(Math.abs(gain))} (${pct(roi, 1)} on cash in)`].join("\n")
+      };
+    }
+  },
+
+  roe: {
+    t: "Return on equity", i: "roe", d: "What your cash really earns, with a mortgage",
+    fields: [
+      { id: "price", l: "Price", t: "money", def: 1500000, full: 1, q: [1e6, 1.5e6, 2.5e6, 4e6] },
+      { id: "buyer", l: "Financing", t: "sel", def: "r1", full: 1, opts: [["r1", "Resident, first home"], ["r2", "Resident, second property"], ["nr", "Non-resident"], ["cash", "Cash, no mortgage"]] },
+      { id: "down", l: "Down payment", t: "pct", def: 20, show: v => v.buyer !== "cash" }, { id: "rate", l: "Rate", t: "pct", def: 4.25, step: .05, show: v => v.buyer !== "cash" },
+      { id: "rent", l: "Annual rent", t: "money", def: 110000 }, { id: "rg", l: "Rent growth", t: "pct", def: 3 },
+      { id: "size", l: "Size", t: "num", def: 900, u: "sq ft" }, { id: "sc", l: "Service charge", t: "num", def: 18, u: "AED/ft" },
+      { id: "mm", l: "Mgmt + maintenance", t: "pct", def: 10 }, { id: "vac", l: "Empty weeks", t: "num", def: 2, u: "wks" },
+      { id: "app", l: "Price growth", t: "pct", def: 4 }, { id: "years", l: "Hold for", t: "num", def: 5, u: "years" },
+      FEE_F
+    ],
+    run(v) {
+      const cash = v.buyer === "cash", ltv = v.buyer === "nr" ? 50 : v.buyer === "r2" ? 60 : v.price <= 5e6 ? 80 : 70, minDown = 100 - ltv;
+      const down = cash ? 100 : Math.min(100, Math.max(v.down, minDown));
+      const o = { price: v.price, tf: fee(v.fee), down, rate: v.rate, term: 25, agency: !!v.agency, rent: v.rent, rg: v.rg, sc: v.size * v.sc, mm: v.mm, vac: Math.min(52, v.vac), app: v.app, years: Math.min(25, Math.max(1, Math.round(v.years) || 5)), sell: 2 };
+      const L = roeModel(o, !cash && down < 100), C = roeModel(o, false), r = L, pc = x => isFinite(x) ? (x * 100).toFixed(1) + "%" : "—";
+      return {
+        warn: !cash && v.down < minDown ? `The minimum down payment for you is ${minDown}%, so I've used that.` : "",
+        hero: { k: "Return on equity, year 1", v: pc(r.roe1), s: `cash flow + loan paid down + price growth, on the ${short(r.eq0)} you put in` },
+        kpis: [["Cash in", short(r.eq0), cash ? "price + fees" : down + "% down + fees"], ["Cash-on-cash", pc(r.coc), short(r.y1.cf / 12) + " a month"], ["Annualised", pc(r.irr), `IRR over ${o.years} yrs`], ["Total profit", short(r.profit), isFinite(r.multiple) ? r.multiple.toFixed(2) + "× your money" : ""]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Where year 1 comes from</h2></div><div class="card" style="padding:10px 14px">${bars([["Rent after costs", r.y1.cf, "var(--red)", short(r.y1.cf)], ["Loan paid down", r.y1.principal, "var(--bone)", short(r.y1.principal)], ["Price growth", r.y1.appY, "var(--mute)", short(r.y1.appY)]])}</div>
+          ${cash ? "" : `<div class="sec-t" style="margin-top:20px"><h2>Mortgage vs all cash</h2></div><div class="card" style="padding:10px 14px">${bars([["With mortgage", L.irr, "var(--red)", pc(L.irr)], ["All cash", C.irr, "var(--bone)", pc(C.irr)]])}</div><p class="note">${L.irr > C.irr ? `Borrowing lifts the annualised return by ${((L.irr - C.irr) * 100).toFixed(1)} points. It also magnifies losses if prices fall.` : "Here the loan costs more than the property earns and grows, so cash does better."}</p>`}`,
+        text: [`Return on equity`, "", `Price: ${aedTxt(v.price)} · ${cash ? "cash" : down + "% down"}`, `Rent: ${aedTxt(v.rent)} a year`, `Year 1 ROE: ${pc(r.roe1)} · Annualised over ${o.years} yrs: ${pc(r.irr)}`].join("\n")
+      };
+    }
+  },
+
+  buyrent: {
+    t: "Buy or rent", i: "rent", d: "Which leaves you richer, year by year",
+    fields: [
+      { id: "price", l: "Home price", t: "money", def: 1800000, full: 1 }, { id: "rent", l: "Rent instead (a year)", t: "money", def: 120000, full: 1 },
+      { id: "years", l: "Staying", t: "num", def: 7, u: "years" }, { id: "down", l: "Down payment", t: "pct", def: 20 },
+      { id: "rate", l: "Mortgage rate", t: "pct", def: 4.5, step: .05 }, { id: "app", l: "Price growth", t: "pct", def: 4 },
+      { id: "rinc", l: "Rent increases", t: "pct", def: 3 }, { id: "inv", l: "Savings earn", t: "pct", def: 5 },
+      { id: "sc", l: "Service charge a year", t: "money", def: 22000, full: 1 }, FEE_F
+    ],
+    run(v) {
+      const years = Math.min(25, Math.max(1, v.years || 7)), down = Math.max(20, v.down), app = v.app / 100, rinc = v.rinc / 100, inv = v.inv / 100, f = fee(v.fee);
+      const loan = v.price * (1 - down / 100), pay = emi(loan, v.rate, 25);
+      const upfront = v.price * down / 100 + v.price * f.rate + (f.dubai ? 580 + 4200 : 0) + loan * 0.0025 + 290 + 3150 + loan * 0.0105;
+      let bal = loan, buyPot = 0, rentPot = upfront, rent = v.rent / 12, cross = null; const r = v.rate / 1200, mi = Math.pow(1 + inv, 1 / 12) - 1, series = [];
+      for (let m = 1; m <= years * 12; m++) {
+        if (m > 1 && (m - 1) % 12 === 0) rent *= 1 + rinc;
+        const i = bal * r; bal = Math.max(0, bal - (pay - i));
+        const out = pay + v.sc / 12 + v.price * 0.01 / 12; buyPot *= 1 + mi; rentPot *= 1 + mi;
+        if (out > rent) rentPot += out - rent; else buyPot += rent - out;
+        if (m % 12 === 0) { const val = v.price * Math.pow(1 + app, m / 12), b = val - bal - val * 0.02 + buyPot; series.push([m / 12, b, rentPot]); if (cross == null && b >= rentPot) cross = m / 12; }
+      }
+      const [, bw, rw] = series[series.length - 1], win = bw >= rw ? "Buying" : "Renting";
+      const mx = Math.max(...series.map(s => Math.max(s[1], s[2])), 1);
+      return {
+        hero: { k: `After ${years} years`, v: win + " wins", s: `by about ${short(Math.abs(bw - rw))}`, cls: win === "Buying" ? "ok" : "" },
+        kpis: [["If you buy", short(bw), "equity + savings"], ["If you rent", short(rw), "invested savings"], ["Upfront to buy", short(upfront), down + "% down + fees"], ["Buying wins from", cross ? "Year " + cross : "—", cross ? "equity overtakes renting" : "not in this period"]],
+        body: `<div class="sec-t" style="margin-top:20px"><h2>Wealth, year by year</h2></div><div class="card" style="padding:10px 14px">${series.map(([y, b, rn]) => `<div class="bn" style="grid-template-columns:44px 1fr 60px"><span>Yr ${y}</span><span style="display:grid;gap:3px"><span class="tr"><i style="width:${Math.max(1, b / mx * 100)}%;background:var(--red)"></i></span><span class="tr"><i style="width:${Math.max(1, rn / mx * 100)}%;background:var(--mute)"></i></span></span><b style="font-size:11.5px">${short(b - rn)}</b></div>`).join("")}<p class="note" style="margin:6px 0 4px">Red: buying · Grey: renting · Right: buying minus renting</p></div>`,
+        text: [`Buy vs rent`, "", `Home: ${aedTxt(v.price)} · Rent: ${aedTxt(v.rent)} a year`, `Over ${years} years ${win.toLowerCase()} comes out ahead by about ${aedTxt(Math.abs(bw - rw))}.`].join("\n")
+      };
+    }
+  },
+
+  golden: {
+    t: "Golden Visa check", i: "visa", d: "Does this property qualify?",
+    fields: [
+      { id: "em", l: "Emirate", t: "sel", def: "dxb", full: 1, opts: [["dxb", "Dubai"], ["adh", "Abu Dhabi"], ["rak", "Ras Al Khaimah"], ["shj", "Sharjah"], ["oth", "Ajman, UAQ or Fujairah"]] },
+      { id: "st", l: "Property", t: "seg", def: "ready", full: 1, opts: [["ready", "Ready"], ["op", "Off-plan"]] },
+      { id: "pr", l: "Property value", t: "money", def: 2500000, full: 1, q: [1.5e6, 2e6, 2.5e6, 4e6] },
+      { id: "paid", l: "Paid to developer", t: "money", def: 500000, full: 1, show: v => v.st === "op" },
+      { id: "loan", l: "Mortgage outstanding", t: "money", def: 0, full: 1, show: v => v.st !== "op" }
+    ],
+    run(v) {
+      const op = v.st === "op", pr = v.pr, paid = Math.min(pr, v.paid), loan = Math.min(pr, v.loan), T = 2e6, fm = n => short(Math.max(0, n));
+      let cls, t, why;
+      if (v.em === "adh") {
+        const c = op ? paid : pr - loan;
+        if (pr < T) { cls = ""; t = "Not on its own"; why = "The property is under AED 2M. You can combine it with other Abu Dhabi property to reach the threshold."; }
+        else if (c >= T) { cls = "ok"; t = "Likely qualifies"; why = op ? `You've paid ${fm(paid)} to the developer, which clears AED 2M. You'll need the registered sale agreement and the developer's payment statement.` : `Your own equity is ${fm(c)}${loan ? ", after the loan" : ""}, which clears AED 2M.`; }
+        else { cls = ""; t = "Not yet"; why = op ? `Abu Dhabi counts what you've paid. You're at ${fm(paid)}, so ${fm(T - paid)} more to the developer gets you there.` : `Abu Dhabi counts your own equity, which is ${fm(c)}. Paying the loan down by ${fm(T - c)} would get you there.`; }
+      } else if (pr < T) { cls = ""; t = "Not on its own"; why = `The value is ${fm(pr)}, under AED 2M. Several properties in your name can be combined to reach the threshold.`; }
+      else if (v.em === "dxb") { cls = "ok"; t = "Likely qualifies"; why = op ? `Dubai counts the full value, ${fm(pr)}, once the unit is registered with Oqood, even though you've only paid ${fm(paid)}.` : loan ? `Dubai counts the full value, ${fm(pr)}, even with ${fm(loan)} still owed. You'll need a bank NOC.` : `Dubai counts the DLD-certified value, ${fm(pr)}, which clears AED 2M.`; }
+      else if (v.em === "rak") { cls = op || !loan ? "ok" : "ck"; t = cls === "ok" ? "Likely qualifies" : "Check with your bank"; why = op ? "RAK accepts off-plan at full value with a developer-stamped SPA or a land department valuation letter." : loan ? "The value clears AED 2M. With a mortgage, confirm how much equity RAK will count before you apply." : `The value of ${fm(pr)} clears AED 2M. You'll need a valuation letter from the land department.`; }
+      else { cls = op || loan ? "ck" : "ok"; t = cls === "ok" ? "Likely qualifies" : "Check first"; why = cls === "ok" ? `A valuation of ${fm(pr)} from the land department clears AED 2M.` : `The value clears AED 2M, but ${op ? "off-plan" : "mortgaged"} property here is assessed case by case. Confirm with the land department first.`; }
+      return {
+        hero: { k: "10-year Golden Visa", v: t, s: "Threshold: AED 2M in property", cls: cls || "" },
+        body: `<div class="callout" style="margin-top:16px">${why}</div><button class="btn" data-site="golden" style="width:100%;margin-top:12px">${ico("book")}Read the full Golden Visa guide</button>`,
+        text: [`Golden Visa check`, "", `Property: ${aedTxt(pr)} · ${op ? "off-plan" : "ready"}`, `Result: ${t}`].join("\n")
+      };
+    }
+  },
+
+  convert: {
+    t: "Converter", i: "conv", d: "Sq ft, price per foot, currencies",
+    fields: [
+      { id: "ft", l: "Size", t: "num", def: 1000, u: "sq ft" }, { id: "price", l: "Price", t: "money", def: 2000000 },
+      { id: "rent", l: "Annual rent", t: "money", def: 140000, full: 1 }, { id: "aed", l: "Convert AED", t: "money", def: 1000000, full: 1, q: [5e5, 1e6, 2e6, 5e6] }
+    ],
+    run(v) {
+      const m2 = v.ft / 10.7639, ppf = v.ft ? v.price / v.ft : 0;
+      return {
+        hero: { k: "Price per sq ft", v: "AED " + Math.round(ppf).toLocaleString("en-US"), s: `${Math.round(ppf * 10.7639).toLocaleString("en-US")} per sq m · ${v.price ? pct(v.rent / v.price * 100) + " gross yield" : ""}` },
+        kpis: [["Size", m2.toFixed(1) + " sq m", v.ft.toLocaleString("en-US") + " sq ft"], ["USD", "$" + Math.round(v.aed * FX.USD).toLocaleString("en-US"), "pegged"], ["GBP", "£" + Math.round(v.aed * FX.GBP).toLocaleString("en-US"), "mid-market"], ["INR", inr(v.aed * FX.INR), "mid-market"]],
+        body: `<p class="note">Currency rates of ${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short", year: "numeric" }))}, refreshed with the website.</p>`,
+        text: [`${v.ft.toLocaleString("en-US")} sq ft = ${m2.toFixed(1)} sq m`, `AED ${Math.round(ppf).toLocaleString("en-US")} per sq ft`, `AED ${v.aed.toLocaleString("en-US")} = $${Math.round(v.aed * FX.USD).toLocaleString("en-US")} · £${Math.round(v.aed * FX.GBP).toLocaleString("en-US")} · ${inr(v.aed * FX.INR)}`].join("\n")
+      };
+    }
+  }
+
+};
+
+function roeModel(o, useLoan) {
+  const { price, tf, down, rate, term, agency, rent, rg, sc, mm, vac, app, years, sell } = o;
+  const loan = useLoan ? price * (1 - down / 100) : 0, pay = loan ? emi(loan, rate, term) : 0;
+  const fees = price * tf.rate + (tf.dubai ? 580 + (price >= 500000 ? 4200 : 2100) : 0) + (loan ? (tf.abu ? Math.min(loan * 0.001, 1e6) : loan * 0.0025 + (tf.dubai ? 290 : 0)) + 3150 + loan * 0.0105 : 0);
+  const eq0 = price - loan + fees; let bal = loan, cum = 0; const rows = [], cfs = [-eq0], r = rate / 1200;
+  for (let y = 1; y <= years; y++) {
+    let interest = 0, principal = 0;
+    for (let m = 0; m < 12; m++) { if (bal <= 0 || (y - 1) * 12 + m >= term * 12) break; const i = bal * r, p = Math.min(bal, pay - i); interest += i; principal += p; bal -= p; }
+    const g = rent * Math.pow(1 + rg / 100, y - 1), income = g * (1 - vac / 52), costs = sc + g * mm / 100, cf = income - costs - interest - principal; cum += cf;
+    const value = price * Math.pow(1 + app / 100, y);
+    rows.push({ y, cf, cum, principal, value, bal, appY: value - price * Math.pow(1 + app / 100, y - 1) }); cfs.push(cf);
+  }
+  const last = rows[rows.length - 1], proceeds = last.value * (1 - sell / 100) - last.bal; cfs[cfs.length - 1] += proceeds;
+  const irr = (() => { let lo = -0.99, hi = 1.5; const npv = x => cfs.reduce((a, c, i) => a + c / Math.pow(1 + x, i), 0); if (npv(lo) * npv(hi) > 0) return NaN; for (let k = 0; k < 120; k++) { const m = (lo + hi) / 2; (npv(lo) * npv(m) <= 0) ? hi = m : lo = m; } return (lo + hi) / 2; })();
+  const y1 = rows[0];
+  return { loan, fees, eq0, rows, profit: proceeds + cum - eq0, multiple: (proceeds + cum) / eq0, irr, coc: y1.cf / eq0, roe1: (y1.cf + y1.principal + y1.appY) / eq0, y1 };
+}
+
+/* ---------- calculator screen ---------- */
+function calcScreen(id, preset) {
+  const C = CALCS[id], key = "aw-c-" + id;
+  const v = Object.assign({}, Object.fromEntries(C.fields.filter(f => f.t !== "quick").map(f => [f.id, f.def])), S.get(key, {}), preset || {});
+  if (preset && preset.proj) { const f = C.fields.find(x => x.id === "proj"); f && f.apply && f.apply(v); }
+  let last = null;
+  const fieldHtml = f => {
+    if (f.broker && !isBroker()) return "";
+    const lab = `<label for="cf-${f.id}">${esc(f.l)}</label>`, cls = `fd${f.full ? " full" : ""}`;
+    const val = v[f.id];
+    if (f.t === "sel") return `<div class="${cls}" data-f="${f.id}">${lab}<div class="inp sel"><select id="cf-${f.id}">${f.opts.map(([k, l]) => `<option value="${esc(k)}"${String(val) === String(k) ? " selected" : ""}>${esc(l)}</option>`).join("")}</select></div></div>`;
+    if (f.t === "seg") return `<div class="${cls}" data-f="${f.id}"><label>${esc(f.l)}</label><div class="segf" id="cf-${f.id}">${f.opts.map(([k, l]) => `<button type="button" data-v="${esc(k)}" aria-pressed="${String(val) === String(k)}">${esc(l)}</button>`).join("")}</div></div>`;
+    if (f.t === "tog") return `<div class="fd full" data-f="${f.id}"><label class="tgl" for="cf-${f.id}"><span>${esc(f.l)}</span><span class="sw"><input type="checkbox" id="cf-${f.id}"${val ? " checked" : ""}><i></i></span></label></div>`;
+    if (f.t === "quick") return `<div class="fd full" data-f="${f.id}"><label>${esc(f.l)}</label><div class="qc">${f.q.map(([k, l]) => `<button type="button" data-q="${esc(k)}">${esc(l)}</button>`).join("")}</div></div>`;
+    const type = f.t === "text" ? "text" : f.t === "month" ? "month" : "number";
+    const unit = f.t === "money" ? "AED" : f.t === "pct" ? "%" : f.u || "";
+    return `<div class="${cls}" data-f="${f.id}">${lab}<div class="inp"><input id="cf-${f.id}" type="${type}" ${type === "number" ? `inputmode="decimal" step="${f.step || (f.t === "money" ? 1000 : 1)}"` : ""} value="${esc(val)}">${unit ? `<span class="u">${unit}</span>` : ""}</div>${f.q ? `<div class="qc">${f.q.map(x => `<button type="button" data-qv="${x}">${f.t === "money" ? compact(x) : x}</button>`).join("")}</div>` : ""}</div>`;
+  };
+  return {
+    t: C.t,
+    html: () => `<div class="res" id="cres"></div><div id="ckpi"></div><p class="err" id="cwarn" hidden></p>
+      <div class="fields" id="cfields">${C.fields.map(fieldHtml).join("")}</div>
+      <div id="cbody"></div>
+      <div class="calc-acts">${isBroker() ? `<button class="btn btn-red" id="ca-send">${ico("wa")}Send to client</button><button class="btn" id="ca-copy">${ico("copy")}Copy</button>` : `<button class="btn btn-red" id="ca-ask">${ico("wa")}Ask Ahmed</button><button class="btn" id="ca-share">${ico("share")}Share</button>`}</div>
+      <p class="note">Estimates for guidance, not financial advice. Amounts follow the currency at the top of the app.</p>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      const read = () => C.fields.forEach(f => {
+        const el = q("#cf-" + f.id); if (!el || f.t === "quick") return;
+        if (f.t === "seg") return; if (f.t === "tog") v[f.id] = el.checked ? 1 : 0;
+        else if (f.t === "sel" || f.t === "text" || f.t === "month") v[f.id] = el.value; else v[f.id] = num(el.value);
+      });
+      const write = () => C.fields.forEach(f => {
+        const el = q("#cf-" + f.id); if (!el || f.t === "quick") return;
+        if (f.t === "seg") el.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v) === String(v[f.id])));
+        else if (f.t === "tog") el.checked = !!v[f.id]; else el.value = v[f.id];
+      });
+      const run = () => {
+        C.fields.forEach(f => { if (f.show) { const w = nb.querySelector(`[data-f="${f.id}"]`); if (w) w.hidden = !f.show(v); } });
+        const out = C.run(v); last = out; S.set(key, Object.fromEntries(Object.entries(v).filter(([k]) => k !== "client" && k !== "project")));
+        q("#cwarn").hidden = !(out.err || out.warn); q("#cwarn").textContent = out.err || out.warn || "";
+        if (out.err) { q("#cbody").innerHTML = ""; return; }
+        q("#cres").innerHTML = `<div class="res-card ${out.hero.cls || ""}"><span>${esc(out.hero.k)}</span><b>${out.hero.v}</b><small>${out.hero.s}</small></div>`;
+        q("#ckpi").innerHTML = out.kpis ? `<div class="kpis" style="margin:0 0 14px">${out.kpis.map(([k, x, s]) => `<div class="kpi"><span>${esc(k)}</span><b>${x}</b>${s ? `<small>${s}</small>` : ""}</div>`).join("")}</div>` : "";
+        q("#cbody").innerHTML = out.body || ""; bindScreen(q("#cbody"));
+      };
+      nb.addEventListener("input", e => { if (e.target.closest("#cfields")) { read(); run(); } });
+      nb.addEventListener("change", e => { const f = C.fields.find(x => "cf-" + x.id === e.target.id); read(); if (f && f.apply) { f.apply(v); write(); } run(); });
+      nb.addEventListener("click", e => {
+        const sb = e.target.closest(".segf button"); if (sb) { const id = sb.parentElement.id.slice(3), f = C.fields.find(x => x.id === id); v[id] = sb.dataset.v; f.apply && f.apply(v); write(); run(); vib(); return; }
+        const qb = e.target.closest("[data-q]"); if (qb) { const f = C.fields.find(x => x.id === qb.closest("[data-f]").dataset.f); f.apply(v, qb.dataset.q); write(); run(); vib(); return; }
+        const qv = e.target.closest("[data-qv]"); if (qv) { const id = qv.closest("[data-f]").dataset.f; v[id] = +qv.dataset.qv; write(); run(); vib(); }
+      });
+      const msg = () => last && !last.err ? last.text : "";
+      q("#ca-send")?.addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(msg() + "\n\n" + SIGN)));
+      q("#ca-copy")?.addEventListener("click", () => copyText(msg() + "\n\n" + SIGN));
+      q("#ca-ask")?.addEventListener("click", () => openExt(waLink(`Hi Ahmed, I used the ${C.t.toLowerCase()} calculator in your app.\n\n${msg()}\n\nCan you help me with this?`)));
+      q("#ca-share")?.addEventListener("click", () => shareText(msg() + "\n\nCalculated with Ahmed Wazir's app · WhatsApp +971 58 603 2580 · www.awazrealty.com", C.t));
+      this.refresh = run; run();
+    },
+    share() { shareText((last && last.text || "") + "\n\n" + SIGN, C.t); }
+  };
+}
+
+/* ================= NAVIGATION ================= */
+let TAB = "home";
+const STACK = [];
+function pushView(o) {
+  const el = document.createElement("section");
+  el.className = "view"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", o.t || "");
+  el.innerHTML = `<div class="vbar"><button class="tb-btn" data-back aria-label="Back">${ico("back")}</button><h2>${esc(o.t || "")}</h2>${o.share ? `<button class="tb-btn" data-vshare aria-label="Share">${ico("share")}</button>` : ""}</div><div class="vbody"></div>`;
+  document.body.appendChild(el);
+  const body = el.querySelector(".vbody");
+  if (o.site) body.innerHTML = `<iframe class="site" title="${esc(o.t || "")}"></iframe><div class="loading"><div class="bars"><i></i><i></i><i></i><i></i></div></div>`;
+  else {
+    body.innerHTML = `<div class="vin${o.flush ? " flush" : ""}${o.foot ? " hasfoot" : ""}">${o.html()}</div>`;
+    if (o.foot) { const f = document.createElement("div"); f.className = "vfoot"; f.innerHTML = o.foot(); el.appendChild(f); }
+  }
+  el.querySelector("[data-back]").addEventListener("click", () => history.back());
+  el.querySelector("[data-vshare]")?.addEventListener("click", () => o.share());
+  STACK.push({ el, o });
+  history.pushState({ v: STACK.length }, "");
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("open")));
+  if (o.site) loadSite(el, o.site); else { o.init && o.init(body.querySelector(".vin"), el); bindScreen(body); }
+  el.querySelector(".vfoot") && bindScreen(el.querySelector(".vfoot"));
+  return el;
+}
+function popView() {
+  const top = STACK.pop(); if (!top) return;
+  top.o.close && top.o.close();
+  top.el.classList.remove("open"); setTimeout(() => top.el.remove(), 300);
+  if (!STACK.length) { paintMode(); if (TAB === "broker" || TAB === "home") render(); }
+}
+window.addEventListener("popstate", () => { if (STACK.length) popView(); });
+window.appBack = () => { if (closeSheet()) return true; if (STACK.length) { history.back(); return true; } if (TAB !== "home") { go("home"); return true; } return false; };
+function go(tab) { TAB = tab; if (location.hash !== "#" + tab) history.replaceState(history.state, "", "#" + tab); render(); window.scrollTo(0, 0); }
+document.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => { vib(); if (TAB === b.dataset.tab) window.scrollTo({ top: 0, behavior: "smooth" }); else go(b.dataset.tab); }));
+window.addEventListener("scroll", () => $("topbar").classList.toggle("lined", scrollY > 4), { passive: true });
+
+/* ---------- bottom sheet ---------- */
+function openSheet(html, init) {
+  const s = $("sheet"); s.querySelector(".panel").innerHTML = `<div class="grab"></div>` + html; s.hidden = false;
+  requestAnimationFrame(() => s.classList.add("open")); init && init(s.querySelector(".panel"));
+}
+function closeSheet() { const s = $("sheet"); if (!s.classList.contains("open")) return false; s.classList.remove("open"); setTimeout(() => s.hidden = true, 220); return true; }
+$("sheet").addEventListener("click", e => { if (e.target.id === "sheet") closeSheet(); });
+
+/* ---------- website reader (guides) ---------- */
+const SITE_V = (D.synced || "").replace(/\D/g, "");
+function loadSite(el, o) {
+  const q = new URLSearchParams({ app: "1", v: SITE_V });
+  if (o.only) q.set("only", o.only); if (o.tab) q.set("tab", o.tab); if (o.proj) q.set("proj", o.proj);
+  const f = el.querySelector("iframe"), ld = el.querySelector(".loading");
+  f.addEventListener("load", () => { try { f.contentDocument.documentElement.setAttribute("data-theme", THEME.now()); } catch (e) {} setTimeout(() => ld.hidden = true, 150); });
+  setTimeout(() => ld.hidden = true, 6000);
+  f.src = "site.html?" + q + "#" + (o.h || "top");
+}
+window.addEventListener("message", e => {
+  const m = e.data; if (!m || !m.awaz) return;
+  if (m.type === "close") history.back(); else if (m.type === "open") openExt(m.url);
+});
+const openSite = o => pushView({ t: o.t, site: o });
+
+/* ---------- catalogues ---------- */
+const TOOLS = [
+  { id: "plan", g: "Buying" }, { id: "cost", g: "Buying" }, { id: "mortgage", g: "Buying" }, { id: "golden", g: "Buying" },
+  { id: "yield", g: "Investing" }, { id: "roe", g: "Investing" }, { id: "resale", g: "Investing" }, { id: "buyrent", g: "Investing" },
+  { id: "verify", g: "Before you buy", t: "Verify a project", d: "8 official DLD checks", i: "verified", site: { h: "verify", t: "Verify a project" } },
+  { id: "planner", g: "Before you buy", t: "Due diligence", d: "Checklist and developer track records", i: "planner", site: { h: "planner", t: "Due diligence" } },
+  { id: "stress", g: "Before you buy", t: "Stress test", d: "Rates up, currency down, empty months", i: "chart", site: { h: "stress", t: "Off-plan stress test" } },
+  { id: "afford", g: "Before you buy", t: "Afford from abroad", d: "Your realistic Dubai budget", i: "globe", site: { h: "afford", t: "Afford from abroad" } },
+  { id: "lrs", g: "More", t: "India LRS & TCS", d: "Remittance limits and tax", i: "india", site: { h: "abroad", t: "Buying from India" } },
+  { id: "convert", g: "More" },
+  { id: "glossary", g: "More", t: "Glossary", d: "Oqood, NOC, Ejari…", i: "glossary", site: { h: "toolkit", only: "toolkit", tab: 3, t: "Glossary" } },
+  { id: "faq", g: "More", t: "Buyer FAQ", d: "The questions everyone asks", i: "faq", site: { h: "toolkit", only: "toolkit", tab: 4, t: "Buyer FAQ" } }
+].map(t => Object.assign({}, CALCS[t.id] ? { t: CALCS[t.id].t, d: CALCS[t.id].d, i: CALCS[t.id].i } : {}, t));
+const GUIDES = [
+  { t: "Market reports", d: "Springfield monthly and quarterly Dubai reports", i: "news", h: "reports" },
+  { t: "Dubai vs the world", d: "How the UAE beats London, New York, Singapore", i: "pulse", h: "compare" },
+  { t: "Dubai prices by area", d: "Price per sq ft and where Dubai is buying", i: "chart", h: "prices" },
+  { t: "Dubai rents by area", d: "Studio to 4 bed, straight into the yield calculator", i: "rent", h: "rents" },
+  { t: "Service charges by area", d: "The running cost buyers forget", i: "cost", h: "charges" },
+  { t: "Why invest in UAE property", d: "Tax, yields, visa, the dollar peg", i: "star", h: "why" },
+  { t: "Golden Visa through property", d: "Dubai vs Abu Dhabi rules", i: "visa", h: "golden" },
+  { t: "Dubai real estate law", d: "Off-plan, escrow, handover, renting", i: "law", h: "laws" },
+  { t: "Abu Dhabi real estate law", d: "Ownership, fees, committees", i: "law", h: "adlaw" },
+  { t: "Sharjah real estate law", d: "Who can own, escrow, rent rules", i: "law", h: "shjlaw" },
+  { t: "UAE developers", d: "Track records, Emaar to Aldar", i: "dev", h: "developers" },
+  { t: "Sell or lease with Ahmed", d: "Owners: reach serious buyers", i: "owner", h: "sell" }
+];
+const ABROAD = [
+  { t: "From anywhere", h: "buyabroad", f: "🌍" }, { t: "From India", h: "abroad", f: "🇮🇳" }, { t: "From Pakistan", h: "from-pakistan", f: "🇵🇰" },
+  { t: "From Saudi Arabia", h: "from-saudi", f: "🇸🇦" }, { t: "From the UK", h: "from-uk", f: "🇬🇧" }, { t: "From the USA", h: "from-us", f: "🇺🇸" }
+];
+function openTool(id, preset) {
+  if (CALCS[id]) return pushView(Object.assign(calcScreen(id, preset), {}));
+  if (id === "mapv") return openMap();
+  if (id === "news") return openNews();
+  if (id === "market") return openMarket();
+  const t = TOOLS.find(x => x.id === id); if (t && t.site) return openSite(t.site);
+  if (BT[id]) return openBroker(id);
+}
+
+/* ---------- shared binding ---------- */
+function bindScreen(root) {
+  root.querySelectorAll("[data-tool]").forEach(b => b.onclick = () => { vib(); openTool(b.dataset.tool, b.dataset.proj ? { proj: b.dataset.proj } : null); });
+  root.querySelectorAll("[data-site]").forEach(b => b.onclick = () => { vib(); const g = GUIDES.find(x => x.h === b.dataset.site) || ABROAD.find(x => x.h === b.dataset.site); openSite({ h: b.dataset.site, t: b.dataset.title || (g && g.t) || "", only: b.dataset.only }); });
+  root.querySelectorAll("[data-go]").forEach(b => b.onclick = () => { if (STACK.length) { while (STACK.length) { STACK.pop().el.remove(); } } go(b.dataset.go); });
+  root.querySelectorAll("[data-p]").forEach(b => b.onclick = () => { vib(); openProject(b.dataset.p); });
+}
+
+/* ================= HOME ================= */
+function marketStats() {
+  const p = D.pulse || {}, out = [];
+  const add = (n, d) => d && out.push(`<div class="stat"><span>${esc(n)} · ${esc((d.period.label || "").replace("Week of ", "Wk "))}</span><b>${short(d.total)}</b><small>${esc(d.totalSub || "Total value")}</small>
+    <div class="bar3">${d.mix.map((m, i) => `<i style="flex:${m[d.mixBasis === "count" ? "count" : "aed"] || 0};background:${["var(--red)", "var(--bone)", "var(--mute)"][i]}"></i>`).join("")}</div></div>`);
+  add("Dubai", p.dubai); add("Abu Dhabi", p.abudhabi);
+  ((D.ticker || {}).items || []).forEach(it => { const s = it.stats[0]; out.push(`<div class="stat"><span>${esc(it.em)} · ${esc(it.period)}</span><b>${s.aed != null ? short(s.aed) : s.num != null ? Number(s.num).toLocaleString("en-US") : s.pct != null ? `<span class="${s.pct >= 0 ? "up" : "down"}">${s.pct >= 0 ? "▲" : "▼"}${Math.abs(s.pct)}%</span>` : esc(s.text || "")}</b><small>${esc(s.label)}</small></div>`); });
+  return out.join("");
+}
+function projCardSmall(p) {
+  return `<button class="pc" data-p="${p.key}"><div class="im"${p.img ? ` style="background-image:url('${esc(p.img)}')"` : ""}>${p.img ? "" : `<div class="noimg">${devLogo(p.d, 120, 34) || ico("build")}</div>`}<span class="st${p.pick ? " r" : ""}">${p.pick ? "Ahmed's pick" : esc(p.status || "")}</span></div>
+    <div class="bd"><b>${esc(p.n)}</b><small>${esc(p.d)} · ${esc(p.a || p.em)}</small><span class="pr">${p.from ? "From " + priceTxt(p) : "Price on request"}</span></div></button>`;
+}
+function newsList(n) {
+  const isHot = x => !!x.hot || /springfield/i.test(x.title + " " + (x.summary || ""));
+  const items = ((D.news || {}).items || []).map((x, i) => [x, i]).sort((a, b) => (isHot(b[0]) - isHot(a[0])) || a[1] - b[1]).map(x => x[0]).slice(0, n || 99);
+  return items.length ? `<div class="list">${items.map(x => `<a class="li${isHot(x) ? " hot" : ""}" href="${esc(x.url)}" data-ext><span class="ib">${ico("news")}</span><span class="t"><b>${esc(x.title)}</b><small>${esc(x.source)}${x.date ? " · " + fmtD(x.date) : ""}</small></span><span class="chev">${ico("chev")}</span></a>`).join("")}</div>` : `<p class="empty">No headlines yet.</p>`;
+}
+function holidayRail() {
+  const H = D.holidays || {}, tz = "Asia/Dubai", now = new Date();
+  const ymdz = d => new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const td = ymdz(now), day = s => new Date(s + "T12:00:00+04:00");
+  const greg = new Intl.DateTimeFormat("en-GB", { timeZone: tz, weekday: "short", day: "numeric", month: "short" }).format(now);
+  const HM = ["Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Ula", "Jumada al-Akhirah", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qadah", "Dhu al-Hijjah"];
+  let hij = ""; try { const pt = Object.fromEntries(new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn", { timeZone: tz, day: "numeric", month: "numeric", year: "numeric" }).formatToParts(now).map(x => [x.type, x.value])); hij = `${+pt.day} ${HM[+pt.month - 1]} ${parseInt(pt.year)} AH`; } catch (e) {}
+  const up = (H.items || []).filter(h => h.end >= td).slice(0, 6).map(h => { const u = Math.round((day(h.start) - day(td)) / 864e5), on = h.start <= td; return `<div class="hd-c"><em>${on ? "Today" : u === 1 ? "Tomorrow" : "In " + u + " days"}</em><b>${esc(h.name)}</b><span>${fmtD(h.start)}${h.end !== h.start ? " – " + fmtD(h.end) : ""}</span></div>`; }).join("");
+  return `<div class="rail"><div class="hd-c today"><em>Today</em><b>${esc(greg)}</b><span>${esc(hij)}</span></div>${up}</div>`;
+}
+function homeView() {
+  const h = THEME.hour(), hi = h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+  
+  const Q = [["plan", "Payment plan"], ["mortgage", "Mortgage"], ["cost", "Total cost"], ["yield", "Rental yield"], ["golden", "Golden Visa"], ["resale", "Sell early"], ["roe", "ROE"]];
+  return `<div class="scr">
+    <div class="prof">
+      <div class="prof-top"><img class="avatar" src="ahmed.jpg" alt="Ahmed Wazir" width="64" height="64">
+        <div><p class="eyebrow">${hi}</p><div class="prof-n">Ahmed Wazir</div><div class="prof-r">Property Consultant · Springfield Properties</div><span class="verified">${ico("verified")}RERA BRN 85446</span></div></div>
+      <div class="acts">
+        <a class="act pri" href="${waLink("Hi Ahmed, I found you through your app.")}" data-ext><span class="c">${ico("wa")}</span>WhatsApp</a>
+        <a class="act" href="tel:${PHONE}" data-ext><span class="c">${ico("call")}</span>Call</a>
+        <a class="act" href="${BOOK}" data-ext><span class="c">${ico("cal")}</span>Book</a>
+        <a class="act" href="mailto:${EMAIL}" data-ext><span class="c">${ico("mail")}</span>Email</a>
+      </div>
+    </div>
+
+    <div class="sec"><div class="sec-t"><h2>Quick tools</h2><button class="more" data-go="tools">All ${ico("chev", "ic")}</button></div>
+      <div class="grid4">${Q.map(([id, l]) => { const t = TOOLS.find(x => x.id === id); return `<button class="app" data-tool="${id}"><span class="ib">${ico(t.i)}</span>${l}</button>`; }).join("")}</div></div>
+
+<div class="sec"><div class="sec-t"><h2>New launches in Dubai</h2></div>
+      <div class="card" style="padding:16px"><p style="margin:0 0 10px">Under Dubai Land Department rules, specific projects, prices and availability can only be advertised with a DLD permit, so they aren't listed in this app. Tell me your budget and goal and I'll walk you through the launches that fit, one to one.</p>
+      <a href="${waLink("Hi Ahmed, I'd like to hear about new off-plan launches in Dubai. My budget and goal are: ")}" data-ext style="display:inline-block;background:#C8102E;color:#fff;border-radius:10px;padding:10px 16px;font-weight:600;text-decoration:none">Ask on WhatsApp</a></div></div>
+
+    <div class="sec"><div class="sec-t"><h2>Market this week</h2><button class="more" data-tool="market">More ${ico("chev")}</button></div><div class="rail">${marketStats()}</div></div>
+
+    <div class="sec"><div class="sec-t"><h2>Explore</h2></div>
+      <div class="grid4">
+        <button class="app" data-tool="news"><span class="ib">${ico("news")}</span>News</button>
+        <button class="app" data-site="reports" data-title="Market reports"><span class="ib">${ico("chart")}</span>Reports</button>
+        <button class="app" data-site="compare" data-title="Dubai vs the world"><span class="ib">${ico("pulse")}</span>Dubai vs world</button>
+        <button class="app" data-site="prices" data-title="Prices by area"><span class="ib">${ico("chart")}</span>Prices</button>
+        <button class="app" data-site="developers"><span class="ib">${ico("dev")}</span>Developers</button>
+        <button class="app" data-site="why"><span class="ib">${ico("star")}</span>Why UAE</button>
+        <button class="app" data-site="buyabroad"><span class="ib">${ico("globe")}</span>From abroad</button>
+        <button class="app" data-site="laws"><span class="ib">${ico("law")}</span>Dubai law</button>
+        <button class="app" data-site="sell"><span class="ib">${ico("owner")}</span>Sell / lease</button>
+        <button class="app" data-site="about" data-only="about" data-title="About Ahmed"><span class="ib">${ico("card")}</span>About</button>
+      </div></div>
+
+    <div class="sec"><div class="sec-t"><h2>Dirham today</h2><span class="muted" style="font-size:12px">${esc(fmtD((D.fx || {}).date))}</span></div>
+      <div class="fx3"><div><span>AED 1M</span><b>$${compact(1e6 * FX.USD)}</b></div><div><span>AED 1M</span><b>£${compact(1e6 * FX.GBP)}</b></div><div><span>AED 1M</span><b>${inr(1e6 * FX.INR)}</b></div></div></div>
+
+    <div class="sec"><div class="sec-t"><h2>UAE calendar</h2></div>${holidayRail()}</div>
+    <div class="sec"><div class="sec-t"><h2>Headlines</h2><button class="more" data-tool="news">All ${ico("chev")}</button></div>${newsList(4)}</div>
+
+    <div class="sec"><div class="sec-t"><h2>Follow @awaz.realty</h2></div>
+      <div class="soc">
+        <a href="https://www.instagram.com/awaz.realty" data-ext>${ico("ig")}Instagram<small>Reels & market takes</small></a>
+        <a href="https://www.tiktok.com/@awaz.realty" data-ext>${ico("tt")}TikTok<small>Quick takes</small></a>
+        <a href="https://www.youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA?sub_confirmation=1" data-ext>${ico("yt")}YouTube<small>Subscribe</small></a>
+        <a href="https://www.youtube.com/channel/UC29rND5JpEEFSATZUVwWGIw?sub_confirmation=1" data-ext>${ico("yt")}Shorts<small>Subscribe</small></a>
+        <a href="https://www.linkedin.com/in/ahmed-wazir/" data-ext>${ico("li")}LinkedIn<small>Market takes</small></a>
+        <a href="https://www.awazrealty.com/" data-ext>${ico("globe")}Website<small>www.awazrealty.com</small></a>
+        <a href="${waLink("Hi Ahmed, please add me to Ahmed's UAE Real Estate Private Collection on WhatsApp.")}" data-ext>${ico("wa")}Private Collection<small>Market updates</small></a>
+      </div>
+      <button class="btn btn-red" data-site="follow" data-only="follow" data-title="Latest videos" style="width:100%;margin-top:12px">${ico("yt")}Watch my latest videos</button></div>
+
+    <div class="sec"><div class="list"><button class="li" id="saveContact"><span class="ib">${ico("plus")}</span><span class="t"><b>Save Ahmed's contact</b><small>Add to your phone</small></span><span class="chev">${ico("chev")}</span></button></div></div>
+    <p class="foot">Ahmed Wazir · Springfield Properties L.L.C S.O.C (ORN 11929)<br>RERA BRN 85446 · UAE Media Council advertiser permit 8476056<br>General information only, not an offer of any property · figures are estimates, not financial advice.<br><button data-site="privacy" data-title="Privacy policy" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Privacy policy</button><button onclick="window.__awConsent&&__awConsent()" style="color:var(--mute);text-decoration:underline;font-size:11.5px;padding:8px">Analytics choice</button></p>
+  </div>`;
+}
+const VCARD = ["BEGIN:VCARD", "VERSION:3.0", "N:Wazir;Ahmed;;;", "FN:Ahmed Wazir", "ORG:Springfield Properties", "TITLE:Property Consultant · RERA BRN 85446", "TEL;TYPE=CELL:" + PHONE, "EMAIL;TYPE=WORK:" + EMAIL, "URL:https://www.awazrealty.com", "END:VCARD"].join("\n");
+document.addEventListener("click", e => {
+  if (e.target.closest("#saveContact")) { if (NB && NB.addContact) NB.addContact("Ahmed Wazir", PHONE, EMAIL, "Springfield Properties", "Property Consultant · RERA BRN 85446"); else shareText(VCARD, "Ahmed Wazir"); }
+  if (e.target.closest("#seeNew")) { PF.src = "all"; PF.only = "new"; go("projects"); }
+});
+
+/* ================= PROJECTS ================= */
+const PF = Object.assign({ src: "w", em: "all", q: "", type: "all", beds: "all", max: 0, ho: 0, only: "all", dev: "all", sort: "rec", n: 30 }, S.get("aw-pf", {}), { q: "", n: 30 });
+function filtered() {
+  const base = PF.src === "w" ? WP : ALLP, q = PF.q.trim().toLowerCase();
+  let L = base.filter(p => (PF.em === "all" || p.em === PF.em) && (PF.type === "all" || p.type === PF.type)
+    && (!q || (p.n + " " + p.d + " " + (p.a || "") + " " + p.em).toLowerCase().includes(q))
+    && (PF.dev === "all" || p.d === PF.dev)
+    && (!PF.max || (p.from && p.from <= PF.max))
+    && (!PF.ho || (p.h && +p.h.slice(0, 4) <= PF.ho))
+    && (PF.beds === "all" || (p.beds && p.beds[0] != null && (PF.beds === "4" ? p.beds[1] >= 4 : p.beds[0] <= +PF.beds && p.beds[1] >= +PF.beds)))
+    && (PF.only === "all" || (PF.only === "new" ? p.fresh : PF.only === "partner" ? (p.src === "w" || p.partner) : PF.only === "pick" ? p.pick : true)));
+  const pr = p => p.from || 9e15;
+  if (PF.sort === "lo") L.sort((a, b) => pr(a) - pr(b)); else if (PF.sort === "hi") L.sort((a, b) => (b.from || 0) - (a.from || 0));
+  else if (PF.sort === "ho") L.sort((a, b) => (a.h || "9999") < (b.h || "9999") ? -1 : 1);
+  else L.sort((a, b) => (!!b.pick - !!a.pick) || (b.src === "w") - (a.src === "w") || (!!b.fresh - !!a.fresh) || (!!b.img - !!a.img));
+  return L;
+}
+function prCard(p) {
+  const meta = [p.from ? `<span class="pr">${priceTxt(p)}</span>` : `<span class="muted">Price on request</span>`, bedsTxt(p.beds) ? `<span class="muted">${bedsTxt(p.beds)}</span>` : "", p.h ? `<span class="muted">${ymLabel(p.h)}</span>` : ""].filter(Boolean).join("");
+  return `<button class="pr-card" data-p="${p.key}"><div class="im"${p.img ? ` style="background-image:url('${esc(p.img)}')"` : ""}>${p.img ? "" : devLogo(p.d, 84, 26) || ico("build")}${p.pick ? `<span class="pick-flag">PICK</span>` : ""}</div>
+    <div class="bd"><span class="k"><span>${esc(p.em)}</span>·<span class="s">${esc(p.status || p.type)}</span></span><b>${esc(p.n)}</b><small>${esc(p.d)}${p.a ? " · " + esc(p.a) : ""}</small><div class="meta">${meta}</div>${miniOp(p)}</div></button>`;
+}
+/* One-line escrow + DLD progress strip on every project card */
+function miniOp(p) {
+  const o = (p.src === "w" ? OPI[p.n] : OP_BY_RID[p.rid]) || p.op || {};
+  const has = o.completion_pct != null, pct = has ? Math.max(0, Math.min(100, +o.completion_pct)) : 0;
+  return `<div class="mop"><span class="${o.escrow_bank ? "ok" : ""}">${o.escrow_bank ? ico("check") + "Escrow" : "Escrow on request"}</span><span class="bar"><i style="width:${pct}%"></i></span><span>${has ? (pct ? Math.round(pct) + "%" : "Not started") : "—"}</span></div>`;
+}
+function projectsView() {
+  const L = filtered(), ems = ["all", "Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Ajman"];
+  const nF = [PF.type !== "all", PF.beds !== "all", !!PF.max, !!PF.ho, PF.only !== "all", PF.dev !== "all"].filter(Boolean).length;
+  return `<div class="scr"><div class="page-h"><p class="eyebrow">Off-plan & commercial</p><h1 class="h-big">Projects</h1></div>
+    <div class="seg top" id="srcSeg"><button data-src="w" aria-pressed="${PF.src === "w"}">Ahmed's launches · ${WP.length}</button><button data-src="all" aria-pressed="${PF.src === "all"}">All projects · ${ALLP.length}</button></div>
+    <label class="search" style="margin-top:12px">${ico("match")}<input id="pq" type="search" placeholder="Project, area or developer" value="${esc(PF.q)}" autocomplete="off"></label>
+    <div class="chips"><button class="chip" id="fBtn" aria-pressed="${nF > 0}">${ico("filter")}Filters${nF ? " · " + nF : ""}</button>${ems.map(e => `<button class="chip" data-em="${esc(e)}" aria-pressed="${PF.em === e}">${e === "all" ? "All emirates" : esc(e)}</button>`).join("")}</div>
+    <p class="count">${L.length} project${L.length === 1 ? "" : "s"}${PF.src === "all" ? ` · updated ${esc(fmtD(CAT_UPDATED || RY.updated, { day: "numeric", month: "short" }))}` : ""}</p>
+    <div class="pl" id="plist">${L.length ? L.slice(0, PF.n).map(prCard).join("") : `<p class="empty">Nothing matches. Clear a filter, or message me and I'll find it.</p>`}</div>
+    ${L.length > PF.n ? `<button class="btn" id="pMore" style="width:100%;margin-top:12px">Show more (${L.length - PF.n})</button>` : ""}
+  </div><button class="fab" id="mapFab">${ico("map")}Map</button>`;
+}
+function bindProjects(root) {
+  const save = () => S.set("aw-pf", Object.assign({}, PF, { q: "", n: 30 }));
+  root.querySelectorAll("[data-src]").forEach(b => b.onclick = () => { PF.src = b.dataset.src; PF.n = 30; save(); render(); });
+  root.querySelectorAll("[data-em]").forEach(b => b.onclick = () => { PF.em = b.dataset.em; PF.n = 30; save(); render(); });
+  const qi = root.querySelector("#pq"); let t;
+  qi.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { PF.q = qi.value; PF.n = 30; const L = filtered(); root.querySelector("#plist").innerHTML = L.length ? L.slice(0, PF.n).map(prCard).join("") : `<p class="empty">Nothing matches.</p>`; root.querySelector(".count").textContent = L.length + " projects"; bindScreen(root.querySelector("#plist")); }, 160); });
+  root.querySelector("#pMore")?.addEventListener("click", () => { PF.n += 30; const y = scrollY; render(); scrollTo(0, y); });
+  root.querySelector("#fBtn").onclick = filterSheet;
+  $("mapFab").onclick = () => openMap();
+}
+function filterSheet() {
+  const devs = [...new Set((PF.src === "w" ? WP : ALLP).map(p => p.d))].filter(Boolean).sort();
+  const C = (k, opts) => `<div class="wrapchips">${opts.map(([v, l]) => `<button class="chip" data-k="${k}" data-v="${v}" aria-pressed="${String(PF[k]) === String(v)}">${l}</button>`).join("")}</div>`;
+  openSheet(`<h3>Filters</h3>
+    <p class="fl-t">Show</p>${C("only", [["all", "Everything"], ["new", "New launches"], ["partner", "Top developers"], ["pick", "Ahmed's picks"]])}
+    <p class="fl-t">Type</p>${C("type", [["all", "All"], ["Residential", "Residential"], ["Commercial", "Commercial"]])}
+    <p class="fl-t">Bedrooms</p>${C("beds", [["all", "Any"], ["0", "Studio"], ["1", "1"], ["2", "2"], ["3", "3"], ["4", "4+"]])}
+    <p class="fl-t">Budget up to</p>${C("max", [[0, "Any"], [1e6, "1M"], [1.5e6, "1.5M"], [2e6, "2M"], [3e6, "3M"], [5e6, "5M"], [1e7, "10M"]])}
+    <p class="fl-t">Handover by</p>${C("ho", [[0, "Any"], [2026, "2026"], [2027, "2027"], [2028, "2028"], [2029, "2029"], [2030, "2030"]])}
+    <p class="fl-t">Sort</p>${C("sort", [["rec", "Recommended"], ["lo", "Price ↑"], ["hi", "Price ↓"], ["ho", "Handover soonest"]])}
+    <p class="fl-t">Developer</p><div class="inp sel"><select id="fdev"><option value="all">All developers</option>${devs.map(d => `<option${PF.dev === d ? " selected" : ""}>${esc(d)}</option>`).join("")}</select></div>
+    <div class="btn-row" style="margin-top:20px"><button class="btn" id="fReset">Reset</button><button class="btn btn-red" id="fDone">Show results</button></div>`, p => {
+    p.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { const k = b.dataset.k, v = b.dataset.v; PF[k] = /^\d+$/.test(v) && k !== "beds" ? +v : v; p.querySelectorAll(`[data-k="${k}"]`).forEach(x => x.setAttribute("aria-pressed", x === b)); vib(); });
+    p.querySelector("#fdev").onchange = e => PF.dev = e.target.value;
+    p.querySelector("#fReset").onclick = () => { Object.assign(PF, { type: "all", beds: "all", max: 0, ho: 0, only: "all", dev: "all", sort: "rec" }); closeSheet(); S.set("aw-pf", PF); render(); };
+    p.querySelector("#fDone").onclick = () => { PF.n = 30; closeSheet(); S.set("aw-pf", Object.assign({}, PF, { q: "" })); render(); };
+  });
+}
+
+/* ---------- project detail ---------- */
+function projText(p, forClient) {
+  const L = [`*${p.n}*${p.d ? " by " + p.d : ""}`, `${p.a ? p.a + ", " : ""}${p.em} · ${p.type}`, p.status ? `Status: ${p.status}` : ""];
+  if (p.from) L.push(`From: ${p.pre || ""}${aedTxt(p.from)}${p.to && p.to > p.from ? " to " + aedTxt(p.to) : ""}`);
+  if (bedsTxt(p.beds)) L.push(`Units: ${bedsTxt(p.beds)}${p.units && p.units.length ? " · " + p.units.join(", ") : ""}`);
+  if (p.plan) L.push(`Plan: ${p.plan.b}/${p.plan.c}/${p.plan.h}`);
+  if (p.h) L.push(`Handover: ${ymLabel(p.h)}`);
+  if (p.blurb) L.push("", p.blurb);
+  if (p.note) L.push(p.note);
+  return (forClient ? ["Hi, thought this one might suit you:", ""] : []).concat(L.filter((x, i, a) => x !== "" || a[i - 1] !== ""), forClient ? ["", "Want me to hold a spot or send the brochure and payment plan?", "", SIGN] : []).join("\n");
+}
+function openProject(key) {
+  const p = findP(key); if (!p) return;
+  const facts = [["From", p.from ? priceTxt(p) : "On request"], ["Up to", p.to && p.to > (p.from || 0) ? short(p.to) : "—"], ["Bedrooms", bedsTxt(p.beds) || "—"], ["Sizes", sizeTxt(p.sz) || "—"], ["Handover", p.h ? ymLabel(p.h) : "TBA"], ["Plan", p.plan ? `${p.plan.b}/${p.plan.c}/${p.plan.h}` : (p.specs || []).find(([k]) => /plan/i.test(k))?.[1] || "On request"]];
+  pushView({
+    t: p.n, flush: 1, share: () => shareText(isBroker() ? projText(p, true) : projText(p) + `\n\nAsk Ahmed Wazir: ${waLink("")}`, p.n),
+    html: () => `<div class="hero-im"${p.img ? ` style="background-image:url('${esc(p.img)}')"` : ""}>${p.img ? "" : devLogo(p.d, 140, 40) || ico("build")}</div>
+      <div class="pd-k">${p.pick ? `<span class="pill r">Ahmed's pick</span>` : ""}${p.fresh && !p.pick ? `<span class="pill r">New launch</span>` : ""}<span class="pill">${esc(p.em)}</span><span class="pill">${esc(p.type)}</span>${p.status ? `<span class="pill g">${esc(p.status)}</span>` : ""}</div>
+      <h1 class="pd-n">${esc(p.n)}</h1><p class="pd-l">${esc(p.d)}${p.a ? " · " + esc(p.a) : ""}</p>
+      ${p.pick ? `<div class="callout">${esc(p.pick)}</div>` : ""}
+      <div class="facts">${facts.map(([k, x]) => `<div><span>${k}</span><b>${x}</b></div>`).join("")}</div>
+      ${opBlock(p)}
+      ${p.units && p.units.length ? `<p class="note">Unit types: ${esc(p.units.join(", "))}</p>` : ""}
+      ${p.note ? `<p class="note">${esc(p.note)}</p>` : ""}
+      <div class="quick">
+        <button data-tool="plan" data-proj="${p.src === "w" && p.plan ? p.key : ""}">${ico("plan")}Plan</button>
+        <button id="pdCost">${ico("cost")}Costs</button>
+        <button id="pdMap">${ico("map")}Map</button>
+        <button id="pdShare">${ico("share")}Share</button>
+      </div>
+      ${p.blurb ? `<div class="sec"><div class="sec-t"><h2>About</h2></div>${esc(p.blurb).split(/\n+/).map(x => `<p style="font-size:15px;line-height:1.55;margin-bottom:10px">${x}</p>`).join("")}</div>` : ""}
+      ${isBroker() ? `<div class="sec"><div class="sec-t"><h2>Broker</h2></div><div class="list">
+        <button class="li" id="pdSend"><span class="ib">${ico("wa")}</span><span class="t"><b>Send to a client</b><small>Ready-written WhatsApp message</small></span><span class="chev">${ico("chev")}</span></button>
+        <button class="li" id="pdCopy"><span class="ib">${ico("copy")}</span><span class="t"><b>Copy details</b><small>Paste into a post or email</small></span><span class="chev">${ico("chev")}</span></button>
+        <button class="li" id="pdLead"><span class="ib">${ico("leads")}</span><span class="t"><b>Add as a lead's interest</b><small>New lead with this project</small></span><span class="chev">${ico("chev")}</span></button>
+        ${p.url ? `<a class="li" href="${esc(p.url)}" data-ext><span class="ib">${ico("link")}</span><span class="t"><b>Open in Reelly</b><small>Units, floor plans, brochure</small></span><span class="chev">${ico("chev")}</span></a>` : ""}
+      </div></div>` : ""}
+      <p class="note">${p.src === "w" ? "From Ahmed's launch list. " : ""}Prices are developer list prices and can change. Ask Ahmed for the live price list and payment plan.</p>`,
+    foot: () => `<a class="btn btn-red" href="${waLink(`Hi Ahmed, I'm interested in ${p.n} (${p.em}). Can you send me the details?`)}" data-ext>${ico("wa")}Register interest</a><a class="btn" href="tel:${PHONE}" data-ext>${ico("call")}Call</a>`,
+    init(nb) {
+      bindScreen(nb);
+      nb.querySelector("[data-tool=plan]").onclick = () => openTool("plan", p.src === "w" && p.plan ? { proj: p.key } : { proj: "", price: Math.round(p.from || 2e6), fee: FEEMAP(p), ho: p.h || "2029-12" });
+      nb.querySelector("#pdCost").onclick = () => openTool("cost", { price: Math.round(p.from || 2e6), fee: FEEMAP(p), st: "op", project: p.n });
+      nb.querySelector("#pdMap").onclick = () => openMap(p.key);
+      nb.querySelector("#pdShare").onclick = () => shareText(isBroker() ? projText(p, true) : projText(p) + `\n\nAsk Ahmed Wazir: ${waLink("")}`, p.n);
+      nb.querySelector("#pdSend")?.addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(projText(p, true))));
+      nb.querySelector("#pdCopy")?.addEventListener("click", () => copyText(projText(p)));
+      nb.querySelector("#pdLead")?.addEventListener("click", () => { LEAD_PREFILL = p.n; openBroker("leadnew"); });
+    }
+  });
+}
+
+/* ================= MAP (satellite) ================= */
+let MAPV = null;
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  return new Promise((ok, no) => {
+    const c = document.createElement("link"); c.rel = "stylesheet"; c.href = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"; document.head.appendChild(c);
+    const s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"; s.onload = ok; s.onerror = no; document.head.appendChild(s);
+  });
+}
+function openMap(focus) {
+  let src = focus ? "all" : (PF.src || "w");
+  pushView({
+    t: "Launch map", flush: 1,
+    html: () => `<div id="map"></div><div class="map-tools"><button class="chip" data-ms="w" aria-pressed="${src === "w"}">Ahmed's launches</button><button class="chip" data-ms="all" aria-pressed="${src === "all"}">All projects</button></div><div class="map-card" id="mapCard" hidden></div>`,
+    init(nb, el) {
+      nb.style.padding = "0"; nb.parentElement.style.overflow = "hidden"; nb.style.position = "absolute"; nb.style.inset = "0";
+      loadLeaflet().then(() => {
+        const m = L.map(nb.querySelector("#map"), { zoomControl: false, attributionControl: true }).setView([25.1, 55.2], 9);
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19, attribution: "Esri, Maxar, Earthstar Geographics" }).addTo(m);
+        L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", { maxZoom: 19 }).addTo(m);
+        const layer = L.layerGroup().addTo(m);
+        const draw = () => {
+          layer.clearLayers();
+          const L2 = (src === "w" ? WP : ALLP).filter(p => p.ll && p.ll[0]);
+          L2.forEach(p => {
+            const mk = L.marker([p.ll[1], p.ll[0]], { icon: L.divIcon({ className: "", html: `<div class="mk-pin${p.src === "w" ? " w" : ""}"></div>`, iconSize: [20, 20], iconAnchor: [10, 10] }) }).addTo(layer);
+            mk.on("click", () => card(p));
+          });
+        };
+        const card = p => {
+          const c = nb.querySelector("#mapCard"); c.hidden = false;
+          c.innerHTML = prCard(p); bindScreen(c); m.panTo([p.ll[1], p.ll[0]]);
+        };
+        draw();
+        nb.querySelectorAll("[data-ms]").forEach(b => b.onclick = () => { src = b.dataset.ms; nb.querySelectorAll("[data-ms]").forEach(x => x.setAttribute("aria-pressed", x === b)); draw(); });
+        if (focus) { const p = findP(focus); if (p && p.ll) { m.setView([p.ll[1], p.ll[0]], 14); card(p); } }
+        m.on("click", () => nb.querySelector("#mapCard").hidden = true);
+        setTimeout(() => m.invalidateSize(), 350);
+      }).catch(() => { nb.querySelector("#map").innerHTML = `<p class="empty" style="margin:80px 16px">The map needs an internet connection.</p>`; });
+    }
+  });
+}
+
+/* ================= NEWS & MARKET ================= */
+function openNews() { pushView({ t: "News", html: () => `<p class="sub" style="margin-bottom:14px">UAE property headlines, refreshed every morning. Stories naming Springfield are marked HOT.</p>${newsList()}` }); }
+function openMarket() {
+  const p = D.pulse || {};
+  const block = (n, d) => !d ? "" : `<div class="card" style="padding:16px;margin-bottom:12px"><div class="sec-t" style="margin:0"><h2>${esc(n)}</h2><span class="muted" style="font-size:12px">${esc(d.period.label)}</span></div>
+    <div class="disp" style="font-size:44px;margin-top:8px">${short(d.total)}</div><p class="muted" style="font-size:13px">${esc(d.totalSub || "Total value")}</p>
+    ${bars(d.mix.map((m, i) => [m.name, m[d.mixBasis === "count" ? "count" : "aed"], ["var(--red)", "var(--bone)", "var(--mute)"][i], m.aed ? short(m.aed) : Number(m.count).toLocaleString("en-US")]))}
+    <p class="note">Source: ${(d.sources || []).map(s => `<a href="${esc(s.url)}" data-ext style="text-decoration:underline">${esc(s.name)}</a>`).join(", ")}</p></div>`;
+  pushView({ t: "Market", html: () => block("Dubai", p.dubai) + block("Abu Dhabi", p.abudhabi) + ((D.ticker || {}).items || []).map(it => `<div class="card" style="padding:16px;margin-bottom:12px"><div class="sec-t" style="margin:0"><h2>${esc(it.em)}</h2><span class="muted" style="font-size:12px">${esc(it.period)}</span></div><div class="kpis">${it.stats.map(s => `<div class="kpi"><span>${esc(s.label)}</span><b>${s.aed != null ? short(s.aed) : s.num != null ? Number(s.num).toLocaleString("en-US") : s.pct != null ? `<span class="${s.pct >= 0 ? "up" : "down"}">${s.pct >= 0 ? "▲" : "▼"} ${Math.abs(s.pct)}%</span>` : esc(s.text || "")}</b></div>`).join("")}</div><p class="note">Source: <a href="${esc(it.source.url)}" data-ext style="text-decoration:underline">${esc(it.source.name)}</a></p></div>`).join("") });
+}
+
+/* ================= TOOLS & GUIDES TABS ================= */
+function toolsView() {
+  const groups = [...new Set(TOOLS.map(t => t.g))];
+  return `<div class="scr"><div class="page-h"><p class="eyebrow">Investor toolkit</p><h1 class="h-big">Know the <em>numbers</em></h1><p class="sub">Same formulas as the website. Amounts follow the currency at the top.</p></div>
+    ${groups.map(g => `<p class="grp-t">${esc(g)}</p><div class="tiles">${TOOLS.filter(t => t.g === g).map(t => `<button class="tile" data-tool="${t.id}"><span class="ib">${ico(t.i)}</span><b>${esc(t.t)}</b><small>${esc(t.d)}</small></button>`).join("")}</div>`).join("")}
+    ${isBroker() ? `<p class="grp-t">Broker</p><div class="tiles"><button class="tile" data-go="broker"><span class="ib">${ico("brief")}</span><b>Broker toolkit</b><small>Leads, templates, checklists</small></button></div>` : ""}
+  </div>`;
+}
+function guidesView() {
+  return `<div class="scr"><div class="page-h"><p class="eyebrow">Buyer guides</p><h1 class="h-big">Buy with your <em>eyes open</em></h1><p class="sub">Plain-English guides, checked against official sources.</p></div>
+    <div class="list">${GUIDES.map(g => `<button class="li" data-site="${g.h}"><span class="ib">${ico(g.i)}</span><span class="t"><b>${esc(g.t)}</b><small>${esc(g.d)}</small></span><span class="chev">${ico("chev")}</span></button>`).join("")}</div>
+    <p class="grp-t">Buying from abroad</p>
+    <div class="grid4" style="grid-template-columns:repeat(3,1fr)">${ABROAD.map(g => `<button class="app" data-site="${g.h}"><span class="ib" style="font-size:28px">${g.f}</span>${esc(g.t.replace("From ", ""))}</button>`).join("")}</div>
+    <p class="grp-t">Quick answers</p>
+    <div class="tiles"><button class="tile" data-tool="glossary"><span class="ib">${ico("glossary")}</span><b>Glossary</b><small>Oqood, NOC, Ejari…</small></button><button class="tile" data-tool="faq"><span class="ib">${ico("faq")}</span><b>Buyer FAQ</b><small>The questions everyone asks</small></button></div>
+  </div>`;
+}
+
+/* ================= BROKER MODE ================= */
+const PIN_KEY = "awaz-pin", UNLOCK = "awaz-broker", KEEP = "awaz-keep";
+const hash = s => { let h = 5381; for (const c of "awaz:" + s) h = ((h << 5) + h + c.charCodeAt(0)) >>> 0; return h.toString(36); };
+const isBroker = () => S.sget(UNLOCK) === "1" || (S.get(KEEP, false) && S.get("awaz-keep-on", false));
+let pinBuf = "", pinStage = "", pinStage_new = "", LEAD_PREFILL = "";
+function setBroker(on) {
+  S.sset(UNLOCK, on ? "1" : null); if (!on) S.set("awaz-keep-on", false); else if (S.get(KEEP, false)) S.set("awaz-keep-on", true);
+  paintMode(); render();
+}
+function paintMode() {
+  const on = isBroker(), mc = $("modeChip");
+  mc.classList.toggle("on", on); mc.querySelector("span").textContent = on ? "Broker" : "Client";
+  $("brokerIco").innerHTML = on ? IC.brief : IC.lock; $("brokerLbl").textContent = on ? "Broker" : "Broker";
+  const due = on ? dueLeads().length : 0; $("dueBadge").hidden = !due; $("dueBadge").textContent = due;
+}
+$("modeChip").addEventListener("click", () => { vib(); if (isBroker()) { setBroker(false); toast("Client mode"); } else go("broker"); });
+function closeAllViews() { while (STACK.length) { const t = STACK.pop(); t.el.remove(); } }
+
+/* Native broker tools reuse one screen: opening another tool from inside swaps the content */
+function openNative(title, tool) {
+  const t = tool && tool.f ? tool.f() : tool;
+  const top = STACK[STACK.length - 1];
+  if (top && top.o.native) {
+    top.o = Object.assign({ native: 1 }, t); top.el.querySelector(".vbar h2").textContent = title;
+    const vin = top.el.querySelector(".vin"); vin.innerHTML = t.html(); vin.scrollTop = 0; top.el.querySelector(".vbody").scrollTop = 0;
+    t.init && t.init(vin); bindScreen(vin); return;
+  }
+  pushView(Object.assign({ native: 1 }, t, { t: title }));
+}
+function openBroker(id) {
+  if (id === "leadnew") return openNative("New lead", leadForm());
+  const b = BT[id]; if (!b) return;
+  if (b.calc) return openTool(b.calc);
+  openNative(b.t, b);
+}
+
+function brokerView() {
+  if (!isBroker()) {
+    const has = !!S.get(PIN_KEY, null); pinStage = pinStage || (has ? "enter" : "new");
+    const label = { enter: "Enter your PIN", new: "Set a 4-digit PIN", confirm: "Enter it again" }[pinStage];
+    return `<div class="scr"><div class="lock">
+      <span class="ib" style="width:64px;height:64px;border-radius:22px;background:var(--red-soft);color:var(--red-text);display:grid;place-items:center">${ico("lock")}</span>
+      <h1 class="h-big" style="font-size:34px">${label}</h1>
+      <p class="sub" style="max-width:32ch">${has ? "Leads, templates, quotes and your deal tools." : "Keeps clients out of your broker tools when they hold your phone. It's a convenience lock, so keep anything sensitive out of notes."}</p>
+      <div class="dots" id="dots">${[0, 1, 2, 3].map(i => `<i class="${i < pinBuf.length ? "on" : ""}"></i>`).join("")}</div>
+      <div class="pad" id="pad">${[1, 2, 3, 4, 5, 6, 7, 8, 9, "", 0, "⌫"].map(k => k === "" ? "<span></span>" : `<button data-k="${k}" aria-label="${k === "⌫" ? "Delete" : k}">${k}</button>`).join("")}</div>
+    </div></div>`;
+  }
+  const due = dueLeads(), L = S.get("awaz-leads", []);
+  const A = (id, extra = "") => { const t = BT[id]; return `<button class="app${id === "leads" && due.length ? " hot" : ""}" data-bt="${id}"><span class="ib">${ico(t.i)}</span>${esc(t.s || t.t)}${extra}</button>`; };
+  return `<div class="scr"><div class="page-h"><p class="eyebrow">Broker mode · BRN 85446</p><h1 class="h-big">Your <em>toolkit</em></h1>
+      <p class="sub">${due.length ? `<b style="color:var(--red-text)">${due.length} follow-up${due.length > 1 ? "s" : ""} due today.</b> ` : ""}${L.length} lead${L.length === 1 ? "" : "s"} on this phone · ${RP.length} projects from Reelly.</p></div>
+    <div class="grid4">${A("leads", due.length ? `<span class="tag">${due.length}</span>` : "")}${A("templates")}${A("cost")}${A("plan")}${A("brief")}${A("checklists")}${A("convert")}${A("card")}${A("settings")}</div>
+    <div class="sec"><div class="sec-t"><h2>New on Reelly</h2><button class="more" id="seeNew2">All ${ico("chev")}</button></div><div class="rail">${RP.filter(p => p.fresh && p.img).slice(0, 10).map(projCardSmall).join("")}</div></div>
+    <div class="sec"><div class="sec-t"><h2>Client tools</h2></div><div class="grid4">${["golden", "roe", "yield", "resale"].map(id => { const t = TOOLS.find(x => x.id === id); return `<button class="app" data-tool="${id}"><span class="ib">${ico(t.i)}</span>${esc(t.t.split(" ").slice(0, 2).join(" "))}</button>`; }).join("")}</div></div>
+    <div class="sec"><div class="list"><button class="li" id="lockNow"><span class="ib">${ico("lock")}</span><span class="t"><b>Lock and hand to a client</b><small>Switches to client mode</small></span><span class="chev">${ico("chev")}</span></button></div></div>
+    <p class="foot">Website data synced ${esc(D.synced || "—")} · Reelly catalogue ${esc(RY.updated || "—")}</p></div>`;
+}
+function bindBroker(root) {
+  root.querySelectorAll("[data-bt]").forEach(b => b.onclick = () => { vib(); openBroker(b.dataset.bt); });
+  root.querySelector("#lockNow")?.addEventListener("click", () => { setBroker(false); go("home"); toast("Locked. Client mode on."); });
+  root.querySelector("#seeNew2")?.addEventListener("click", () => { PF.src = "all"; PF.only = "new"; go("projects"); });
+  const pad = root.querySelector("#pad"); if (!pad) return;
+  pad.addEventListener("click", e => {
+    const b = e.target.closest("[data-k]"); if (!b) return; vib();
+    const k = b.dataset.k;
+    if (k === "⌫") pinBuf = pinBuf.slice(0, -1); else if (pinBuf.length < 4) pinBuf += k;
+    if (pinBuf.length === 4) {
+      if (pinStage === "enter") { if (hash(pinBuf) === S.get(PIN_KEY)) { pinBuf = ""; pinStage = ""; setBroker(true); toast("Broker mode on"); return; } return fail(); }
+      if (pinStage === "new") { pinStage = "confirm"; pinStage_new = pinBuf; pinBuf = ""; return render(); }
+      if (pinStage === "confirm") { if (pinBuf === pinStage_new) { S.set(PIN_KEY, hash(pinBuf)); pinBuf = ""; pinStage = ""; setBroker(true); toast("PIN set. Broker mode on."); return; } pinStage = "new"; return fail("Didn't match. Try again."); }
+    }
+    render();
+  });
+  function fail(msg) { pinBuf = ""; render(); $("dots").classList.add("shake"); toast(msg || "Wrong PIN"); }
+}
+
+/* ---------- shortlist builder (Reelly catalogue) ---------- */
+function shortlistTool() {
+  const st = Object.assign({ em: "Dubai", max: 2000000, beds: "1", type: "Residential", ho: 0 }, S.get("aw-sl", {}));
+  let picked = new Set();
+  const list = () => ALLP.filter(p => p.from && p.from <= st.max && p.from >= st.max * 0.45 && (st.em === "all" || p.em === st.em) && p.type === st.type
+    && (st.type === "Commercial" || st.beds === "any" || (p.beds && p.beds[0] != null && (st.beds === "4" ? p.beds[1] >= 4 : p.beds[0] <= +st.beds && p.beds[1] >= +st.beds)))
+    && (!st.ho || (p.h && +p.h.slice(0, 4) <= st.ho)))
+    .sort((a, b) => (!!b.pick - !!a.pick) || (b.src === "w") - (a.src === "w") || (!!b.partner - !!a.partner) || b.from - a.from).slice(0, 40);
+  const C = (k, opts) => `<div class="wrapchips">${opts.map(([v, l]) => `<button class="chip" data-k="${k}" data-v="${v}" aria-pressed="${String(st[k]) === String(v)}">${l}</button>`).join("")}</div>`;
+  return {
+    t: "Shortlist",
+    html: () => `<p class="sub">Pick a client's brief, tick the projects, send one WhatsApp message.</p>
+      <p class="fl-t">Emirate</p>${C("em", [["Dubai", "Dubai"], ["Abu Dhabi", "Abu Dhabi"], ["Ras Al Khaimah", "RAK"], ["Sharjah", "Sharjah"], ["all", "Any"]])}
+      <p class="fl-t">Type</p>${C("type", [["Residential", "Residential"], ["Commercial", "Commercial"]])}
+      <p class="fl-t">Bedrooms</p>${C("beds", [["any", "Any"], ["0", "Studio"], ["1", "1"], ["2", "2"], ["3", "3"], ["4", "4+"]])}
+      <p class="fl-t">Budget up to</p>${C("max", [[1e6, "1M"], [1.5e6, "1.5M"], [2e6, "2M"], [3e6, "3M"], [5e6, "5M"], [1e7, "10M"], [3e7, "30M"]])}
+      <p class="fl-t">Handover by</p>${C("ho", [[0, "Any"], [2027, "2027"], [2028, "2028"], [2029, "2029"], [2030, "2030"]])}
+      <div id="slList" style="margin-top:16px"></div>`,
+    init(nb) {
+      const draw = () => {
+        const L = list();
+        nb.querySelector("#slList").innerHTML = L.length ? `<p class="count" style="margin:0 0 10px">${L.length} matches · ${picked.size} picked</p><div class="list">${L.map(p => `<label class="li"><input type="checkbox" data-sk="${p.key}"${picked.has(p.key) ? " checked" : ""} style="width:22px;height:22px;accent-color:var(--red);flex:none"><span class="t"><b>${esc(p.n)}</b><small>${esc(p.d)} · ${esc(p.a || p.em)} · from ${short(p.from)}${p.h ? " · " + ymLabel(p.h) : ""}</small></span></label>`).join("")}</div>
+          <div class="btn-row" style="margin-top:14px"><button class="btn btn-red" id="slSend">${ico("wa")}Send ${picked.size || ""}</button><button class="btn" id="slCopy">${ico("copy")}Copy</button></div>` : `<p class="empty">No projects in that brief. Raise the budget or widen the area.</p>`;
+        nb.querySelectorAll("[data-sk]").forEach(c => c.onchange = () => { c.checked ? picked.add(c.dataset.sk) : picked.delete(c.dataset.sk); draw(); });
+        const text = () => { const P = [...picked].map(findP).filter(Boolean); return ["Hi, here's a shortlist that fits your brief:", "", ...P.map((p, i) => `${i + 1}. *${p.n}* by ${p.d}\n   ${p.a ? p.a + ", " : ""}${p.em} · from ${aedTxt(p.from)}${bedsTxt(p.beds) ? " · " + bedsTxt(p.beds) : ""}${p.h ? " · handover " + ymLabel(p.h) : ""}`), "", "Shall I send brochures and payment plans for any of these?", "", SIGN].join("\n"); };
+        nb.querySelector("#slSend")?.addEventListener("click", () => picked.size ? openExt("https://wa.me/?text=" + encodeURIComponent(text())) : toast("Tick at least one project"));
+        nb.querySelector("#slCopy")?.addEventListener("click", () => picked.size ? copyText(text()) : toast("Tick at least one project"));
+      };
+      nb.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { const k = b.dataset.k, v = b.dataset.v; st[k] = /^\d+$/.test(v) && k !== "beds" ? +v : v; S.set("aw-sl", st); nb.querySelectorAll(`[data-k="${k}"]`).forEach(x => x.setAttribute("aria-pressed", x === b)); vib(); draw(); });
+      draw();
+    }
+  };
+}
+
+/* ---------- leads ---------- */
+const STAGES = ["New", "Contacted", "Viewing", "Negotiating", "EOI / booked", "Closed", "Lost"];
+const dueLeads = () => S.get("awaz-leads", []).filter(l => l.next && l.next <= today() && !["Closed", "Lost"].includes(l.stage));
+const saveLeads = L => S.set("awaz-leads", L);
+let LEADF = "Active";
+function leadsTool() {
+  return {
+    t: "Leads",
+    html() {
+      const L = S.get("awaz-leads", []);
+      const f = LEADF, shown = L.filter(l => f === "All" ? true : f === "Due" ? dueLeads().some(d => d.id === l.id) : f === "Active" ? !["Closed", "Lost"].includes(l.stage) : l.stage === f)
+        .sort((a, b) => (a.next || "9") < (b.next || "9") ? -1 : 1);
+      return `<div class="btn-row"><button class="btn btn-red" id="ldAdd">+ Add lead</button></div>
+        <div class="chips" style="margin-top:12px">${["Due", "Active", ...STAGES, "All"].map(s => `<button class="chip" data-lf="${s}" aria-pressed="${f === s}">${s}${s === "Due" ? ` (${dueLeads().length})` : ""}</button>`).join("")}</div>
+        <div style="display:grid;gap:10px;margin-top:12px">${shown.length ? shown.map(leadCard).join("") : `<p class="empty">${L.length ? "No leads in this view." : "No leads yet. Add your first one, it stays on this phone only."}</p>`}</div>
+        <p class="note">Leads are stored on this phone only, not on any server. Back them up from Settings.</p>`;
+    },
+    init(nb) {
+      nb.querySelector("#ldAdd").addEventListener("click", () => openNative("New lead", leadForm()));
+      nb.querySelectorAll("[data-lf]").forEach(b => b.addEventListener("click", () => { LEADF = b.dataset.lf; reopen(); }));
+      nb.querySelectorAll("[data-le]").forEach(b => b.addEventListener("click", () => openNative("Edit lead", leadForm(b.dataset.le))));
+      nb.querySelectorAll("[data-lwa]").forEach(b => b.addEventListener("click", () => { const l = S.get("awaz-leads", []).find(x => x.id === b.dataset.lwa); openExt(waLink(`Hi ${l.name.split(" ")[0]}, Ahmed Wazir here from Springfield Properties.`, waPhone(l.phone))); }));
+      nb.querySelectorAll("[data-ltp]").forEach(b => b.addEventListener("click", () => { TPL_LEAD = b.dataset.ltp; openNative("Templates", BT.templates); }));
+      nb.querySelectorAll("[data-ldone]").forEach(b => b.addEventListener("click", () => {
+        const L = S.get("awaz-leads", []), l = L.find(x => x.id === b.dataset.ldone);
+        const d = new Date(); d.setDate(d.getDate() + 3); l.next = d.toISOString().slice(0, 10);
+        if (l.stage === "New") l.stage = "Contacted"; l.log = (l.log || []).concat(today() + " followed up"); saveLeads(L); toast("Next follow-up in 3 days"); reopen();
+      }));
+      function reopen() { nb.innerHTML = leadsTool().html(); leadsTool().init(nb); paintMode(); }
+    }
+  };
+}
+function leadCard(l) {
+  const due = l.next && l.next <= today() && !["Closed", "Lost"].includes(l.stage);
+  return `<div class="lead${due ? " due" : ""}"><div class="lead-h"><b>${esc(l.name)}</b><span class="stage">${esc(l.stage)}</span></div>
+    <div class="meta">${[l.interest, l.budget ? "Budget " + l.budget : "", l.source].filter(Boolean).map(esc).join(" · ")}</div>
+    ${l.next ? `<div class="meta" style="color:${due ? "var(--red-text)" : "var(--mute)"}">Follow up ${l.next === today() ? "today" : fmtD(l.next, { weekday: "short", day: "numeric", month: "short" })}</div>` : ""}
+    ${l.notes ? `<div class="meta">${esc(l.notes).slice(0, 160)}</div>` : ""}
+    <div class="btn-row">${l.phone ? `<button class="btn" data-lwa="${l.id}">WhatsApp</button><a class="btn" href="tel:${esc(l.phone)}" data-ext>Call</a>` : ""}<button class="btn" data-ltp="${l.id}">Template</button>${due ? `<button class="btn" data-ldone="${l.id}">Done</button>` : ""}<button class="btn btn-ghost" data-le="${l.id}">Edit</button></div></div>`;
+}
+function leadForm(id) {
+  const L = S.get("awaz-leads", []), l = L.find(x => x.id === id) || { stage: "New", next: today(), interest: LEAD_PREFILL || "" }; LEAD_PREFILL = "";
+  const projOpts = (D.projects || []).map(p => p.name);
+  return {
+    t: id ? "Edit lead" : "New lead",
+    html: () => `<form class="form" id="lf" onsubmit="return false">
+      <div class="f full"><label for="l-name">Name</label><input id="l-name" required value="${esc(l.name || "")}" autocomplete="off"></div>
+      <div class="f full"><label for="l-phone">Phone / WhatsApp</label><input id="l-phone" type="tel" value="${esc(l.phone || "")}" placeholder="+971 5x xxx xxxx"></div>
+      <div class="f"><label for="l-stage">Stage</label><select id="l-stage">${STAGES.map(s => `<option${s === l.stage ? " selected" : ""}>${s}</option>`).join("")}</select></div>
+      <div class="f"><label for="l-next">Next follow-up</label><input id="l-next" type="date" value="${esc(l.next || "")}"></div>
+      <div class="f full"><label for="l-int">Looking for</label><input id="l-int" list="l-projs" value="${esc(l.interest || "")}" placeholder="e.g. 2BR off-plan, Palm Springs"><datalist id="l-projs">${projOpts.map(p => `<option value="${esc(p)}">`).join("")}</datalist></div>
+      <div class="f"><label for="l-bud">Budget</label><input id="l-bud" value="${esc(l.budget || "")}" placeholder="AED 2M"></div>
+      <div class="f"><label for="l-src">Source</label><input id="l-src" list="l-srcs" value="${esc(l.source || "")}"><datalist id="l-srcs">${["Instagram", "TikTok", "YouTube", "Website", "WhatsApp community", "Referral", "Portal", "Walk-in", "Event"].map(s => `<option value="${s}">`).join("")}</datalist></div>
+      <div class="f full"><label for="l-notes">Notes</label><textarea id="l-notes">${esc(l.notes || "")}</textarea></div>
+      ${l.log && l.log.length ? `<p class="note full" style="grid-column:1/-1">History: ${l.log.slice(-5).map(esc).join(" · ")}</p>` : ""}
+      <div class="btn-row full" style="grid-column:1/-1"><button class="btn btn-red" id="l-save">Save</button>${id ? `<button class="btn btn-ghost" id="l-del">Delete</button>` : ""}</div></form>`,
+    init(nb) {
+      nb.querySelector("#l-save").addEventListener("click", () => {
+        const v = k => nb.querySelector("#l-" + k).value.trim();
+        if (!v("name")) { toast("Add a name"); return; }
+        const rec = Object.assign(l, { id: l.id || Date.now().toString(36), name: v("name"), phone: v("phone"), stage: v("stage"), next: v("next"), interest: v("int"), budget: v("bud"), source: v("src"), notes: v("notes"), updated: today() });
+        if (!id) { rec.created = today(); rec.log = [today() + " added"]; L.push(rec); }
+        saveLeads(L); toast("Saved"); openNative("Leads", leadsTool()); paintMode();
+      });
+      nb.querySelector("#l-del")?.addEventListener("click", () => { if (!confirm("Delete this lead?")) return; saveLeads(L.filter(x => x.id !== id)); openNative("Leads", leadsTool()); paintMode(); });
+    }
+  };
+}
+
+/* ---------- message templates ---------- */
+let TPL_LEAD = null;
+const TPLS = [
+  { t: "First reply to an enquiry", b: "Hi {name}, Ahmed Wazir here from Springfield Properties. Thanks for reaching out about {project}.\n\nTo point you to the right options, what's your budget, and is this for living in or investing?\n\nHappy to jump on a quick call whenever suits you." },
+  { t: "New launch alert", b: "Hi {name}, a new launch you'll want to see before it goes public: {project}.\n\nUnits go to whoever registers first. Shall I hold a spot and send the brochure and payment plan?" },
+  { t: "EOI reminder", b: "Hi {name}, quick reminder: the EOI window for {project} closes on {date}. The EOI is refundable and puts you in the queue for unit selection.\n\nWant me to send the details so you can lock it in?" },
+  { t: "Viewing confirmation", b: "Hi {name}, confirming our viewing at {project} on {date} at {time}.\n\nLocation: {location}\n\nPlease bring your Emirates ID or passport. See you there!" },
+  { t: "After a viewing", b: "Hi {name}, thanks for your time today at {project}. What did you think?\n\nI can put together a side-by-side with the other options and the full cost breakdown, if useful." },
+  { t: "Payment reminder", b: "Hi {name}, a friendly heads-up: your next instalment for {project} is due on {date}.\n\nLet me know if you need the developer's payment details or a statement." },
+  { t: "Check-in on a cold lead", b: "Hi {name}, Ahmed Wazir from Springfield Properties. It's been a while, so a quick update: prices in the areas you liked have moved, and there are a couple of new launches worth a look.\n\nStill thinking about buying this year?" },
+  { t: "Owner: listing request", b: "Hi {name}, I'm Ahmed Wazir, a RERA-registered agent (BRN 85446) with Springfield Properties. I have buyers asking for homes like yours at {project}.\n\nWould you be open to a no-obligation valuation based on recent transactions?" },
+  { t: "Thank you after a deal", b: "Hi {name}, congratulations again on {project}! Thank you for trusting me with it.\n\nIf you have a minute, a short recommendation would mean a lot. And I'm always here for anything you need after handover." },
+  { t: "Follow me on social", b: "Hi {name}, I share new launches and honest market takes first on my channels:\n\nInstagram & TikTok: @awaz.realty\nYouTube: youtube.com/channel/UC7_c4PPLPykGmr36DCPuZOA\n\nWould love to have you there." }
+];
+const TPL_SAVED = () => S.get("awaz-tpl-edits", {});
+function templatesTool() {
+  let cur = 0;
+  return {
+    t: "Message templates",
+    html() {
+      const L = S.get("awaz-leads", []), lead = L.find(l => l.id === TPL_LEAD);
+      return `<div class="form">
+        <div class="f full"><label for="tp-pick">Template</label><select id="tp-pick">${TPLS.map((x, i) => `<option value="${i}">${esc(x.t)}</option>`).join("")}</select></div>
+        <div class="f full"><label for="tp-lead">Send to</label><select id="tp-lead"><option value="">Choose from my leads (optional)</option>${L.map(l => `<option value="${l.id}"${lead && lead.id === l.id ? " selected" : ""}>${esc(l.name)}</option>`).join("")}</select></div>
+        <div class="f"><label for="tp-name">Name</label><input id="tp-name" value="${esc(lead ? lead.name.split(" ")[0] : "")}"></div>
+        <div class="f"><label for="tp-project">Project</label><input id="tp-project" list="tp-projs" value="${esc(lead ? lead.interest || "" : "")}"><datalist id="tp-projs">${(D.projects || []).map(p => `<option value="${esc(p.name)}">`).join("")}</datalist></div>
+        <div class="f"><label for="tp-date">Date</label><input id="tp-date" placeholder="Sat 8 Nov"></div>
+        <div class="f"><label for="tp-time">Time</label><input id="tp-time" placeholder="4:30pm"></div>
+        <div class="f full"><label for="tp-location">Location</label><input id="tp-location" placeholder="Sales centre or map link"></div>
+        <div class="f full"><label for="tp-out">Message (edit freely)</label><textarea id="tp-out" style="min-height:200px"></textarea></div>
+      </div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-red" id="tp-wa">WhatsApp</button><button class="btn" id="tp-share">Share</button><button class="btn" id="tp-copy">Copy</button></div>
+      <div class="toggle" style="margin-top:12px"><label for="tp-sign">Add my signature</label><input type="checkbox" id="tp-sign"></div>
+      <button class="btn btn-ghost btn-sm" id="tp-save" style="margin-top:12px">Save my wording for this template</button>`;
+    },
+    init(nb) {
+      const q = s => nb.querySelector(s), body = () => (TPL_SAVED()[cur] || TPLS[cur].b);
+      const fill = () => {
+        let t = body(); for (const k of ["name", "project", "date", "time", "location"]) { const v = q("#tp-" + k).value.trim(); t = t.split("{" + k + "}").join(v || (k === "name" ? "there" : "[" + k + "]")); }
+        if (q("#tp-sign").checked) t += "\n\n" + SIGN; q("#tp-out").value = t;
+      };
+      q("#tp-pick").addEventListener("change", e => { cur = +e.target.value; fill(); });
+      q("#tp-lead").addEventListener("change", e => { const l = S.get("awaz-leads", []).find(x => x.id === e.target.value); TPL_LEAD = e.target.value || null; if (l) { q("#tp-name").value = l.name.split(" ")[0]; q("#tp-project").value = l.interest || ""; } fill(); });
+      nb.querySelectorAll("input").forEach(i => i.id !== "tp-out" && i.addEventListener("input", fill));
+      q("#tp-sign").addEventListener("change", fill);
+      q("#tp-wa").addEventListener("click", () => { const l = S.get("awaz-leads", []).find(x => x.id === q("#tp-lead").value); openExt(l && l.phone ? waLink(q("#tp-out").value, waPhone(l.phone)) : "https://wa.me/?text=" + encodeURIComponent(q("#tp-out").value)); });
+      q("#tp-share").addEventListener("click", () => shareText(q("#tp-out").value));
+      q("#tp-copy").addEventListener("click", () => copyText(q("#tp-out").value));
+      q("#tp-save").addEventListener("click", () => {
+        let t = q("#tp-out").value;
+        for (const k of ["name", "project", "date", "time", "location"]) { const v = q("#tp-" + k).value.trim(); if (v) t = t.split(v).join("{" + k + "}"); }
+        t = t.replace("\n\n" + SIGN, ""); const s = TPL_SAVED(); s[cur] = t; S.set("awaz-tpl-edits", s); toast("Saved your wording");
+      });
+      fill();
+    }
+  };
+}
+
+/* ---------- market brief for the WhatsApp community ---------- */
+function briefTool() {
+  const build = () => {
+    const p = D.pulse || {}, L = [];
+    L.push(`📊 UAE property this week · ${fmtD(today(), { day: "numeric", month: "short" })}`, "");
+    const mk = (n, d) => { if (!d) return; L.push(`*${n}* (${d.period.label})`, `${d.totalSub ? d.totalSub + ": " : "Total: "}AED ${compact(d.total)}`);
+      d.mix.forEach(m => L.push(`• ${m.name}: ${m.aed ? "AED " + compact(m.aed) : Number(m.count).toLocaleString("en-US")}${m.aed && m.count ? ` (${m.count.toLocaleString("en-US")} deals)` : ""}`)); L.push(""); };
+    mk("Dubai", p.dubai); mk("Abu Dhabi", p.abudhabi);
+    const picks = (D.projects || []).filter(x => x.pick);
+    if (picks.length) { L.push("*On my radar*"); picks.forEach(x => { const pr = priceSpec(x); L.push(`• ${x.name} by ${x.dev}, ${x.loc}${pr ? ` · from ${pr.pre || ""}AED ${compact(pr.aed)}` : ""} · ${x.status}`); }); L.push(""); }
+    const n = ((D.news || {}).items || []).slice(0, 3);
+    if (n.length) { L.push("*Worth reading*"); n.forEach(x => L.push(`• ${x.title} (${x.source})`, `  ${x.url}`)); L.push(""); }
+    L.push("Questions or want a unit held? Message me.", "", SIGN, "Follow @awaz.realty for launches first.");
+    return L.join("\n");
+  };
+  return {
+    t: "Market brief",
+    html: () => `<p class="sub">Built from this morning's data. Edit, then post to your Private Collection or status.</p>
+      <div class="f full" style="margin-top:14px"><label for="br-out">Message</label><textarea id="br-out" style="min-height:380px;font-size:14px">${esc(build())}</textarea></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn btn-red" id="br-wa">WhatsApp</button><button class="btn" id="br-share">Share</button><button class="btn" id="br-copy">Copy</button></div>
+      <p class="note">Figures: ${esc((D.pulse?.dubai?.sources || []).map(s => s.name).join(", ") || "website data")}. Check before posting if anything looks off.</p>`,
+    init(nb) {
+      const t = () => nb.querySelector("#br-out").value;
+      nb.querySelector("#br-wa").addEventListener("click", () => openExt("https://wa.me/?text=" + encodeURIComponent(t())));
+      nb.querySelector("#br-share").addEventListener("click", () => shareText(t(), "Market brief"));
+      nb.querySelector("#br-copy").addEventListener("click", () => copyText(t()));
+    },
+    share: () => shareText(document.querySelector("#br-out").value, "Market brief")
+  };
+}
+
+/* ---------- deal checklists ---------- */
+const CHECKS = {
+  offplan: { t: "Off-plan sale (Dubai)", items: [
+    ["Confirm the project is RERA-registered", "Check the project and escrow account in the Dubai REST app"],
+    ["Client KYC", "Passport, visa page or Emirates ID if resident, proof of address"],
+    ["EOI or booking form signed", "With the deposit to the developer's escrow, not to you"],
+    ["Unit, price and plan confirmed in writing", "Check the plan % adds to 100 and the handover date"],
+    ["SPA issued and signed", "Read the late-payment and cancellation clauses with the client"],
+    ["Oqood registration done", "4% DLD fee plus admin; client gets the Oqood certificate"],
+    ["Payment schedule shared with the client", "Use Payment plan quote, set follow-up dates in Leads"] ] },
+  resale: { t: "Resale / ready (Dubai)", items: [
+    ["Form A signed with the seller", "Listing agreement (seller and agency)"],
+    ["Trakheesi ad permit before advertising", "Show the permit number or QR on every ad"],
+    ["Form B signed with the buyer", "Buyer and agency agreement"],
+    ["Form I if there's a co-broker", "Agency-to-agency agreement, split agreed in writing"],
+    ["Form F (MOU) signed", "Price, terms, 10% security cheque usually held by the agency"],
+    ["Mortgage pre-approval / valuation", "If financed; bank valuation must support the price"],
+    ["Seller's liability letter & clearance", "If the property is mortgaged"],
+    ["Developer NOC", "Service charges cleared; book the NOC"],
+    ["Transfer at the trustee office", "Manager's cheques ready: price, 4% DLD, trustee and admin fees"],
+    ["Keys, access cards, DEWA moved over", "Handover complete"] ] },
+  lease: { t: "Lease (Dubai)", items: [
+    ["Form A with the landlord", "Plus title deed and landlord ID"],
+    ["Trakheesi ad permit", "Before the listing goes live"],
+    ["Tenant documents", "Passport, visa, Emirates ID"],
+    ["Rent checked against the RERA index", "Use the rental calculator for renewals"],
+    ["Tenancy contract signed", "Cheques agreed; security deposit (usually 5% unfurnished)"],
+    ["Ejari registered", "Needed for DEWA and residence"],
+    ["DEWA connection", "Tenant opens the account"] ] },
+  abudhabi: { t: "Abu Dhabi sale", items: [
+    ["Check the property on DARI", "Ownership, any mortgage or block"],
+    ["Client KYC", "Passport or Emirates ID"],
+    ["Sale agreement / MOU", "Through DARI where required"],
+    ["Off-plan: confirm escrow and registration", "Interim register before handover"],
+    ["Transfer fee 2%", "Paid at registration"],
+    ["Mortgage registration 0.1%", "If financed (capped)"] ] }
+};
+function checklistTool() {
+  let cur = S.get("awaz-ck-cur", "offplan");
+  return {
+    t: "Deal checklists",
+    html() {
+      const C = CHECKS[cur], done = S.get("awaz-ck-" + cur, {}), n = C.items.filter((_, i) => done[i]).length;
+      return `<div class="chips">${Object.entries(CHECKS).map(([k, v]) => `<button class="chip" data-ck="${k}" aria-pressed="${k === cur}">${esc(v.t)}</button>`).join("")}</div>
+        <div class="prog" style="margin-top:14px"><i style="width:${n / C.items.length * 100}%"></i></div><p class="note" style="margin:0">${n} of ${C.items.length} done</p>
+        <div class="ck">${C.items.map(([b, s], i) => `<label><input type="checkbox" data-i="${i}"${done[i] ? " checked" : ""}><span><b>${esc(b)}</b><small>${esc(s)}</small></span></label>`).join("")}</div>
+        <button class="btn btn-ghost btn-sm" id="ck-reset" style="margin-top:14px">Start a new deal (clear ticks)</button>
+        <p class="note">A working aid, not legal advice. Forms and fees change; check the latest RERA, DLD and ADREC rules.</p>`;
+    },
+    init(nb) {
+      const re = () => { nb.innerHTML = this.html(); this.init(nb); };
+      nb.querySelectorAll("[data-ck]").forEach(b => b.addEventListener("click", () => { cur = b.dataset.ck; S.set("awaz-ck-cur", cur); re(); }));
+      nb.querySelectorAll("input[data-i]").forEach(i => i.addEventListener("change", () => { const d = S.get("awaz-ck-" + cur, {}); d[i.dataset.i] = i.checked; S.set("awaz-ck-" + cur, d); re(); }));
+      nb.querySelector("#ck-reset").addEventListener("click", () => { S.set("awaz-ck-" + cur, {}); re(); });
+    }
+  };
+}
+
+/* ---------- converter ---------- */
+function convertTool() {
+  return {
+    t: "Converter",
+    html: () => `<div class="panel"><p class="eyebrow"><i></i>Size</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-ft">Sq ft</label><input id="cv-ft" type="number" inputmode="decimal" value="1000"></div>
+        <div class="f"><label for="cv-m">Sq m</label><input id="cv-m" type="number" inputmode="decimal"></div></div></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Price per foot</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-p">Price (AED)</label><input id="cv-p" type="number" inputmode="numeric" value="2000000"></div>
+        <div class="f"><label for="cv-s">Size (sq ft)</label><input id="cv-s" type="number" inputmode="numeric" value="1000"></div>
+        <div class="f"><label for="cv-r">Annual rent (AED)</label><input id="cv-r" type="number" inputmode="numeric" value="140000"></div>
+        <div class="f"><label>Result</label><div id="cv-pr" style="padding:12px 0;font-weight:700"></div></div></div></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Service charge</p><div class="form" style="margin-top:10px">
+        <div class="f"><label for="cv-int">Internal area (sq ft)</label><input id="cv-int" type="number" inputmode="numeric" value="900"></div>
+        <div class="f"><label for="cv-ext">Balcony / terrace (sq ft)</label><input id="cv-ext" type="number" inputmode="numeric" value="120"></div>
+        <div class="f"><label for="cv-bal">Balcony counted at (%)</label><input id="cv-bal" type="number" inputmode="numeric" value="25"></div>
+        <div class="f"><label for="cv-scr">Rate (AED per sq ft a year)</label><input id="cv-scr" type="number" inputmode="decimal" value="18"></div>
+        <div class="f full"><label>Result</label><div id="cv-sc" style="padding:12px 0;font-weight:700"></div></div></div>
+        <p class="note">Dubai charges the internal area plus 25% of a balcony or terrace. In Abu Dhabi it follows the unit's registered share of the building, so use 100% unless the statement says otherwise.</p></div>
+      <div class="panel" style="margin-top:10px"><p class="eyebrow"><i></i>Currency · rates of ${esc(fmtD((D.fx || {}).date, { day: "numeric", month: "short" }))}</p><div class="form" style="margin-top:10px">
+        <div class="f full"><label for="cv-aed">AED</label><input id="cv-aed" type="number" inputmode="numeric" value="1000000"></div>
+        <div class="f"><label for="cv-usd">USD</label><input id="cv-usd" type="number" inputmode="numeric"></div>
+        <div class="f"><label for="cv-gbp">GBP</label><input id="cv-gbp" type="number" inputmode="numeric"></div>
+        <div class="f full"><label for="cv-inr">INR</label><input id="cv-inr" type="number" inputmode="numeric"></div></div></div>`,
+    init(nb) {
+      const q = s => nb.querySelector(s), K = 10.7639;
+      q("#cv-ft").addEventListener("input", () => q("#cv-m").value = (num(q("#cv-ft").value) / K).toFixed(1));
+      q("#cv-m").addEventListener("input", () => q("#cv-ft").value = Math.round(num(q("#cv-m").value) * K));
+      const pr = () => { const p = num(q("#cv-p").value), s = num(q("#cv-s").value), r = num(q("#cv-r").value); q("#cv-pr").innerHTML = `${s ? "AED " + Math.round(p / s).toLocaleString("en-US") + "/sq ft · AED " + Math.round(p / (s / K)).toLocaleString("en-US") + "/sq m" : "—"}<br><span class="muted" style="font-weight:500">${p && r ? (r / p * 100).toFixed(2) + "% gross yield" : ""}</span>`; };
+      ["#cv-p", "#cv-s", "#cv-r"].forEach(s => q(s).addEventListener("input", pr));
+      const sc = () => { const i = num(q("#cv-int").value), x = num(q("#cv-ext").value), b = Math.min(100, num(q("#cv-bal").value)), r = num(q("#cv-scr").value), a = i + x * b / 100;
+        q("#cv-sc").innerHTML = `AED ${Math.round(a * r).toLocaleString("en-US")} a year<br><span class="muted" style="font-weight:500">Charged on ${Math.round(a).toLocaleString("en-US")} sq ft (${(a / K).toFixed(1)} sq m) · AED ${Math.round(a * r / 4).toLocaleString("en-US")} a quarter</span>`; };
+      ["#cv-int", "#cv-ext", "#cv-bal", "#cv-scr"].forEach(s => q(s).addEventListener("input", sc)); sc();
+      const cs = { usd: "USD", gbp: "GBP", inr: "INR" };
+      const fromAed = () => { const a = num(q("#cv-aed").value); for (const [k, c] of Object.entries(cs)) q("#cv-" + k).value = Math.round(a * FX[c]); };
+      q("#cv-aed").addEventListener("input", fromAed);
+      for (const [k, c] of Object.entries(cs)) q("#cv-" + k).addEventListener("input", () => { const a = num(q("#cv-" + k).value) / FX[c]; q("#cv-aed").value = Math.round(a); for (const [k2, c2] of Object.entries(cs)) if (k2 !== k) q("#cv-" + k2).value = Math.round(a * FX[c2]); });
+      q("#cv-ft").dispatchEvent(new Event("input")); pr(); fromAed();
+    }
+  };
+}
+
+/* ---------- my card ---------- */
+function cardTool() {
+  const line = "Ahmed Wazir · Springfield Properties\nRERA BRN 85446 · Agency ORN 11929\nWhatsApp +971 58 603 2580 · " + EMAIL + "\nhttps://linktr.ee/ahmedwazir";
+  return {
+    t: "My card",
+    html: () => `<div class="cred">
+        <div><span>Name</span><b>Ahmed Wazir</b></div><div><span>Role</span><b>Property Consultant</b></div>
+        <div><span>RERA BRN</span><b>85446</b></div><div><span>Agency ORN</span><b>11929</b></div>
+        <div><span>Media Council permit</span><b>8476056</b></div><div><span>Agency</span><b>Springfield Properties</b></div>
+        <div style="grid-column:1/-1"><span>WhatsApp</span><b>+971 58 603 2580</b></div>
+        <div style="grid-column:1/-1"><span>Email</span><b>${EMAIL}</b></div></div>
+      <div style="display:grid"><div class="qr" id="qrBox" hidden></div></div>
+      <p class="note" style="text-align:center" id="qrNote">Clients scan to save your contact.</p>
+      <div class="btn-row" style="margin-top:14px"><button class="btn btn-red" id="mc-share">Share my contact</button><button class="btn" id="mc-copy">Copy details</button></div>
+      <div class="btn-row" style="margin-top:8px"><a class="btn btn-ghost" href="https://linktr.ee/ahmedwazir" data-ext>Linktree</a><a class="btn btn-ghost" href="${BOOK}" data-ext>My booking link</a></div>`,
+    init(nb) {
+      nb.querySelector("#mc-share").addEventListener("click", () => shareText(line, "Ahmed Wazir"));
+      nb.querySelector("#mc-copy").addEventListener("click", () => copyText(line));
+      const draw = () => { const b = nb.querySelector("#qrBox"); try { new QRCode(b, { text: VCARD, width: 200, height: 200, colorDark: "#0B0B0C", colorLight: "#FFFFFF", correctLevel: QRCode.CorrectLevel.M }); b.hidden = false; } catch (e) { nb.querySelector("#qrNote").textContent = "QR needs a connection the first time."; } };
+      if (window.QRCode) draw(); else { const s = document.createElement("script"); s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"; s.onload = draw; s.onerror = () => nb.querySelector("#qrNote").textContent = "QR needs a connection the first time."; document.head.appendChild(s); }
+    }
+  };
+}
+
+/* ---------- settings ---------- */
+function settingsTool() {
+  return {
+    t: "Settings",
+    html: () => `<div class="toggle"><label for="st-keep">Stay unlocked on this phone<br><small class="muted">Skip the PIN until you lock it yourself</small></label><input type="checkbox" id="st-keep"${S.get(KEEP, false) ? " checked" : ""}></div>
+      <div class="panel" style="margin-top:12px;padding:0 16px">
+        <button class="row" id="st-pin"><div class="t"><b>Change PIN</b><small>Set a new 4-digit PIN</small></div><span class="go">→</span></button>
+        <button class="row" id="st-csv"><div class="t"><b>Export leads (CSV)</b><small>Share to email or Drive, opens in Excel/Sheets</small></div><span class="go">↗</span></button>
+        <button class="row" id="st-bak"><div class="t"><b>Back up everything</b><small>Leads, templates, checklists as one text block</small></div><span class="go">↗</span></button>
+        <button class="row" id="st-res"><div class="t"><b>Restore from backup</b><small>Paste a backup to bring your data to a new phone</small></div><span class="go">→</span></button>
+      </div>
+      <div class="f full" id="st-resbox" hidden style="margin-top:12px"><label for="st-paste">Paste backup</label><textarea id="st-paste"></textarea><button class="btn btn-red" id="st-do" style="margin-top:8px">Restore</button></div>
+      <p class="foot">App data synced ${esc(D.synced || "—")} · website version ${esc(SITE_V || "—")}</p>`,
+    init(nb) {
+      const q = s => nb.querySelector(s);
+      q("#st-keep").addEventListener("change", e => { S.set(KEEP, e.target.checked); S.set("awaz-keep-on", e.target.checked); toast(e.target.checked ? "Stays unlocked" : "PIN each time"); });
+      q("#st-pin").addEventListener("click", () => { S.set(PIN_KEY, null); try { localStorage.removeItem(PIN_KEY); } catch (e) {} S.sset(UNLOCK, null); S.set("awaz-keep-on", false); pinStage = "new"; closeAllViews(); go("broker"); });
+      q("#st-csv").addEventListener("click", () => {
+        const L = S.get("awaz-leads", []), cols = ["name", "phone", "stage", "next", "interest", "budget", "source", "notes", "created", "updated"];
+        const csv = [cols.join(",")].concat(L.map(l => cols.map(c => `"${String(l[c] || "").replace(/"/g, '""')}"`).join(","))).join("\n");
+        if (NB && NB.saveFile) NB.saveFile("awaz-leads-" + today() + ".csv", csv, "text/csv"); else shareText(csv, "Ahmed Wazir leads");
+      });
+      q("#st-bak").addEventListener("click", () => {
+        const o = {}; try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k.startsWith("awaz-") && k !== PIN_KEY) o[k] = localStorage.getItem(k); } } catch (e) {}
+        const t = "AWAZ-BACKUP " + btoa(unescape(encodeURIComponent(JSON.stringify(o))));
+        if (NB && NB.saveFile) NB.saveFile("awaz-backup-" + today() + ".txt", t, "text/plain"); else shareText(t, "Ahmed Wazir app backup");
+      });
+      q("#st-res").addEventListener("click", () => q("#st-resbox").hidden = false);
+      q("#st-do").addEventListener("click", () => {
+        try { const o = JSON.parse(decodeURIComponent(escape(atob(q("#st-paste").value.trim().replace(/^AWAZ-BACKUP\s+/, ""))))); for (const [k, v] of Object.entries(o)) if (k.startsWith("awaz-")) localStorage.setItem(k, v); toast("Restored"); paintMode(); }
+        catch (e) { toast("That doesn't look like a backup"); }
+      });
+    }
+  };
+}
+
+
+
+/* ---------- broker tool registry ---------- */
+const BT = {
+  leads: { t: "Leads", s: "Leads", i: "leads", f: leadsTool },
+  templates: { t: "Message templates", s: "Templates", i: "msg", f: templatesTool },
+  shortlist: { t: "Shortlist", s: "Shortlist", i: "heart", f: shortlistTool },
+  finder: { t: "Project finder", s: "Finder", i: "match" },
+  cost: { t: "Cost sheet", s: "Cost sheet", i: "cost", calc: "cost" },
+  plan: { t: "Plan quote", s: "Plan quote", i: "plan", calc: "plan" },
+  brief: { t: "Market brief", s: "Brief", i: "chart", f: briefTool },
+  checklists: { t: "Deal checklists", s: "Checklists", i: "check", f: checklistTool },
+  convert: { t: "Converter", s: "Converter", i: "conv", calc: "convert" },
+  card: { t: "My card", s: "My card", i: "card", f: cardTool },
+  settings: { t: "Settings & backup", s: "Settings", i: "gear", f: settingsTool }
+};
+const _ob = openBroker;
+openBroker = id => { if (id === "finder") { PF.src = "all"; closeAllViews(); return go("projects"); } return _ob(id); };
+
+/* ---------- render ---------- */
+function render() {
+  if (TAB === "projects") TAB = "home";
+  document.querySelectorAll(".tabs button").forEach(b => b.dataset.tab === TAB ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current"));
+  const m = $("main");
+  m.innerHTML = { home: homeView, projects: projectsView, tools: toolsView, guides: guidesView, broker: brokerView }[TAB]();
+  bindScreen(m);
+  if (TAB === "projects") bindProjects(m);
+  if (TAB === "broker") bindBroker(m);
+  paintMode();
+}
+
+/* ---------- top bar ---------- */
+// Currency picker: symbols only, never currency letters
+{
+  const b = $("cur"), m = $("curM"), SY = c => c === "AED" ? DH : SYM[c];
+  const NAME = { AED: "UAE dirham", USD: "US dollar", GBP: "British pound", INR: "Indian rupee" };
+  const paint = () => { b.innerHTML = SY(CUR) + '<svg class="cv" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>'; m.innerHTML = ["AED", "USD", "GBP", "INR"].map(c => `<button type="button" role="radio" data-c="${c}" aria-checked="${c === CUR}" aria-label="${NAME[c]}">${SY(c)}</button>`).join(""); };
+  const shut = () => { m.hidden = true; b.setAttribute("aria-expanded", "false"); };
+  b.addEventListener("click", e => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute("aria-expanded", String(!m.hidden)); });
+  m.addEventListener("click", e => { const x = e.target.closest("[data-c]"); if (!x) return; CUR = x.dataset.c; S.set("aw-cur", CUR); paint(); shut(); render(); const top = STACK[STACK.length - 1]; if (top && top.o.refresh) top.o.refresh(); });
+  document.addEventListener("click", e => { if (!e.target.closest(".cur-pop")) shut(); });
+  paint();
+}
+// Amounts written on screen use symbols, never "AED", "USD", "GBP" or "INR" (shared text messages keep the letters)
+{
+  const RX = /AED\s?(?=\d)|\bAED\b|(?:US\$|\bUSD)\s?(?=\d)|\bGBP\s?(?=\d)|\bINR\s?(?=\d)/g;
+  const SKIP = "script,style,textarea,input,select,option,svg,code,[data-nofx]";
+  const fix = n => {
+    const t = n.nodeValue; if (!t || !/AED|USD|US\$|GBP|INR/.test(t)) return;
+    const p = n.parentElement; if (!p || p.closest(SKIP)) return;
+    RX.lastIndex = 0; if (!RX.test(t)) return; RX.lastIndex = 0;
+    const f = document.createDocumentFragment(); let last = 0, m;
+    while ((m = RX.exec(t))) {
+      f.append(t.slice(last, m.index)); last = m.index + m[0].length;
+      if (m[0].startsWith("AED")) { const tp = document.createElement("template"); tp.innerHTML = DH; f.append(tp.content.firstChild); }
+      else f.append({ U: "$", G: "£", I: "₹" }[m[0][0]]);
+    }
+    f.append(t.slice(last)); n.replaceWith(f);
+  };
+  const scan = r => { if (r.nodeType === 3) return fix(r); if (r.nodeType !== 1) return; const w = document.createTreeWalker(r, NodeFilter.SHOW_TEXT), L = []; while (w.nextNode()) L.push(w.currentNode); L.forEach(fix); };
+  scan(document.body);
+  new MutationObserver(R => R.forEach(r => { if (r.type === "characterData") fix(r.target); else r.addedNodes.forEach(scan); })).observe(document.body, { childList: true, subtree: true, characterData: true });
+}
+function paintThemeBtn() { const m = THEME.mode(); $("themeBtn").innerHTML = ico(m === "auto" ? "auto" : m === "light" ? "sun" : "moon"); }
+$("themeBtn").addEventListener("click", () => {
+  const m = THEME.mode();
+  openSheet(`<h3>Appearance</h3><p class="sub">Auto is light by day and dark from 6 pm, Dubai time.</p>
+    <div class="list" style="margin-top:14px">${[["auto", "Auto (day and night)", "auto"], ["light", "Light", "sun"], ["dark", "Dark", "moon"]].map(([k, l, i]) => `<button class="li" data-th="${k}"><span class="ib">${ico(i)}</span><span class="t"><b>${l}</b></span>${m === k ? `<span style="color:var(--red-text)">${ico("check")}</span>` : ""}</button>`).join("")}</div>`,
+    p => p.querySelectorAll("[data-th]").forEach(b => b.onclick = () => { THEME.set(b.dataset.th); paintThemeBtn(); closeSheet(); }));
+});
+paintThemeBtn();
+
+/* ---------- start ---------- */
+let CAT_UPDATED = "";
+const start = (location.hash || "#home").slice(1);
+TAB = ["home", "projects", "tools", "guides", "broker"].includes(start) ? start : "home";
+history.replaceState({ v: 0 }, "", "#" + TAB);
+render();
+fetch("data/projects.json").then(r => r.ok ? r.json() : null).then(j => {
+  if (!j || !j.projects) return;
+  CAT_UPDATED = j.updated || ""; mergeCatalog(j.projects);
+  if (!STACK.length && ["home", "projects", "broker"].includes(TAB) && !document.activeElement.closest?.("#pq")) { const y = scrollY; render(); scrollTo(0, y); }
+}).catch(() => {});
+if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => {});
+
+</script>
+<!-- Google Analytics: loads only after the user taps Accept -->
+<div id="ck" hidden role="dialog" aria-label="Analytics choice" style="position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:200;background:#151517;color:#F4F1EE;border:1px solid rgba(244,241,238,.15);border-left:4px solid #E0182D;border-radius:14px;padding:14px;box-shadow:0 12px 40px rgba(0,0,0,.5);font:14px/1.45 system-ui,-apple-system,sans-serif">
+  <p style="margin:0 0 12px">I use Google Analytics to see which screens and tools help people most. Nothing is shared for ads.</p>
+  <div style="display:flex;gap:10px;justify-content:flex-end"><button data-ck="denied" style="background:none;border:1px solid rgba(244,241,238,.3);color:inherit;border-radius:10px;padding:10px 16px;font:inherit;font-weight:600">Decline</button><button data-ck="granted" style="background:#C8102E;border:0;color:#fff;border-radius:10px;padding:10px 18px;font:inherit;font-weight:700">Accept</button></div>
+</div>
+<script>
+(function(){
+  var ID="GTM-P9B7V4K3",K="aw-consent",b=document.getElementById("ck"),c=null;
+  window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}window.gtag=gtag;
+  gtag("consent","default",{ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",analytics_storage:"denied"});
+  function load(){if(window.__ga)return;window.__ga=1;gtag("consent","update",{analytics_storage:"granted"});var s=document.createElement("script");s.async=1;s.src="https://www.googletagmanager.com/gtm.js?id="+ID;document.head.appendChild(s);gtag("js",new Date());gtag("set",{app_name:"Ahmed Wazir app"});ev("screen_view",{screen_name:location.hash.slice(1)||"home"});}
+  function ev(n,p){if(window.__ga)gtag("event",n,Object.assign({platform:"app"},p||{}))}
+  window.__awEv=ev;window.__awConsent=function(){b.hidden=false};
+  try{c=localStorage.getItem(K)}catch(e){}
+  if(c==="granted")load();else if(c!=="denied")setTimeout(function(){b.hidden=false},1500);
+  b.addEventListener("click",function(e){var v=e.target.getAttribute&&e.target.getAttribute("data-ck");if(!v)return;try{localStorage.setItem(K,v)}catch(_){}b.hidden=true;if(v==="granted")load();else gtag("consent","update",{analytics_storage:"denied"});});
+  // screens, guides and tools
+  if(typeof go==="function"){var _go=go;go=function(t){_go(t);ev("screen_view",{screen_name:t})};}
+  if(typeof pushView==="function"){var _pv=pushView;pushView=function(o){_pv(o);ev("screen_view",{screen_name:(o&&(o.t||(o.site&&o.site.h)))||"view"})};}
+  // contact taps
+  if(typeof openExt==="function"){var _ox=openExt;openExt=function(u){u=String(u||"");
+    if(/wa\.me|whatsapp/i.test(u))ev("whatsapp_click");else if(/^tel:/.test(u))ev("phone_click");else if(/^mailto:/.test(u))ev("email_click");else if(/calendar\.app\.google|calendly/i.test(u))ev("book_call_click");else ev("outbound_click",{link_domain:(u.split("/")[2]||"")});
+    return _ox.apply(this,arguments)};}
+  var used={};document.addEventListener("input",function(e){var k=location.hash||"#tools";if(used[k])return;used[k]=1;ev("tool_use",{tool:k.slice(1)})},true);
+})();
+</script>
+</body>
+</html>
