@@ -1887,7 +1887,7 @@ body { transition: background-color .25s ease, color .25s ease; }
             <div class="field"><label for="t-state">Buying</label><select id="t-state"><option value="op">Off-plan from the developer</option><option value="ready">Ready or resale</option></select></div>
             <div class="field full"><label for="t-fee">Land department transfer fee</label><select id="t-fee"></select></div>
             <div class="field full fee-pct"><label for="t-feep">Fee % (change it if your deal differs)</label><input id="t-feep" type="number" min="0" max="10" step="0.25" value="4"></div>
-            <div class="field full"><label id="t-unit-l">Size in</label><div class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="t-unit-l"></div></div>
+            <div class="field full"><label id="t-cur-l">Show amounts in</label><div class="cur-seg gcur" role="radiogroup" aria-labelledby="t-cur-l"></div></div><div class="field full"><label id="t-unit-l">Size in</label><div class="cur-seg unit-seg gunit" role="radiogroup" aria-labelledby="t-unit-l"></div></div>
             <div class="field"><label for="t-loan">Mortgage loan (AED, 0 if cash)</label><input id="t-loan" type="number" min="0" step="50000" value="0"></div>
             <div class="field"><label for="t-size">Internal area (<span data-ulab>sq ft</span>)</label><input id="t-size" data-area="size" type="number" min="0" step="50" value="1000"></div><div class="field"><label for="t-ext">Balcony / terrace (<span data-ulab>sq ft</span>)</label><input id="t-ext" type="number" min="0" value="100" data-area="size" inputmode="numeric"></div><div class="field"><label for="t-bal">Balcony counted at (%)</label><input id="t-bal" type="number" min="0" max="100" step="5" value="25"></div><p class="area-note full" id="t-area"></p>
           </div>
@@ -1903,7 +1903,7 @@ body { transition: background-color .25s ease, color .25s ease; }
       <div class="tk-panel" role="tabpanel" id="tk-p2" aria-labelledby="tk-t2" hidden>
         <div class="tk-calc">
           <div class="tk-f">
-            <div class="field"><label for="r-price">What you're paying (AED)</label><input id="r-price" type="number" min="0" step="50000" value="1800000"></div>
+            <div class="field full"><label id="r-cur-l">Show amounts in</label><div class="cur-seg gcur" role="radiogroup" aria-labelledby="r-cur-l"></div></div><div class="field"><label for="r-price">What you're paying (AED)</label><input id="r-price" type="number" min="0" step="50000" value="1800000"></div>
             <div class="field"><label for="r-paid">Paid so far (%)</label><input id="r-paid" type="number" min="0" max="100" step="5" value="40"></div>
             <div class="field"><label for="r-sell">Expected resale price (AED)</label><input id="r-sell" type="number" min="0" step="50000" value="2100000"></div>
             <div class="field"><label for="r-min">Developer's minimum paid before resale (%)</label><input id="r-min" type="number" min="0" max="100" step="5" value="40"></div>
@@ -3087,7 +3087,7 @@ body { transition: background-color .25s ease, color .25s ease; }
     </div>
     <div class="calc-grid">
       <form class="calc-in" onsubmit="return false" id="st-form">
-        <div class="field full"><label for="st-price">Property price (AED)</label><input id="st-price" type="number" min="0" step="10000" value="1200000" inputmode="numeric"></div>
+        <div class="field full"><label id="st-cur-l">Show amounts in</label><div class="cur-seg gcur" role="radiogroup" aria-labelledby="st-cur-l"></div></div><div class="field full"><label for="st-price">Property price (AED)</label><input id="st-price" type="number" min="0" step="10000" value="1200000" inputmode="numeric"></div>
         <div class="field"><label for="st-b">Booking (%)</label><input id="st-b" type="number" min="0" max="100" value="20"></div>
         <div class="field"><label for="st-c">During construction (%)</label><input id="st-c" type="number" min="0" max="100" value="30"></div>
         <div class="field"><label for="st-h">On handover (%)</label><input id="st-h" type="number" min="0" max="100" value="50"></div>
@@ -3697,7 +3697,7 @@ const DX = (() => {
   const kpi = (k, v, s, cls) => `<div class="dx-kpi${cls ? " " + cls : ""}"><span>${k}</span><b>${v}</b>${s ? `<small>${s}</small>` : ""}</div>`;
   const bar = (v, max) => `<td class="dx-bar" aria-hidden="true"><i style="width:${Math.max(2, v / max * 100)}%"></i></td>`;
   const wa = t => `https://wa.me/971586032580?text=${encodeURIComponent(t)}`;
-  const fmtN = (v, f) => f === "aed" ? "AED " + n0(v) : f === "k" ? kshort(v) : f === "x" ? (Math.round(v * 10) / 10).toString() : f === "p" ? Math.round(v) + "%" : f === "s1" ? (v < 0 ? "−" : "+") + Math.abs(v).toFixed(1) + "%" : f === "s0" ? (v < 0 ? "−" : "+") + n0(Math.abs(v)) : f === "d2" ? (+v).toFixed(2) + "%" : n0(v);
+  const fmtN = (v, f) => f === "aed" ? "AED " + n0(v) : f === "cur" ? (CUR.get() === "AED" ? "AED " + n0(v) : CUR.full(v)) : f === "k" ? kshort(v) : f === "x" ? (Math.round(v * 10) / 10).toString() : f === "p" ? Math.round(v) + "%" : f === "s1" ? (v < 0 ? "−" : "+") + Math.abs(v).toFixed(1) + "%" : f === "s0" ? (v < 0 ? "−" : "+") + n0(Math.abs(v)) : f === "d2" ? (+v).toFixed(2) + "%" : n0(v);
   const N = (v, f = "n") => `<b class="dx-n" data-n="${v}" data-f="${f}">${fmtN(v, f)}</b>`;
   const line = (v, max) => `<span class="dx-line" aria-hidden="true"><i style="width:${Math.max(2, v / max * 100)}%"></i></span>`;
   const still = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; } };
@@ -3785,14 +3785,14 @@ const DX = (() => {
         return { name, perM, share, gap, after, res };
       };
       const S = [run("As planned", {}), run("Mortgage rates +2%", { rate: 2 }), run(other ? "Your currency −15%" : "Currency −15% (pegged: no change)", { fx: other }), run("Empty for 6 months after handover", { empty: 1 }), run("All three at once", { rate: 2, fx: other, empty: 1 })];
-      put("st-t", S.map(s => `<li class="dx-row dx-row-r dx-sc"><span class="dx-name">${esc(s.name)}</span><span class="dx-pill ${s.res[0]}">${s.res[1]}</span><span class="dx-chips"><span class="dx-chip"><small>Monthly payment</small>${N(s.perM, "aed")}</span><span class="dx-chip"><small>Of income</small>${N(s.share * 100, "p")}</span><span class="dx-chip"><small>At handover</small>${s.gap > 0 ? `<b class="dx-neg">short ${aed(s.gap)}</b>` : "<b>covered</b>"}</span><span class="dx-chip"><small>Monthly after handover</small>${s.after < 0 ? `<b class="dx-neg">−${aed(-s.after)}</b>` : `<b class="dx-pos">+${aed(s.after)}</b>`}</span></span></li>`).join(""));
+      put("st-t", S.map(s => `<li class="dx-row dx-row-r dx-sc"><span class="dx-name">${esc(s.name)}</span><span class="dx-pill ${s.res[0]}">${s.res[1]}</span><span class="dx-chips"><span class="dx-chip"><small>Monthly payment</small>${N(s.perM, "cur")}</span><span class="dx-chip"><small>Of income</small>${N(s.share * 100, "p")}</span><span class="dx-chip"><small>At handover</small>${s.gap > 0 ? `<b class="dx-neg">short ${CUR.full(s.gap)}</b>` : "<b>covered</b>"}</span><span class="dx-chip"><small>Monthly after handover</small>${s.after < 0 ? `<b class="dx-neg">−${CUR.full(-s.after)}</b>` : `<b class="dx-pos">+${CUR.full(s.after)}</b>`}</span></span></li>`).join(""));
       const worst = S[4].res[0], base = S[0].res[0];
       $("st-verdict").innerHTML = base === "bad" ? `<p class="dx-bad"><b>This plan is stretched even if nothing goes wrong.</b> Look at a lower price, a longer plan or a smaller handover payment.</p>`
         : worst === "ok" ? `<p class="dx-good"><b>Your plan holds up even if all three go wrong at once.</b></p>`
         : `<p class="dx-mid"><b>Fine as planned, but a shock would squeeze you.</b> Keep a cash buffer for the handover payment and the first months of rent.</p>`;
       $("st-wa").href = wa(`Hi Ahmed, I ran your off-plan stress test: price AED ${n0(P)}, plan ${b}/${c}/${h}, ${m} months to handover. Result as planned: ${S[0].res[1]}; with all shocks: ${S[4].res[1]}. Can we talk it through?`);
     };
-    document.querySelectorAll("#st-form input, #st-form select").forEach(el => el.addEventListener("input", calc)); calc();
+    document.querySelectorAll("#st-form input, #st-form select").forEach(el => el.addEventListener("input", calc)); CUR.on(calc); calc();
   }
 
   function afford() {
